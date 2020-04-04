@@ -4,7 +4,6 @@ Particle::Particle(float xPos, float yPos, float width, float height, glm::vec4 
 	: m_xPos(xPos), m_yPos(yPos), m_Width(width), m_Height(height), m_startingColor(startingColor), m_dyingColor(dyingColor), m_life(life), m_dyingSpeed(dyingSpeed), m_Color(startingColor)
 {
 	m_Sprite = new Sprite(m_xPos, m_yPos, m_Width, m_Height, m_Color, "src/res/shaders/Basic.shader");
-	srand(time(0));
 	m_Velocity = glm::vec2((rand() % 100) - 50, (rand() % 100) - 50);
 }
 
@@ -25,7 +24,7 @@ Particle::~Particle()
 
 void Particle::OnUpdate()
 {
-	m_Sprite->m_Shader->Bind();
+	//m_Sprite->m_Shader->Bind();
 	
 	m_Color = glm::vec4(m_Color.x - ((m_startingColor.x - m_dyingColor.x) / m_life),
 		m_Color.y - ((m_startingColor.y - m_dyingColor.y) / m_life),

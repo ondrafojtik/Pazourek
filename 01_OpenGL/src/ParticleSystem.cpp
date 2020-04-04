@@ -1,21 +1,28 @@
 #include "ParticleSystem.h"
 
 ParticleSystem::ParticleSystem()
-{
-	m_objects = std::vector<std::unique_ptr<Particle>>();
-}
+{}
 
 ParticleSystem::~ParticleSystem()
-{
-	//delete m_objects;
-}
+{}
 
-void ParticleSystem::AddObject(Particle particle)
+void ParticleSystem::AddObject(const Particle& particle)
 {
-	//m_objects.push_back(particle);
+	m_Particles.push_back(particle);
 }
 
 void ParticleSystem::OnUpdate()
 {
+	for (int i = 0; i < m_Particles.size(); i++)
+	{
+		m_Particles[i].OnUpdate();
+
+		if (!m_Particles[i].Alive())
+		{
+			m_Particles.erase(m_Particles.begin() + i);
+			continue;
+		}
+
+	}
 
 }

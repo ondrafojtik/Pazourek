@@ -27,6 +27,7 @@
 #include "Window.h"
 
 #include "Particle.h"
+#include "ParticleSystem.h"
 
 float l_WindowWidth = 1920;
 float l_WindowHeight = 1080;
@@ -89,13 +90,11 @@ int main(void)
 	Sprite* randomColorfullRectangle = new Sprite(700, 100, 1827, 1251, path5, "src/res/shaders/rndFun.shader");
 	Sprite* Player = new Sprite((l_WindowWidth / 2) - 25, (l_WindowHeight / 2) - 25, 50, 50, path7, "src/res/shaders/Sphere.shader");
 	
-	//Sprite* tmp = new Sprite(100, 200, 20, 20, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "src/res/shaders/Basic.shader");
-	Particle* tmp = new Particle(100, 200, 50, 50, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 100, 0.008f);
-	
 	Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
 	Renderer *renderer = new Renderer(camera);
 
-
+	ParticleSystem* myParticles = new ParticleSystem();
+	
 	float tmpRotation = 0.0f;
 	
 	float tmpColorR = 0.0f;
@@ -114,7 +113,8 @@ int main(void)
 		//sets the values into cursorX, Y.. 
 		glfwGetCursorPos(window.GetWindow(), &cursorX, &cursorY);
 		
-
+		myParticles->OnUpdate();
+		
 		tmpRotation += 1.0f;
 		mySprite2->RotateSprite(tmpRotation);
 
@@ -152,8 +152,10 @@ int main(void)
 			m_CameraZOOM = m_CameraZOOM - 1;
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_E) == GLFW_PRESS)
 			m_CameraZOOM = m_CameraZOOM + 1;
+		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
+			myParticles->AddObject(Particle((float)cursorX, (float)cursorY, 50, 50, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f), 100, 0.008f));
 
-
+		
 
 		//CAMERA
 		ImGui::SliderFloat("CameraX", &m_CameraX, l_WindowWidth * (-1.0f), l_WindowWidth);
@@ -181,10 +183,8 @@ int main(void)
 		Player->MoveSprite((l_WindowWidth / 2) + m_CameraX - 25, (l_WindowHeight / 2) + m_CameraY - 25);
 		renderer->DrawSprite(randomColorfullRectangle);
 		renderer->DrawSprite(Player);
+		renderer->DrawParticles(myParticles->GetParticles());
 		
-		renderer->DrawSprite(tmp->GetSprite());
-		tmp->OnUpdate();
-
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);
 		

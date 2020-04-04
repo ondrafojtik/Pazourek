@@ -1,7 +1,7 @@
 #include "Sprite.h"
 
 Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, const std::string TexturePath, const std::string shaderPath) 
-	: m_xPos(xPos), m_yPos(yPos), m_TexturePath(TexturePath), m_SpriteWidth(SpriteWidth), m_SpriteHeight(SpriteHeight), m_Color(glm::vec4(1.0f)), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f)
+	: m_xPos(xPos), m_yPos(yPos), m_TexturePath(TexturePath), m_SpriteWidth(SpriteWidth), m_SpriteHeight(SpriteHeight), m_Color(glm::vec4(1.0f)), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f), m_Size(1.0f)
 {
 	
 	float positions[] = {
@@ -52,7 +52,8 @@ Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, co
 }
 
 Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, glm::vec4 color, const std::string shaderPath)
-	: m_xPos(xPos), m_yPos(yPos), m_Color(color), m_SpriteWidth(SpriteWidth), m_SpriteHeight(SpriteHeight), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f)
+	: m_xPos(xPos), m_yPos(yPos), m_Color(color), m_SpriteWidth(SpriteWidth), m_SpriteHeight(SpriteHeight), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f),
+	m_Size(1.0f)
 {
 	
 	float positions[] = {
@@ -156,7 +157,8 @@ void Sprite::OnRender()
 		* glm::translate(glm::mat4(1.0f), glm::vec3(
 			0.0f,
 			0.0f,
-			0.0f));
+			0.0f)) 
+		* glm::scale(glm::mat4(1.0f), { m_Size, m_Size, 1.0f});
 #else
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), {
 		0.0f,

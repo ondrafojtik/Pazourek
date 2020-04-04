@@ -6,6 +6,7 @@
 
 #include "Sprite.h"
 #include "Camera.h"
+#include "ParticleSystem.h"
 
 #define ASSERT(x) if (!(x)) __debugbreak();
 #define GLCall(x) GLClearError();\
@@ -23,5 +24,7 @@ public:
 	Renderer(Camera *camera);
 	//void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader);
 	void DrawSprite(Sprite *m_Sprite);
+	//is it better to pass just the vector, or the whole ParticleSystemObject? what makes more sence?
+	void DrawParticles(const std::vector<Particle>& particles);
 	void Clear() const; 
 };

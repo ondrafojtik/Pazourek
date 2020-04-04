@@ -28,6 +28,7 @@ private:
 	float m_Rotation;
 	glm::vec4 m_colorElement;
 	glm::vec4 m_Color;
+	float m_Size;
 
 public:
 	VertexArray m_VA;		
@@ -53,6 +54,7 @@ public:
 	inline float GetRotation() { return m_Rotation; }
 	inline glm::vec4 GetColorElement() { return m_colorElement; }
 	void SetColor(glm::vec4 color) { m_Color = color; }
+	void SetSize(float size) { m_Size; }
 
 	void OnRender();
 	//inline VertexArray GetVA() { return m_VA; }

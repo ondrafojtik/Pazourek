@@ -28,6 +28,12 @@ void Renderer::DrawSprite(Sprite *m_Sprite)
 	
 }
 
+void Renderer::DrawParticles(const std::vector<Particle>& particles)
+{
+	for (Particle elem : particles)
+		DrawSprite(elem.GetSprite());
+}
+
 void Renderer::Clear() const
 {
 	GLCall(glClear(GL_COLOR_BUFFER_BIT));

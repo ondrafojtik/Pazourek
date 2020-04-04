@@ -5,15 +5,15 @@
 class ParticleSystem
 {
 private: 
-	std::vector<std::unique_ptr<Particle>> m_objects;
+	std::vector<Particle> m_Particles;
 
 public:
 	ParticleSystem();
 	~ParticleSystem();
 
-	void AddObject(Particle particle);
+	void AddObject(const Particle& particle);
 
 	void OnUpdate();
 
-
+	std::vector<Particle>& GetParticles() { return m_Particles; }
 };
