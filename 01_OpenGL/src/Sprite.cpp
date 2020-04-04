@@ -105,6 +105,10 @@ Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, gl
 
 Sprite::~Sprite()
 {
+	delete m_IB;
+	delete m_VB;
+	delete m_Shader;
+	delete m_Texture;
 }
 
 void Sprite::MoveSprite(float xPos, float yPos)

@@ -113,9 +113,8 @@ int main(void)
 		//sets the values into cursorX, Y.. 
 		glfwGetCursorPos(window.GetWindow(), &cursorX, &cursorY);
 		
-		cursorX = cursorX + camera->GetXOffset();
-		//cursorY = glm::abs((float)cursorY + camera->GetYOffset() - camera->GetHeight());
-		cursorY = glm::abs(1080 - (float)cursorY) + camera->GetYOffset();
+		cursorX = (cursorX + camera->GetXOffset());
+		cursorY = (glm::abs(1080 - (float)cursorY) + camera->GetYOffset());
 
 		myParticles->OnUpdate();
 		
@@ -157,8 +156,8 @@ int main(void)
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_E) == GLFW_PRESS)
 			m_CameraZOOM = m_CameraZOOM + 1;
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
-			myParticles->AddObject(Particle((float)cursorX - 25, (float)cursorY - 80, 50, 50, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 100, 0.008f));
-
+			myParticles->AddObject(Particle((float)cursorX - 25, (float)cursorY - 80, 50, 50, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 100, 0.008f));
+		
 		
 
 		//CAMERA
@@ -178,15 +177,15 @@ int main(void)
 		//}
 
 
-		renderer->DrawSprite(mySprite1);
-		renderer->DrawSprite(mySprite2);
-		renderer->DrawSprite(mySprite3);
-		renderer->DrawSprite(mySprite4);
-		renderer->DrawSprite(mySphere1);
-		renderer->DrawSprite(mySphere2);
-		Player->MoveSprite((l_WindowWidth / 2) + m_CameraX - 25, (l_WindowHeight / 2) + m_CameraY - 25);
-		renderer->DrawSprite(randomColorfullRectangle);
-		renderer->DrawSprite(Player);
+		//renderer->DrawSprite(mySprite1);
+		//renderer->DrawSprite(mySprite2);
+		//renderer->DrawSprite(mySprite3);
+		//renderer->DrawSprite(mySprite4);
+		//renderer->DrawSprite(mySphere1);
+		//renderer->DrawSprite(mySphere2);
+		//Player->MoveSprite((camera->GetWidth() / 2) + m_CameraX - 25, (camera->GetHeight()/ 2) + m_CameraY - 25);
+		//renderer->DrawSprite(randomColorfullRectangle);
+		//renderer->DrawSprite(Player);
 		renderer->DrawParticles(myParticles->GetParticles());
 		
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);

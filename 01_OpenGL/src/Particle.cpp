@@ -19,7 +19,8 @@ Particle::Particle(float xPos, float yPos, float width, float height, glm::vec4 
 
 Particle::~Particle()
 {
-
+	//delete m_Sprite;
+	//std::cout << "destroying particle! \n";
 }
 
 void Particle::OnUpdate()
