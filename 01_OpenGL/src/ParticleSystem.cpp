@@ -1,7 +1,9 @@
 #include "ParticleSystem.h"
 
 ParticleSystem::ParticleSystem()
-{}
+{
+	//m_Particles.reserve(1000);
+}
 
 ParticleSystem::~ParticleSystem()
 {}

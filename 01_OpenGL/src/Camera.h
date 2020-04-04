@@ -28,4 +28,10 @@ public:
 	inline float GetRealRightPos() { return ((m_Right + m_xCameraOff) - (m_Zoom * 16)); }
 	inline float GetRealBottomPos() { return ((m_Bottom + m_yCameraOff) + (m_Zoom * 9)); }
 	inline float GetRealTopPos() { return ((m_Top + m_yCameraOff) - (m_Zoom * 9)); }
+
+	inline float GetWidth() { return m_Right - m_Left; }
+	inline float GetHeight() { return m_Top - m_Bottom; }
+	inline float GetZoom() { return m_Zoom; }
+	inline float GetXOffset() { return m_xCameraOff; }  
+	inline float GetYOffset() { return m_yCameraOff; }
 };
