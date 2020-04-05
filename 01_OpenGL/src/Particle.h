@@ -4,7 +4,8 @@
 #include "glm/glm.hpp"
 #include "Sprite.h"
 
-#include <iostream>
+#include "Random.h"
+
 
 class Particle
 {

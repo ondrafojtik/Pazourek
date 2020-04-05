@@ -29,6 +29,8 @@
 #include "Particle.h"
 #include "ParticleSystem.h"
 
+#include "Random.h"
+
 float l_WindowWidth = 1920;
 float l_WindowHeight = 1080;
 
@@ -158,6 +160,10 @@ int main(void)
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
 			myParticles->AddObject(Particle((float)cursorX - 25, (float)cursorY - 80, 50, 50, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 100, 0.008f));
 		
+			//myParticles->AddObject(Particle((float)cursorX - 25, (float)cursorY - 80, 50, 50, glm::vec4(Random::Float(), Random::Float(), Random::Float(), 1.0f),
+			//	glm::vec4(Random::Float(), Random::Float(), Random::Float(), 1.0f), 100, 0.008f));
+
+			
 		
 
 		//CAMERA

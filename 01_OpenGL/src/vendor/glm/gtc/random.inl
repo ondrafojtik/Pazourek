@@ -234,7 +234,8 @@ namespace detail
 	template<length_t L, typename T, qualifier Q>
 	GLM_FUNC_QUALIFIER vec<L, T, Q> gaussRand(vec<L, T, Q> const& Mean, vec<L, T, Q> const& Deviation)
 	{
-		return detail::functor2<vec, L, T, Q>::call(gaussRand, Mean, Deviation);
+		return detail::functor2<vec, L, T, Q>::call(gaus
+			, Mean, Deviation);
 	}
 
 	template<typename T>
