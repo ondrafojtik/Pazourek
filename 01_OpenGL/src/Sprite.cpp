@@ -93,6 +93,62 @@ Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, gl
 
 	//Texture
 	m_Texture = new Texture("src/res/textures/Blank.png");
+
+	m_Texture->Bind();
+
+	m_VA.Unbind();
+	m_VB->Unbind();
+	m_IB->Unbind();
+	m_Shader->Unbind();
+	m_Texture->Unbind();
+
+}
+
+Sprite::Sprite(float xPos, float yPos, std::string TexturePath, std::string shaderPath) 
+	: m_xPos(xPos), m_yPos(yPos), m_TexturePath(TexturePath), m_SpriteWidth(0), m_SpriteHeight(0), m_Color(glm::vec4(1.0f)), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f), m_Size(1.0f)
+{
+
+	m_Texture = new Texture(TexturePath);
+	m_SpriteWidth = m_Texture->GetWidth();
+	m_SpriteHeight = m_Texture->GetHeight();
+	std::cout << m_SpriteWidth << " " << m_SpriteHeight << "\n";
+
+	float positions[] = {
+		m_xPos,					m_yPos,					0.0f, 0.0f,
+		m_xPos + m_SpriteWidth, m_yPos,					1.0f, 0.0f,
+		m_xPos + m_SpriteWidth, m_yPos + m_SpriteHeight, 1.0f, 1.0f,
+		m_xPos,					m_yPos + m_SpriteHeight, 0.0f, 1.0f,
+	};
+
+	unsigned int indices[] = {
+			0, 1, 2,
+			2, 3, 0
+	};
+
+	//VAO
+	unsigned int m_VAO;
+	GLCall(glGenVertexArrays(1, &m_VAO));
+	GLCall(glBindVertexArray(m_VAO));
+
+	//VB
+	m_VB = new VertexBuffer(positions, 4 * 4 * sizeof(float));
+
+	//Layout
+	m_Layout.Push<float>(2);
+	m_Layout.Push<float>(2);
+
+	//VA
+	m_VA.AddBuffer(*m_VB, m_Layout);
+
+	//IB
+	m_IB = new IndexBuffer(indices, 6);
+
+	//Shader
+	//m_Shader = new Shader("src/res/shaders/Basic.shader");
+	m_Shader = new Shader(shaderPath);
+	m_Shader->Bind();
+
+	//Texture
 	m_Texture->Bind();
 
 	m_VA.Unbind();

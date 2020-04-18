@@ -2,6 +2,12 @@
 #include <time.h>
 
 #include "glm/glm.hpp"
+#include "glm/gtx/quaternion.hpp"
+#include <glm/gtc/constants.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/compatibility.hpp>
+
+
 #include "Sprite.h"
 
 #include "Random.h"
@@ -13,7 +19,7 @@ private:
 	float m_xPos;
 	float m_yPos;
 	float m_life;
-	float m_dyingSpeed;
+	float m_currLife;
 	glm::vec4 m_startingColor;
 	glm::vec4 m_dyingColor;
 	glm::vec4 m_Color;
@@ -28,7 +34,6 @@ private:
 public:
 	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor);
 	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life);
-	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life, float dyingSpeed);
 
 	~Particle();
 

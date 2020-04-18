@@ -5,6 +5,7 @@
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include <glm/gtc/type_ptr.hpp>
 
 #include "imgui\imgui.h"
 #include "imgui\imgui_impl_glfw_gl3.h"
@@ -70,7 +71,8 @@ int main(void)
 	const std::string& path5 = "src/res/textures/braun.jpg";
 	const std::string& path6 = "src/res/textures/parcFerme.jpg";
 	const std::string& path7 = "src/res/textures/bojack.png";
-	
+	const std::string& path8 = "src/res/textures/artifact.png";
+
 
 	//just some SpriteDec.	
 	//const int iterX = 64;
@@ -89,7 +91,8 @@ int main(void)
 	Sprite* mySprite4 = new Sprite(400, 100, 50, 50, path5, "src/res/shaders/Sphere.shader");
 	Sprite* mySphere1 = new Sprite(500, 100, 50, 50, path0, "src/res/shaders/Sphere.shader");
 	Sprite* mySphere2 = new Sprite(600, 100, 50, 50, path6, "src/res/shaders/Sphere.shader");
-	Sprite* randomColorfullRectangle = new Sprite(700, 100, 1827, 1251, path5, "src/res/shaders/rndFun.shader");
+	//Sprite* randomColorfullRectangle = new Sprite(700, 100, 3654/*1827*/, 2502/*1251*/, path5, "src/res/shaders/Basic.shader");
+	//Sprite* randomColorfullRectangle = new Sprite(700, 100, path1, "src/res/shaders/Basic.shader");
 	Sprite* Player = new Sprite((l_WindowWidth / 2) - 25, (l_WindowHeight / 2) - 25, 50, 50, path7, "src/res/shaders/Sphere.shader");
 	
 	Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
@@ -108,6 +111,13 @@ int main(void)
 
 	double cursorX;
 	double cursorY;
+
+	float ParticleSize = 50.0f;
+	float ParticleLife = 100.0f;
+	float ParticleDyingSpeed = 0.008f;
+	glm::vec4 ParticleStartingColor = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+	glm::vec4 ParticleDyingColor = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+
 
 	while (!glfwWindowShouldClose(window.GetWindow()))
 	{
@@ -139,8 +149,10 @@ int main(void)
 		tmpColorG += (0.001f * tmpColorHeadG);
 		tmpColorB += (0.004f * tmpColorHeadB);
 
-		randomColorfullRectangle->SetColorElement(glm::vec4(tmpColorR, tmpColorG, tmpColorB, 1.0f));
+		//randomColorfullRectangle->SetColorElement(glm::vec4(tmpColorR, tmpColorG, tmpColorB, 1.0f));
+		//randomColorfullRectangle->SetColorElement(glm::vec4(0.1f, 0.08f, 0.8f, 1.0f));
 		
+
 		renderer->Clear();
 		ImGui_ImplGlfwGL3_NewFrame();
 	
@@ -158,13 +170,8 @@ int main(void)
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_E) == GLFW_PRESS)
 			m_CameraZOOM = m_CameraZOOM + 1;
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
-			myParticles->AddObject(Particle((float)cursorX - 25, (float)cursorY - 80, 50, 50, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 1.0f, 1.0f), 100, 0.008f));
-		
-			//myParticles->AddObject(Particle((float)cursorX - 25, (float)cursorY - 80, 50, 50, glm::vec4(Random::Float(), Random::Float(), Random::Float(), 1.0f),
-			//	glm::vec4(Random::Float(), Random::Float(), Random::Float(), 1.0f), 100, 0.008f));
+			myParticles->AddObject(Particle((float)cursorX - (ParticleSize / 2), (float)cursorY - (ParticleSize / 2) - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife));
 
-			
-		
 
 		//CAMERA
 		ImGui::SliderFloat("CameraX", &m_CameraX, l_WindowWidth * (-1.0f), l_WindowWidth);
@@ -173,6 +180,14 @@ int main(void)
 		ImGui::SliderFloat("CameraZoom", &m_CameraZOOM, -40, 40);
 		camera->SetZoom(m_CameraZOOM);
 		
+
+		//Particles
+		ImGui::SliderFloat("ParticleSize", &ParticleSize, 0, 200);
+		ImGui::SliderFloat("ParticleLife", &ParticleLife, 0, 500);
+		ImGui::SliderFloat("ParticleDyingSpeed", &ParticleDyingSpeed, 0, 0.1);
+		ImGui::ColorEdit4("StartingColor", glm::value_ptr(ParticleStartingColor));
+		ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
+
 		//DrawCalls
 		//for (int i = 0; i < iterX; i++)
 		//{

@@ -31,7 +31,11 @@ void Renderer::DrawSprite(Sprite *m_Sprite)
 void Renderer::DrawParticles(const std::vector<Particle>& particles)
 {
 	for (Particle elem : particles)
-		DrawSprite(elem.GetSprite());
+	{
+		elem.GetSprite()->m_Shader->Bind();
+		elem.GetSprite()->m_Shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
+		elem.GetSprite()->OnRender();
+	}
 }
 
 void Renderer::Clear() const
