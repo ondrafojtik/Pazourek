@@ -35,7 +35,6 @@ Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, co
 	m_IB = new IndexBuffer(indices, 6);
 
 	//Shader
-	//m_Shader = new Shader("src/res/shaders/Basic.shader");
 	m_Shader = new Shader(shaderPath);
 	m_Shader->Bind();
 	
@@ -87,7 +86,6 @@ Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, gl
 	m_IB = new IndexBuffer(indices, 6);
 
 	//Shader
-	//m_Shader = new Shader("src/res/shaders/Basic.shader");
 	m_Shader = new Shader(shaderPath);
 	m_Shader->Bind();
 
@@ -144,7 +142,6 @@ Sprite::Sprite(float xPos, float yPos, std::string TexturePath, std::string shad
 	m_IB = new IndexBuffer(indices, 6);
 
 	//Shader
-	//m_Shader = new Shader("src/res/shaders/Basic.shader");
 	m_Shader = new Shader(shaderPath);
 	m_Shader->Bind();
 

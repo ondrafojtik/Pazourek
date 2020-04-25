@@ -59,10 +59,6 @@ public:
 	void SetSize(float size) { m_Size; }
 
 	void OnRender();
-	//inline VertexArray GetVA() { return m_VA; }
-	//inline IndexBuffer GetIB() { return *m_IB; }
-	//inline Shader GetShader() { return *m_Shader; }
-	//inline Texture GetTexture() { return *m_Texture; }
-
+	
 
 };
