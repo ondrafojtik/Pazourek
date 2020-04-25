@@ -115,7 +115,7 @@ int main(void)
 		//trying mosue input
 		//sets the values into cursorX, Y.. 
 		glfwGetCursorPos(window.GetWindow(), &cursorX, &cursorY);
-		
+
 		cursorX = (cursorX + camera->GetXOffset());
 		cursorY = (glm::abs(1080 - (float)cursorY) + camera->GetYOffset());
 
@@ -163,7 +163,6 @@ int main(void)
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
 			myParticles->AddObject(Particle((float)cursorX - (ParticleSize / 2), (float)cursorY - (ParticleSize / 2) - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife));
 
-
 		//CAMERA
 		camera->SetPosition(m_CameraX, m_CameraY);
 		camera->SetZoom(m_CameraZOOM);
@@ -188,7 +187,7 @@ int main(void)
 		
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);
-		
+
 		ImGui::Render();
 		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
