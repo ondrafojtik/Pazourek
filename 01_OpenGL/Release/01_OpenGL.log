@@ -1,15 +1,6 @@
 ﻿  Application.cpp
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 C:\dev\Pazourek\Dependencies\GLFW\include\GLFW\glfw3.h(104): message : see previous definition of 'APIENTRY'
-C:\dev\Pazourek\01_OpenGL\src\Application.cpp(187,71): warning C4305: 'argument': truncation from 'double' to 'float'
-  Particle.cpp
-  ParticleSystem.cpp
-C:\dev\Pazourek\01_OpenGL\src\ParticleSystem.cpp(18,20): warning C4018: '<': signed/unsigned mismatch
-  Renderer.cpp
-  Shader.cpp
-  VertexArray.cpp
-  VertexBuffer.cpp
-  Generating Code...
 LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
 glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\dev\Pazourek\Release\vc120.pdb'; linking object as if no debug info
   01_OpenGL.vcxproj -> C:\dev\Pazourek\Release\myEngine.exe

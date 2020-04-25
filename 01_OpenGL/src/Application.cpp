@@ -32,6 +32,8 @@
 
 #include "Random.h"
 
+#include "Colors.h"
+
 float l_WindowWidth = 1920;
 float l_WindowHeight = 1080;
 
@@ -73,26 +75,15 @@ int main(void)
 	const std::string& path7 = "src/res/textures/bojack.png";
 	const std::string& path8 = "src/res/textures/artifact.png";
 
-
-	//just some SpriteDec.	
-	//const int iterX = 64;
-	//const int iterY = 64;
-	//Sprite* mySprites[iterX][iterY];
-	//for (int i = 0; i < iterX; i++)
-	//{
-	//	for (int y = 0; y < iterY; y++)
-	//	{
-	//		mySprites[i][y] = new Sprite(50.0f * i, 50.0f * y, 50, 50, path0);
-	//	}
-	//}
 	Sprite* mySprite1 = new Sprite(100, 100, 50, 50, path0, "src/res/shaders/Basic.shader");
 	Sprite* mySprite2 = new Sprite(200, 100, 50, 58, path1, "src/res/shaders/Basic.shader");
 	Sprite* mySprite3 = new Sprite(300, 100, 50, 50, path4, "src/res/shaders/Debug.shader");
 	Sprite* mySprite4 = new Sprite(400, 100, 50, 50, path5, "src/res/shaders/Sphere.shader");
 	Sprite* mySphere1 = new Sprite(500, 100, 50, 50, path0, "src/res/shaders/Sphere.shader");
 	Sprite* mySphere2 = new Sprite(600, 100, 50, 50, path6, "src/res/shaders/Sphere.shader");
-	//Sprite* randomColorfullRectangle = new Sprite(700, 100, 3654/*1827*/, 2502/*1251*/, path5, "src/res/shaders/Basic.shader");
-	//Sprite* randomColorfullRectangle = new Sprite(700, 100, path1, "src/res/shaders/Basic.shader");
+	//Sprite* randomColorfullRectangle = new Sprite(700, 100, 3654/*1827*/, 2502/*1251*/, path5, "src/res/shaders/rndFun.shader");
+	//Sprite* randomColorfullRectangle = new Sprite(700, 100, path5, "src/res/shaders/Basic.shader");
+	Sprite* randomColorfullRectangle = new Sprite(700, 100, path5, "src/res/shaders/rndFun.shader");
 	Sprite* Player = new Sprite((l_WindowWidth / 2) - 25, (l_WindowHeight / 2) - 25, 50, 50, path7, "src/res/shaders/Sphere.shader");
 	
 	Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
@@ -115,8 +106,8 @@ int main(void)
 	float ParticleSize = 50.0f;
 	float ParticleLife = 100.0f;
 	float ParticleDyingSpeed = 0.008f;
-	glm::vec4 ParticleStartingColor = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
-	glm::vec4 ParticleDyingColor = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+	glm::vec4 ParticleStartingColor = COLOR::YELLOW;
+	glm::vec4 ParticleDyingColor = COLOR::PURPLE;
 
 
 	while (!glfwWindowShouldClose(window.GetWindow()))
@@ -149,7 +140,7 @@ int main(void)
 		tmpColorG += (0.001f * tmpColorHeadG);
 		tmpColorB += (0.004f * tmpColorHeadB);
 
-		//randomColorfullRectangle->SetColorElement(glm::vec4(tmpColorR, tmpColorG, tmpColorB, 1.0f));
+		randomColorfullRectangle->SetColorElement(glm::vec4(tmpColorR, tmpColorG, tmpColorB, 1.0f));
 		//randomColorfullRectangle->SetColorElement(glm::vec4(0.1f, 0.08f, 0.8f, 1.0f));
 		
 
@@ -174,39 +165,25 @@ int main(void)
 
 
 		//CAMERA
-		ImGui::SliderFloat("CameraX", &m_CameraX, l_WindowWidth * (-1.0f), l_WindowWidth);
-		ImGui::SliderFloat("CameraY", &m_CameraY, l_WindowHeight * (-1.0f), l_WindowHeight);
 		camera->SetPosition(m_CameraX, m_CameraY);
-		ImGui::SliderFloat("CameraZoom", &m_CameraZOOM, -40, 40);
 		camera->SetZoom(m_CameraZOOM);
 		
 
 		//Particles
 		ImGui::SliderFloat("ParticleSize", &ParticleSize, 0, 200);
 		ImGui::SliderFloat("ParticleLife", &ParticleLife, 0, 500);
-		ImGui::SliderFloat("ParticleDyingSpeed", &ParticleDyingSpeed, 0, 0.1);
 		ImGui::ColorEdit4("StartingColor", glm::value_ptr(ParticleStartingColor));
 		ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
 
-		//DrawCalls
-		//for (int i = 0; i < iterX; i++)
-		//{
-		//	for (int y = 0; y < iterY; y++)
-		//	{
-		//		renderer->DrawSprite(mySprites[i][y]);
-		//	}
-		//}
-
-
-		//renderer->DrawSprite(mySprite1);
-		//renderer->DrawSprite(mySprite2);
-		//renderer->DrawSprite(mySprite3);
-		//renderer->DrawSprite(mySprite4);
-		//renderer->DrawSprite(mySphere1);
-		//renderer->DrawSprite(mySphere2);
-		//Player->MoveSprite((camera->GetWidth() / 2) + m_CameraX - 25, (camera->GetHeight()/ 2) + m_CameraY - 25);
-		//renderer->DrawSprite(randomColorfullRectangle);
-		//renderer->DrawSprite(Player);
+		renderer->DrawSprite(mySprite1);
+		renderer->DrawSprite(mySprite2);
+		renderer->DrawSprite(mySprite3);
+		renderer->DrawSprite(mySprite4);
+		renderer->DrawSprite(mySphere1);
+		renderer->DrawSprite(mySphere2);
+		Player->MoveSprite((camera->GetWidth() / 2) + m_CameraX - 25, (camera->GetHeight()/ 2) + m_CameraY - 25);
+		renderer->DrawSprite(randomColorfullRectangle);
+		renderer->DrawSprite(Player);
 		renderer->DrawParticles(myParticles->GetParticles());
 		
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
