@@ -25,8 +25,6 @@ public:
 	Window(float WindowWidth, float WindowHeight);
 	~Window();
 
-
-
 	inline GLFWwindow* GetWindow() { return m_Window; }
 	inline GLFWmonitor* GetMonitor() { return m_Monitor; }
 	inline float GetWindowWidth() { return m_Bounds.width; }
