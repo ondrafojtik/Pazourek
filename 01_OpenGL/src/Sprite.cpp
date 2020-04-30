@@ -209,7 +209,8 @@ void Sprite::SetColorElement(glm::vec4 color)
 void Sprite::OnRender()
 {
 	m_Texture->Bind();
-	#if 1
+	
+#if 1
 	glm::mat4 transform = glm::rotate(glm::mat4(1.0f), glm::radians(m_Rotation), glm::vec3(0.0f, 0.0f, 1.0f))
 		* glm::translate(glm::mat4(1.0f), glm::vec3(
 			0.0f,

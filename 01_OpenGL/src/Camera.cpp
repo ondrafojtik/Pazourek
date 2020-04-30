@@ -13,7 +13,8 @@ void Camera::SetPosition(float xPos, float yPos)
 {
 	m_xCameraOff = xPos;
 	m_yCameraOff = yPos;
-	m_Proj = glm::ortho((m_Left + m_xCameraOff) + (m_Zoom * 16), 
+	m_Proj = glm::ortho(
+		(m_Left + m_xCameraOff) + (m_Zoom * 16), 
 		(m_Right + m_xCameraOff) - (m_Zoom * 16), 
 		(m_Bottom + m_yCameraOff) + (m_Zoom * 9), 
 		(m_Top + m_yCameraOff) - (m_Zoom * 9));

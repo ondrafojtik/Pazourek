@@ -1,12 +1,12 @@
 #include "Window.h"
 
-Window::Window(float WindowWidth, float WindowHeight) : m_WindowWidth(WindowWidth), m_WindowHeight(WindowHeight)
+Window::Window(float WindowWidth, float WindowHeight) : m_Bounds{ WindowWidth, WindowHeight }
 {
 	if (!glfwInit())
 		std::cout << "Init fail! Check WindowInit" << std::endl;
 
 	m_Monitor = glfwGetPrimaryMonitor();
-	m_Window = glfwCreateWindow(m_WindowWidth, m_WindowHeight, "GLwindow", NULL, NULL);
+	m_Window = glfwCreateWindow(m_Bounds.width, m_Bounds.height, "GLwindow", NULL, NULL);
 
 	const GLFWvidmode* mode = glfwGetVideoMode(m_Monitor);
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
