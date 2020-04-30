@@ -107,7 +107,7 @@ int main(void)
 	float ParticleLife = 100.0f;
 	float ParticleDyingSpeed = 0.008f;
 	glm::vec4 ParticleStartingColor = COLOR::YELLOW;
-	glm::vec4 ParticleDyingColor = COLOR::PURPLE;
+	glm::vec4 ParticleDyingColor = COLOR::RED;
 
 
 	while (!glfwWindowShouldClose(window.GetWindow()))
