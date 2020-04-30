@@ -1,2 +1,4 @@
 #dirs
 .vs/
+Debug/
+Release/
