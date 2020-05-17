@@ -85,8 +85,11 @@ int main(void)
 	//Sprite* randomColorfullRectangle = new Sprite(700, 100, path5, "src/res/shaders/Basic.shader");
 	Sprite* randomColorfullRectangle = new Sprite(700, 100, path5, "src/res/shaders/rndFun.shader");
 	Sprite* Player = new Sprite((l_WindowWidth / 2) - 25, (l_WindowHeight / 2) - 25, 50, 50, path7, "src/res/shaders/Sphere.shader");
-	
-	Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
+
+	//normal camera
+	//Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
+	//camera when drawing function
+	Camera* camera = new Camera(-384.0f, 384.0f, -216.0f, 216.0f);
 	Renderer *renderer = new Renderer(camera);
 
 	ParticleSystem* myParticles = new ParticleSystem();
@@ -109,6 +112,26 @@ int main(void)
 	glm::vec4 ParticleStartingColor = COLOR::YELLOW;
 	glm::vec4 ParticleDyingColor = COLOR::RED;
 	
+	int particleShaderIndex = 0;
+	std::string particleShaderPath = "src/res/shaders/Sphere.shader";
+
+	//TRYING TO USE PAZOUREK FOR HIS ORIGINAL PURPOSE
+	glm::vec2 *fPos = new glm::vec2(0.0f);
+	int fFrom = -100;
+	int fTo = 100;
+	std::vector<glm::vec2> fPositions;
+	bool drawed = false;
+	//mapping
+	float currPos = fFrom;
+	while (currPos <= fTo)
+	{
+		float fx, fy;
+		fx = currPos;
+		fy = glm::sin(fx);
+		fPositions.push_back(glm::vec2(fx, fy));
+		currPos += 0.1;
+	}
+
 
 	while (!glfwWindowShouldClose(window.GetWindow()))
 	{
@@ -143,8 +166,16 @@ int main(void)
 		randomColorfullRectangle->SetColorElement(glm::vec4(tmpColorR, tmpColorG, tmpColorB, 1.0f));
 		//randomColorfullRectangle->SetColorElement(glm::vec4(0.1f, 0.08f, 0.8f, 1.0f));
 		
+		//drawing function
+		if(!drawed)
+		{
+			for (glm::vec2 fPos : fPositions)
+				renderer->DrawSprite(new Sprite(fPos.x, fPos.y, 0.3f, 0.3f, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), "src/res/shaders/Basic.shader"));
+			drawed = true;
+		}
+		renderer->DrawSprite(new Sprite(-0.5f, -0.5f, 1.0f, 1.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "src/res/shaders/Basic.shader"));
 
-		renderer->Clear();
+		//renderer->Clear();
 		ImGui_ImplGlfwGL3_NewFrame();
 	
 		//INPUT
@@ -161,7 +192,15 @@ int main(void)
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_E) == GLFW_PRESS)
 			m_CameraZOOM = m_CameraZOOM + 1;
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
-			myParticles->AddObject(Particle((float)cursorX - (ParticleSize / 2), (float)cursorY - (ParticleSize / 2) - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife));
+			myParticles->AddObject(Particle((float)cursorX - (ParticleSize / 2), (float)cursorY - (ParticleSize / 2) - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath));
+		if (glfwGetKey(window.GetWindow(), GLFW_KEY_C) == GLFW_PRESS)
+		{
+			particleShaderIndex += 1;
+			if (particleShaderIndex % 2 == 0)
+				particleShaderPath = "src/res/shaders/Sphere.shader";
+			else
+				particleShaderPath = "src/res/shaders/Basic.shader";
+		}
 
 		//CAMERA
 		camera->SetPosition(m_CameraX, m_CameraY);
@@ -174,17 +213,19 @@ int main(void)
 		ImGui::ColorEdit4("StartingColor", glm::value_ptr(ParticleStartingColor));
 		ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
 
-		renderer->DrawSprite(mySprite1);
-		renderer->DrawSprite(mySprite2);
-		renderer->DrawSprite(mySprite3);
-		renderer->DrawSprite(mySprite4);
-		renderer->DrawSprite(mySphere1);
-		renderer->DrawSprite(mySphere2);
-		Player->MoveSprite((camera->GetWidth() / 2) + m_CameraX - 25, (camera->GetHeight()/ 2) + m_CameraY - 25);
-		renderer->DrawSprite(randomColorfullRectangle);
-		renderer->DrawSprite(Player);
+		//renderer->DrawSprite(mySprite1);
+		//renderer->DrawSprite(mySprite2);
+		//renderer->DrawSprite(mySprite3);
+		//renderer->DrawSprite(mySprite4);
+		//renderer->DrawSprite(mySphere1);
+		//renderer->DrawSprite(mySphere2);
+		//Player->MoveSprite((camera->GetWidth() / 2) + m_CameraX - 25, (camera->GetHeight()/ 2) + m_CameraY - 25);
+		//renderer->DrawSprite(randomColorfullRectangle);
+		//renderer->DrawSprite(Player);
 		renderer->DrawParticles(myParticles->GetParticles());
 		
+		
+
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);
 

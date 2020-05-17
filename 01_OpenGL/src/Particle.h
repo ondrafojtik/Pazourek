@@ -28,12 +28,14 @@ private:
 	//value assigned here for testing
 	glm::vec2 m_Velocity = glm::vec2(0.0f);
 	float m_Speed = 1.0f;
+	std::string m_Shader;
 
 	Sprite* m_Sprite;
 
 public:
 	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor);
 	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life);
+	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life, std::string shader);
 
 	~Particle();
 
