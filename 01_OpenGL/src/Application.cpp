@@ -87,9 +87,9 @@ int main(void)
 	Sprite* Player = new Sprite((l_WindowWidth / 2) - 25, (l_WindowHeight / 2) - 25, 50, 50, path7, "src/res/shaders/Sphere.shader");
 
 	//normal camera
-	//Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
+	Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
 	//camera when drawing function
-	Camera* camera = new Camera(-384.0f, 384.0f, -216.0f, 216.0f);
+	//Camera* camera = new Camera(-384.0f, 384.0f, -216.0f, 216.0f);
 	Renderer *renderer = new Renderer(camera);
 
 	ParticleSystem* myParticles = new ParticleSystem();
@@ -167,15 +167,15 @@ int main(void)
 		//randomColorfullRectangle->SetColorElement(glm::vec4(0.1f, 0.08f, 0.8f, 1.0f));
 		
 		//drawing function
-		if(!drawed)
-		{
-			for (glm::vec2 fPos : fPositions)
-				renderer->DrawSprite(new Sprite(fPos.x, fPos.y, 0.3f, 0.3f, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), "src/res/shaders/Basic.shader"));
-			drawed = true;
-		}
-		renderer->DrawSprite(new Sprite(-0.5f, -0.5f, 1.0f, 1.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "src/res/shaders/Basic.shader"));
+		//if(!drawed)
+		//{
+		//	for (glm::vec2 fPos : fPositions)
+		//		renderer->DrawSprite(new Sprite(fPos.x, fPos.y, 0.3f, 0.3f, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), "src/res/shaders/Basic.shader"));
+		//	drawed = true;
+		//}
+		//renderer->DrawSprite(new Sprite(-0.5f, -0.5f, 1.0f, 1.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "src/res/shaders/Basic.shader"));
 
-		//renderer->Clear();
+		renderer->Clear();
 		ImGui_ImplGlfwGL3_NewFrame();
 	
 		//INPUT
@@ -192,8 +192,8 @@ int main(void)
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_E) == GLFW_PRESS)
 			m_CameraZOOM = m_CameraZOOM + 1;
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
-			myParticles->AddObject(Particle((float)cursorX - (ParticleSize / 2), (float)cursorY - (ParticleSize / 2) - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath));
-		if (glfwGetKey(window.GetWindow(), GLFW_KEY_C) == GLFW_PRESS)
+			myParticles->AddObject((float)cursorX - (ParticleSize / 2), (float)cursorY - (ParticleSize / 2) - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath);
+			if (glfwGetKey(window.GetWindow(), GLFW_KEY_C) == GLFW_PRESS)
 		{
 			particleShaderIndex += 1;
 			if (particleShaderIndex % 2 == 0)
