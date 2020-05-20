@@ -132,7 +132,6 @@ int main(void)
 		currPos += 0.1;
 	}
 
-
 	while (!glfwWindowShouldClose(window.GetWindow()))
 	{
 		//trying mosue input
@@ -144,7 +143,7 @@ int main(void)
 
 		myParticles->OnUpdate();
 		
-		tmpRotation += 1.0f;
+		tmpRotation += 0.08f;
 		mySprite2->RotateSprite(tmpRotation);
 
 		if (tmpColorR >= 1.0f)
@@ -192,7 +191,7 @@ int main(void)
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_E) == GLFW_PRESS)
 			m_CameraZOOM = m_CameraZOOM + 1;
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
-			myParticles->AddObject((float)cursorX - (ParticleSize / 2), (float)cursorY - (ParticleSize / 2) - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath);
+			myParticles->AddObject((float)cursorX, (float)cursorY - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath);
 			if (glfwGetKey(window.GetWindow(), GLFW_KEY_C) == GLFW_PRESS)
 		{
 			particleShaderIndex += 1;
@@ -213,15 +212,15 @@ int main(void)
 		ImGui::ColorEdit4("StartingColor", glm::value_ptr(ParticleStartingColor));
 		ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
 
-		//renderer->DrawSprite(mySprite1);
-		//renderer->DrawSprite(mySprite2);
-		//renderer->DrawSprite(mySprite3);
-		//renderer->DrawSprite(mySprite4);
-		//renderer->DrawSprite(mySphere1);
-		//renderer->DrawSprite(mySphere2);
-		//Player->MoveSprite((camera->GetWidth() / 2) + m_CameraX - 25, (camera->GetHeight()/ 2) + m_CameraY - 25);
+		renderer->DrawSprite(mySprite1);
+		renderer->DrawSprite(mySprite2);
+		renderer->DrawSprite(mySprite3);
+		renderer->DrawSprite(mySprite4);
+		renderer->DrawSprite(mySphere1);
+		renderer->DrawSprite(mySphere2);
+		Player->MoveSprite((camera->GetWidth() / 2) + m_CameraX - 25, (camera->GetHeight()/ 2) + m_CameraY - 25);
 		//renderer->DrawSprite(randomColorfullRectangle);
-		//renderer->DrawSprite(Player);
+		renderer->DrawSprite(Player);
 		renderer->DrawParticles(myParticles->GetParticles());
 		
 		

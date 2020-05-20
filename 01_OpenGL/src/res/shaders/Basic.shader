@@ -13,7 +13,7 @@ uniform vec4 u_ColorElement;
 
 void main()
 {
-	gl_Position = u_Proj * u_Transform * position; //u_Proj * u_Transform * position;
+	gl_Position = (u_Proj * u_Transform * position); //u_Proj * u_Transform * position;
 	v_TexCoord = texCoord;
 	v_colorElement = u_ColorElement;
 }
@@ -28,6 +28,7 @@ in vec4 v_colorElement;
 
 uniform sampler2D u_Texture;
 uniform vec4 u_Color;
+uniform vec4 u_aPos;
 
 void main()
 {
