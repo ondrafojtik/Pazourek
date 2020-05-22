@@ -7,9 +7,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/compatibility.hpp>
 
-
 #include "Sprite.h"
-
 #include "Random.h"
 
 
@@ -25,7 +23,6 @@ private:
 	glm::vec4 m_Color;
 	float m_Width;
 	float m_Height;
-	//value assigned here for testing
 	glm::vec2 m_Velocity = glm::vec2(0.0f);
 	float m_Speed = 1.0f;
 	std::string m_Shader;
@@ -39,11 +36,11 @@ public:
 
 	~Particle();
 
-	inline float GetXPos() { return m_xPos; }
-	inline float GetYPos() { return m_yPos; }
-	glm::vec2 GetPositionV2() { return glm::vec2(m_xPos, m_yPos); }
-	glm::vec3 GetPositionV3() { return glm::vec3(m_xPos, m_yPos, 0.0f); }
-	bool Alive() { return (m_Color.a > 0); }
+	inline float GetXPos() const { return m_xPos; }
+	inline float GetYPos() const { return m_yPos; }
+	glm::vec2 GetPositionV2() const { return glm::vec2(m_xPos, m_yPos); }
+	glm::vec3 GetPositionV3() const { return glm::vec3(m_xPos, m_yPos, 0.0f); }
+	bool Alive() const { return (m_Color.a > 0); }
 
 	inline Sprite* GetSprite() { return m_Sprite; }
 

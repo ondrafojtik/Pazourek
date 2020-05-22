@@ -18,16 +18,15 @@ class Window
 private: 
 	GLFWwindow* m_Window;
 	GLFWmonitor* m_Monitor;
-	
 	Bounds m_Bounds = { 0, 0 };
 
 public:
 	Window(float WindowWidth, float WindowHeight);
 	~Window();
 
-	inline GLFWwindow* GetWindow() { return m_Window; }
-	inline GLFWmonitor* GetMonitor() { return m_Monitor; }
-	inline float GetWindowWidth() { return m_Bounds.width; }
-	inline float GetWindowHeight() { return m_Bounds.height; }
+	inline GLFWwindow* GetWindow() const { return m_Window; }
+	inline GLFWmonitor* GetMonitor() const { return m_Monitor; }
+	inline float GetWindowWidth() const { return m_Bounds.width; }
+	inline float GetWindowHeight() const { return m_Bounds.height; }
 
 };

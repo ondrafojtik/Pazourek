@@ -1,6 +1,5 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
 #include <GLFW\glfw3native.h>
 
 #include "glm/glm.hpp"
@@ -24,14 +23,10 @@
 #include "VertexBufferLayout.h"
 #include "Texture.h"
 #include <Windows.h>
-#include "Animation.h"
 #include "Window.h"
-
 #include "Particle.h"
 #include "ParticleSystem.h"
-
 #include "Random.h"
-
 #include "Colors.h"
 
 float l_WindowWidth = 1920;
@@ -43,7 +38,6 @@ float posY = 0;
 float m_CameraX = 0;
 float m_CameraY = 0;
 float m_CameraZOOM = 0;
-
 
 int main(void)
 {
@@ -81,9 +75,6 @@ int main(void)
 	Sprite* mySprite4 = new Sprite(400, 100, 50, 50, path5, "src/res/shaders/Sphere.shader");
 	Sprite* mySphere1 = new Sprite(500, 100, 50, 50, path0, "src/res/shaders/Sphere.shader");
 	Sprite* mySphere2 = new Sprite(600, 100, 50, 50, path6, "src/res/shaders/Sphere.shader");
-	//Sprite* randomColorfullRectangle = new Sprite(700, 100, 3654/*1827*/, 2502/*1251*/, path5, "src/res/shaders/rndFun.shader");
-	//Sprite* randomColorfullRectangle = new Sprite(700, 100, path5, "src/res/shaders/Basic.shader");
-	Sprite* randomColorfullRectangle = new Sprite(700, 100, path5, "src/res/shaders/rndFun.shader");
 	Sprite* Player = new Sprite((l_WindowWidth / 2) - 25, (l_WindowHeight / 2) - 25, 50, 50, path7, "src/res/shaders/Sphere.shader");
 
 	//normal camera
@@ -94,17 +85,10 @@ int main(void)
 
 	ParticleSystem* myParticles = new ParticleSystem();
 	
-	float tmpRotation = 0.0f;
-	
-	float tmpColorR = 0.0f;
-	float tmpColorHeadR = 1;
-	float tmpColorG = 0.0f;
-	float tmpColorHeadG = 1;
-	float tmpColorB = 0.0f;
-	float tmpColorHeadB = 1;
-
 	double cursorX;
 	double cursorY;
+
+	float tmpRotation = 0.0f;
 
 	float ParticleSize = 50.0f;
 	float ParticleLife = 100.0f;
@@ -146,25 +130,6 @@ int main(void)
 		tmpRotation += 0.08f;
 		mySprite2->RotateSprite(tmpRotation);
 
-		if (tmpColorR >= 1.0f)
-			tmpColorHeadR = -1;
-		if (tmpColorR <= 0.1f)
-			tmpColorHeadR = 1;
-		if (tmpColorG >= 1.0f)
-			tmpColorHeadG = -1;
-		if (tmpColorG <= 0.1f)
-			tmpColorHeadG = 1;
-		if (tmpColorB >= 1.0f)
-			tmpColorHeadB = -1;
-		if (tmpColorB <= 0.1f)
-			tmpColorHeadB = 1;
-		tmpColorR += (0.006f * tmpColorHeadR);
-		tmpColorG += (0.001f * tmpColorHeadG);
-		tmpColorB += (0.004f * tmpColorHeadB);
-
-		randomColorfullRectangle->SetColorElement(glm::vec4(tmpColorR, tmpColorG, tmpColorB, 1.0f));
-		//randomColorfullRectangle->SetColorElement(glm::vec4(0.1f, 0.08f, 0.8f, 1.0f));
-		
 		//drawing function
 		//if(!drawed)
 		//{
@@ -212,15 +177,14 @@ int main(void)
 		ImGui::ColorEdit4("StartingColor", glm::value_ptr(ParticleStartingColor));
 		ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
 
-		renderer->DrawSprite(mySprite1);
-		renderer->DrawSprite(mySprite2);
-		renderer->DrawSprite(mySprite3);
-		renderer->DrawSprite(mySprite4);
-		renderer->DrawSprite(mySphere1);
-		renderer->DrawSprite(mySphere2);
-		Player->MoveSprite((camera->GetWidth() / 2) + m_CameraX - 25, (camera->GetHeight()/ 2) + m_CameraY - 25);
-		//renderer->DrawSprite(randomColorfullRectangle);
-		renderer->DrawSprite(Player);
+		//renderer->DrawSprite(mySprite1);
+		//renderer->DrawSprite(mySprite2);
+		//renderer->DrawSprite(mySprite3);
+		//renderer->DrawSprite(mySprite4);
+		//renderer->DrawSprite(mySphere1);
+		//renderer->DrawSprite(mySphere2);
+		//Player->MoveSprite((camera->GetWidth() / 2) + m_CameraX - 25, (camera->GetHeight()/ 2) + m_CameraY - 25);
+		//renderer->DrawSprite(Player);
 		renderer->DrawParticles(myParticles->GetParticles());
 		
 		

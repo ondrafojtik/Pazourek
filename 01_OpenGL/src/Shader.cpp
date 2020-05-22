@@ -1,11 +1,6 @@
 #include "Shader.h"
-
-#include "Renderer.h"
-
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
+//#include "Renderer.h"
+#include "GLcall.h"
 
 Shader::Shader(const std::string& filepath)
 	: m_FilePath(filepath), m_RendererID(0)
@@ -55,7 +50,7 @@ ShaderProgramSource Shader::ParseShader(const std::string& filepath)
 unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 {
 	unsigned int id = glCreateShader(type);
-	const char* src = source.c_str(); // = &source[0]
+	const char* src = source.c_str(); // == &source[0]
 	glShaderSource(id, 1, &src, nullptr);
 	glCompileShader(id);
 

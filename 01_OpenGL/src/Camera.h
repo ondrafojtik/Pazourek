@@ -21,17 +21,17 @@ public:
 
 	void SetPosition(float xPos, float yPos);
 	void SetZoom(float Zoom);
-	inline glm::mat4 GetProjection() { return m_Proj; }
-	inline float GetCameraX() { return m_xCameraOff; }
-	inline float GetCameraY() { return m_yCameraOff; }
-	inline float GetRealLeftPos() { return ((m_Left + m_xCameraOff) + (m_Zoom * 16)); }
-	inline float GetRealRightPos() { return ((m_Right + m_xCameraOff) - (m_Zoom * 16)); }
-	inline float GetRealBottomPos() { return ((m_Bottom + m_yCameraOff) + (m_Zoom * 9)); }
-	inline float GetRealTopPos() { return ((m_Top + m_yCameraOff) - (m_Zoom * 9)); }
+	inline glm::mat4 GetProjection() const { return m_Proj; }
+	inline float GetCameraX() const { return m_xCameraOff; }
+	inline float GetCameraY() const { return m_yCameraOff; }
+	inline float GetRealLeftPos() const { return ((m_Left + m_xCameraOff) + (m_Zoom * 16)); }
+	inline float GetRealRightPos() const { return ((m_Right + m_xCameraOff) - (m_Zoom * 16)); }
+	inline float GetRealBottomPos() const { return ((m_Bottom + m_yCameraOff) + (m_Zoom * 9)); }
+	inline float GetRealTopPos() const { return ((m_Top + m_yCameraOff) - (m_Zoom * 9)); }
 
-	inline float GetWidth() { return m_Right - m_Left; }
-	inline float GetHeight() { return m_Top - m_Bottom; }
-	inline float GetZoom() { return m_Zoom; }
-	inline float GetXOffset() { return m_xCameraOff; }  
-	inline float GetYOffset() { return m_yCameraOff; }
+	inline float GetWidth() const { return m_Right - m_Left; }
+	inline float GetHeight() const { return m_Top - m_Bottom; }
+	inline float GetZoom() const { return m_Zoom; }
+	inline float GetXOffset() const { return m_xCameraOff; }  
+	inline float GetYOffset() const { return m_yCameraOff; }
 };

@@ -5,9 +5,7 @@ Camera::Camera(float left, float right, float bottom, float top) : m_Left(left),
 	m_Proj = glm::ortho(m_Left + m_xCameraOff, m_Right + m_xCameraOff, m_Bottom + m_yCameraOff, m_Top + m_yCameraOff);
 }
 
-Camera::~Camera()
-{
-}
+Camera::~Camera() {}
 
 void Camera::SetPosition(float xPos, float yPos)
 {

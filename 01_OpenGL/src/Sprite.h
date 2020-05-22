@@ -1,5 +1,8 @@
 #pragma once
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
 #include <string>
 
 #include "VertexArray.h"
@@ -8,13 +11,9 @@
 #include "IndexBuffer.h"
 #include "Shader.h"
 #include "Texture.h"
-
 #include "GLcall.h"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-
-class Sprite	//xPos and yPos r both left bottom of the sprite
+class Sprite	
 {
 private:
 	float m_xPos;
@@ -48,13 +47,13 @@ public:
 	//angle in degrees
 	void RotateSprite(float angle);
 	void SetColorElement(glm::vec4 color);
-	inline float GetXPos() { return m_xPos; }
-	inline float GetYPos() { return m_yPos; }
-	inline float GetWidth() { return m_SpriteWidth; }
-	inline float GetHeight() { return m_SpriteHeight; }
-	inline glm::vec3 GetPosition() { return glm::vec3(m_xPos, m_yPos, 1.0f); }
-	inline float GetRotation() { return m_Rotation; }
-	inline glm::vec4 GetColorElement() { return m_colorElement; }
+	inline float GetXPos() const { return m_xPos; }
+	inline float GetYPos() const { return m_yPos; }
+	inline float GetWidth() const { return m_SpriteWidth; }
+	inline float GetHeight() const { return m_SpriteHeight; }
+	inline glm::vec3 GetPosition() const { return glm::vec3(m_xPos, m_yPos, 1.0f); }
+	inline float GetRotation() const { return m_Rotation; }
+	inline glm::vec4 GetColorElement() const { return m_colorElement; }
 	void SetColor(glm::vec4 color) { m_Color = color; }
 	void SetSize(float size) { m_Size; }
 

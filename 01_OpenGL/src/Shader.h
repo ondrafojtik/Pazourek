@@ -1,9 +1,12 @@
 #pragma once
 
+#include "glm/glm.hpp"
+
 #include <string>
 #include <unordered_map>
-
-#include "glm/glm.hpp"
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 struct ShaderProgramSource
 {
@@ -31,7 +34,6 @@ public:
 	void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
 private:
 	int GetUniformLocation(const std::string& name);
-	
 	ShaderProgramSource ParseShader(const std::string& filepath);
 	unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
 	unsigned int CompileShader(unsigned int type, const std::string& source);

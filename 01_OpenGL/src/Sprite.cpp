@@ -110,7 +110,6 @@ Sprite::Sprite(float xPos, float yPos, std::string TexturePath, std::string shad
 	m_Texture = new Texture(TexturePath);
 	m_SpriteWidth = m_Texture->GetWidth();
 	m_SpriteHeight = m_Texture->GetHeight();
-	std::cout << m_SpriteWidth << " " << m_SpriteHeight << "\n";
 
 	float positions[] = {
 		-0.5f, -0.5f, 0.0f, 0.0f,

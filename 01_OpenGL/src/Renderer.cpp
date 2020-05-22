@@ -1,5 +1,7 @@
 #include "Renderer.h"
 
+
+//linked to GLCall, might have to deal with later
 void GLClearError()
 {
 	while (glGetError() != GL_NO_ERROR);
@@ -15,17 +17,13 @@ bool GLLogCall(const char* function, const char* file, int line)
 	return true;
 }
 
-
-Renderer::Renderer(Camera *camera) : m_Camera(camera)
-{
-}
+Renderer::Renderer(Camera *camera) : m_Camera(camera) {}
 
 void Renderer::DrawSprite(Sprite *m_Sprite)
 {
 	m_Sprite->m_Shader->Bind();
 	m_Sprite->m_Shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
 	m_Sprite->OnRender();
-	
 }
 
 void Renderer::DrawParticles(const std::vector<Particle>& particles)

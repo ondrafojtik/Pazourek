@@ -29,7 +29,5 @@ void ParticleSystem::OnUpdate()
 		{
 			m_Particles.erase(m_Particles.begin() + i);
 		}
-
 	}
-
 }

@@ -1,7 +1,8 @@
 #pragma once
 
+#include "stb-master\stb_image.h"
+
 #include <iostream>
-//#include "Renderer.h"
 #include "GLcall.h"
 #include <sstream>
 
