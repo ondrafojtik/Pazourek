@@ -11,7 +11,6 @@ Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, co
 		-0.5f,  0.5f, 0.0f, 1.0f,
 	};
 
-
 	unsigned int indices[] = {
 			0, 1, 2,
 			2, 3, 0
@@ -169,8 +168,6 @@ void Sprite::MoveSprite(float xPos, float yPos)
 	m_xPos = xPos;
 	m_yPos = yPos;
 	
-	//m_VB = new VertexBuffer(positions, 4 * 4 * sizeof(float));
-	//m_VA.AddBuffer(*m_VB, m_Layout);
 }
 
 void Sprite::MoveSpriteBy(float xPos, float yPos)
@@ -178,15 +175,6 @@ void Sprite::MoveSpriteBy(float xPos, float yPos)
 	m_xPos = m_xPos + xPos;
 	m_yPos = m_yPos + yPos;
 
-	float positions[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f,
-		 0.5f, -0.5f, 1.0f, 0.0f,
-		 0.5f,  0.5f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-	};
-
-	m_VB = new VertexBuffer(positions, 4 * 4 * sizeof(float));
-	m_VA.AddBuffer(*m_VB, m_Layout);
 }
 
 void Sprite::RotateSprite(float angle)
@@ -197,6 +185,69 @@ void Sprite::RotateSprite(float angle)
 void Sprite::SetColorElement(glm::vec4 color)
 {
 	this->m_colorElement = color;
+}
+
+void Sprite::SetPivot(unsigned int type)
+{
+	float verticalDif;
+	float horizontalDif;
+
+	switch (type)
+	{
+		case DEFAULT:
+		{
+			verticalDif = 0;
+			horizontalDif = 0;
+			break;
+		}
+		case CENTER: 
+		{
+			verticalDif = 0;
+			horizontalDif = 0;
+			break;
+		}
+		case BOTTOM_LEFT:		
+		{
+			verticalDif = 0.5f;
+			horizontalDif = 0.5f;
+			break;
+		}
+		case BOTTOM_RIGHT:
+		{
+			verticalDif = -0.5;
+			horizontalDif = 0.5f;
+			break;
+		}
+		case TOP_RIGHT:			
+		{
+			verticalDif = -0.5f;
+			horizontalDif = -0.5;
+			break;
+		}
+		case TOP_LEFT:		
+		{
+			verticalDif = 0.5f;
+			horizontalDif = -0.5f;
+			break;
+		}
+		default:
+		{
+			verticalDif = 0.0f;
+			horizontalDif = 0.0f;
+			break;
+		}
+		
+	}
+
+	float positions[] = {
+		-0.5f + verticalDif, -0.5f + horizontalDif, 0.0f, 0.0f,
+		 0.5f + verticalDif, -0.5f + horizontalDif, 1.0f, 0.0f,
+		 0.5f + verticalDif,  0.5f + horizontalDif, 1.0f, 1.0f,
+		-0.5f + verticalDif,  0.5f + horizontalDif, 0.0f, 1.0f,
+	};
+
+	m_VB = new VertexBuffer(positions, 4 * 4 * sizeof(float));
+	m_VA.AddBuffer(*m_VB, m_Layout);
 }
 
 void Sprite::OnRender()

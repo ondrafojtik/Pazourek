@@ -14,6 +14,7 @@
 #include <string>
 #include <sstream>
 
+#include "defines.h"
 #include "Camera.h"
 #include "Renderer.h"
 #include "IndexBuffer.h"
@@ -28,6 +29,7 @@
 #include "ParticleSystem.h"
 #include "Random.h"
 #include "Colors.h"
+
 
 float l_WindowWidth = 1920;
 float l_WindowHeight = 1080;
@@ -59,7 +61,7 @@ int main(void)
 	ImGui_ImplGlfwGL3_Init(window.GetWindow(), true);
 	ImGui::StyleColorsDark();
 	////////////////////////////////////////
-
+	
 	const std::string& path0 = "src/res/textures/grass.png";
 	const std::string& path1 = "src/res/textures/iu.png";
 	const std::string& path3 = "src/res/textures/cobblestone.jpg";
@@ -115,6 +117,7 @@ int main(void)
 		fPositions.push_back(glm::vec2(fx, fy));
 		currPos += 0.1;
 	}
+	mySprite2->SetPivot(CENTER);
 
 	while (!glfwWindowShouldClose(window.GetWindow()))
 	{
@@ -127,7 +130,7 @@ int main(void)
 
 		myParticles->OnUpdate();
 		
-		tmpRotation += 0.08f;
+		tmpRotation += 0.03f;
 		mySprite2->RotateSprite(tmpRotation);
 
 		//drawing function
@@ -178,7 +181,7 @@ int main(void)
 		ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
 
 		//renderer->DrawSprite(mySprite1);
-		//renderer->DrawSprite(mySprite2);
+		renderer->DrawSprite(mySprite2);
 		//renderer->DrawSprite(mySprite3);
 		//renderer->DrawSprite(mySprite4);
 		//renderer->DrawSprite(mySphere1);

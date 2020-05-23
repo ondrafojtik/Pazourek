@@ -5,6 +5,7 @@
 
 #include <string>
 
+#include "defines.h"
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
@@ -56,6 +57,7 @@ public:
 	inline glm::vec4 GetColorElement() const { return m_colorElement; }
 	void SetColor(glm::vec4 color) { m_Color = color; }
 	void SetSize(float size) { m_Size; }
+	void SetPivot(unsigned int type);
 
 	void OnRender();
 	
