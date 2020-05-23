@@ -9,9 +9,9 @@ ParticleSystem::~ParticleSystem()
 {}
 
 void ParticleSystem::AddObject(float xPos, float yPos, float ParticleSizeX, float ParticleSizeY, glm::vec4 ParticleStartingColor, glm::vec4 ParticleDyingColor, float ParticleLife,
-	std::string particleShaderPath)
+	std::string particleShaderPath, bool allowRotation, bool allowScale)
 {
-	m_Particles.emplace_back(xPos, yPos, ParticleSizeX, ParticleSizeY, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath);
+	m_Particles.emplace_back(xPos, yPos, ParticleSizeX, ParticleSizeY, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath, allowRotation, allowScale);
 }
 
 void ParticleSystem::AddObject(const Particle& particle)

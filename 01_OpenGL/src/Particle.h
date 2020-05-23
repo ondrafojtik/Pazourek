@@ -26,15 +26,17 @@ private:
 	glm::vec2 m_Velocity = glm::vec2(0.0f);
 	std::string m_Shader;
 	float m_Speed = 1.0f;
-	float m_RotationSpeed = 0.05f;
+	float m_RotationSpeed = 0.1f;
 	float m_minimalSize = 10.0f;
-	
+	bool m_AllowRotation = true;
+	bool m_AllowScale = true;
+
 	Sprite* m_Sprite;
 
 public:
 	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor);
 	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life);
-	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life, std::string shader);
+	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life, std::string shader, bool allowRotation, bool allowScale);
 	
 	~Particle();
 

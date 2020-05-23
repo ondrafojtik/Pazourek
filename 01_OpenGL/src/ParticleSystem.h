@@ -13,7 +13,7 @@ public:
 
 	void AddObject(const Particle& particle);
 	void AddObject(float xPos, float yPos, float ParticleSizeX, float ParticleSizeY, glm::vec4 ParticleStartingColor, glm::vec4 ParticleDyingColor, float ParticleLife,
-		std::string particleShaderPath);
+		std::string particleShaderPath, bool allowRotation, bool allowScale);
 
 	void OnUpdate();
 

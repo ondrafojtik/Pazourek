@@ -97,6 +97,9 @@ int main(void)
 	float ParticleDyingSpeed = 0.008f;
 	glm::vec4 ParticleStartingColor = COLOR::YELLOW;
 	glm::vec4 ParticleDyingColor = COLOR::RED;
+	bool enableRotation = true;
+	bool enableScale = true;
+	bool enableCircles = true;
 	
 	int particleShaderIndex = 0;
 	std::string particleShaderPath = "src/res/shaders/Sphere.shader";
@@ -159,16 +162,8 @@ int main(void)
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_E) == GLFW_PRESS)
 			m_CameraZOOM = m_CameraZOOM + 1;
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
-			myParticles->AddObject((float)cursorX, (float)cursorY - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath);
-			if (glfwGetKey(window.GetWindow(), GLFW_KEY_C) == GLFW_PRESS)
-		{
-			particleShaderIndex += 1;
-			if (particleShaderIndex % 2 == 0)
-				particleShaderPath = "src/res/shaders/Sphere.shader";
-			else
-				particleShaderPath = "src/res/shaders/Basic.shader";
-		}
-
+			myParticles->AddObject((float)cursorX, (float)cursorY - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath, enableRotation, enableScale);
+		
 		//CAMERA
 		camera->SetPosition(m_CameraX, m_CameraY);
 		camera->SetZoom(m_CameraZOOM);
@@ -179,6 +174,14 @@ int main(void)
 		ImGui::SliderFloat("ParticleLife", &ParticleLife, 0, 500);
 		ImGui::ColorEdit4("StartingColor", glm::value_ptr(ParticleStartingColor));
 		ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
+		ImGui::Checkbox("Enable rotation", &enableRotation);
+		ImGui::Checkbox("Enable scale", &enableScale);
+		ImGui::Checkbox("Circles", &enableCircles);
+
+		if(enableCircles)
+			particleShaderPath = "src/res/shaders/Sphere.shader";
+		else
+			particleShaderPath = "src/res/shaders/Basic.shader";
 
 		//renderer->DrawSprite(mySprite1);
 		renderer->DrawSprite(mySprite2);
