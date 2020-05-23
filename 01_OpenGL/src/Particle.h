@@ -24,16 +24,18 @@ private:
 	float m_Width;
 	float m_Height;
 	glm::vec2 m_Velocity = glm::vec2(0.0f);
-	float m_Speed = 1.0f;
 	std::string m_Shader;
-
+	float m_Speed = 1.0f;
+	float m_RotationSpeed = 0.05f;
+	float m_minimalSize = 10.0f;
+	
 	Sprite* m_Sprite;
 
 public:
 	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor);
 	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life);
 	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life, std::string shader);
-
+	
 	~Particle();
 
 	inline float GetXPos() const { return m_xPos; }

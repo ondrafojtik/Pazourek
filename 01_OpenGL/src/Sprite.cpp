@@ -3,7 +3,8 @@
 Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, const std::string TexturePath, const std::string shaderPath) 
 	: m_xPos(xPos), m_yPos(yPos), m_TexturePath(TexturePath), m_SpriteWidth(SpriteWidth), m_SpriteHeight(SpriteHeight), m_Color(glm::vec4(1.0f)), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f), m_Size(1.0f)
 {
-	
+	m_originalSize = { m_SpriteWidth, m_SpriteHeight };
+
 	float positions[] = {
 		-0.5f, -0.5f, 0.0f, 0.0f,
 		 0.5f, -0.5f, 1.0f, 0.0f,
@@ -54,7 +55,8 @@ Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, gl
 	: m_xPos(xPos), m_yPos(yPos), m_Color(color), m_SpriteWidth(SpriteWidth), m_SpriteHeight(SpriteHeight), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f),
 	m_Size(1.0f)
 {
-	
+	m_originalSize = { m_SpriteWidth, m_SpriteHeight };
+
 	float positions[] = {
 		-0.5f, -0.5f, 0.0f, 0.0f,
 		 0.5f, -0.5f, 1.0f, 0.0f,
@@ -105,6 +107,7 @@ Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, gl
 Sprite::Sprite(float xPos, float yPos, std::string TexturePath, std::string shaderPath) 
 	: m_xPos(xPos), m_yPos(yPos), m_TexturePath(TexturePath), m_SpriteWidth(0), m_SpriteHeight(0), m_Color(glm::vec4(1.0f)), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f), m_Size(1.0f)
 {
+	m_originalSize = { m_SpriteWidth, m_SpriteHeight };
 
 	m_Texture = new Texture(TexturePath);
 	m_SpriteWidth = m_Texture->GetWidth();

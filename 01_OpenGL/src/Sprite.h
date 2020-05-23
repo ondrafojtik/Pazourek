@@ -14,6 +14,11 @@
 #include "Texture.h"
 #include "GLcall.h"
 
+struct OriginalSize
+{
+	float width, height;
+};
+
 class Sprite	
 {
 private:
@@ -29,7 +34,8 @@ private:
 	glm::vec4 m_colorElement;
 	glm::vec4 m_Color;
 	float m_Size;
-
+	OriginalSize m_originalSize;
+	
 public:
 	VertexArray m_VA;		
 	IndexBuffer *m_IB;		
@@ -55,9 +61,11 @@ public:
 	inline glm::vec3 GetPosition() const { return glm::vec3(m_xPos, m_yPos, 1.0f); }
 	inline float GetRotation() const { return m_Rotation; }
 	inline glm::vec4 GetColorElement() const { return m_colorElement; }
+	OriginalSize GetOriginalSize() { return m_originalSize; }
 	void SetColor(glm::vec4 color) { m_Color = color; }
-	void SetSize(float size) { m_Size; }
+	void SetSize(glm::vec2 size) { m_SpriteWidth = size.x; m_SpriteHeight = size.y; }
 	void SetPivot(unsigned int type);
+	void SetRotation(float rotation) { m_Rotation = rotation; }
 
 	void OnRender();
 	

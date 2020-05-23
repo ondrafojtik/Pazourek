@@ -4,6 +4,7 @@ Particle::Particle(float xPos, float yPos, float width, float height, glm::vec4 
 	: m_xPos(xPos), m_yPos(yPos), m_Width(width), m_Height(height), m_startingColor(startingColor), m_dyingColor(dyingColor), m_life(life), m_currLife(life), m_Color(startingColor), m_Shader(shader)
 {
 	m_Sprite = new Sprite(m_xPos, m_yPos, m_Width, m_Height, m_Color, shader);
+	m_Sprite->SetRotation(Random::Float() * 360);
 	m_Velocity = glm::vec2(Random::Float() * 100 - 50, Random::Float() * 100 - 50);
 }
 
@@ -28,8 +29,15 @@ void Particle::OnUpdate()
 	m_Color = glm::lerp(m_dyingColor, m_startingColor, _life);
 	m_Color.a = m_Color.a * _life;
 	m_currLife -= 1;
+	float scaleSpeed = (m_life - m_currLife);
+	
+	//"bug" -> but it seems pretty fun, lol	
+	//m_Sprite->SetSize({ m_Sprite->GetWidth() - scaleSpeed, m_Sprite->GetHeight() - scaleSpeed });
 
+	
+	m_Sprite->SetSize({ m_Sprite->GetOriginalSize().width * m_Color.a + m_minimalSize, m_Sprite->GetOriginalSize().height * m_Color.a + m_minimalSize });
 	m_Sprite->MoveSpriteBy(m_Velocity.x * m_Speed / 100, m_Velocity.y * m_Speed / 100);
 	m_Sprite->SetColor(m_Color);
+	m_Sprite->RotateSprite(m_Sprite->GetRotation() + m_RotationSpeed);
 
 }
