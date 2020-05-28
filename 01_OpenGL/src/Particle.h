@@ -34,8 +34,6 @@ private:
 	Sprite* m_Sprite;
 
 public:
-	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor);
-	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life);
 	Particle(float xPos, float yPos, float width, float height, glm::vec4 startingColor, glm::vec4 dyingColor, float life, std::string shader, bool allowRotation, bool allowScale);
 	
 	~Particle();

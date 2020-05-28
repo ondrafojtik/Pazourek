@@ -71,13 +71,13 @@ int main(void)
 	const std::string& path7 = "src/res/textures/bojack.png";
 	const std::string& path8 = "src/res/textures/artifact.png";
 
-	Sprite* mySprite1 = new Sprite(100, 100, 50, 50, path0, "src/res/shaders/Basic.shader");
-	Sprite* mySprite2 = new Sprite(200, 100, 50, 58, path1, "src/res/shaders/Basic.shader");
-	Sprite* mySprite3 = new Sprite(300, 100, 50, 50, path4, "src/res/shaders/Debug.shader");
-	Sprite* mySprite4 = new Sprite(400, 100, 50, 50, path5, "src/res/shaders/Sphere.shader");
-	Sprite* mySphere1 = new Sprite(500, 100, 50, 50, path0, "src/res/shaders/Sphere.shader");
-	Sprite* mySphere2 = new Sprite(600, 100, 50, 50, path6, "src/res/shaders/Sphere.shader");
-	Sprite* Player = new Sprite((l_WindowWidth / 2) - 25, (l_WindowHeight / 2) - 25, 50, 50, path7, "src/res/shaders/Sphere.shader");
+	Sprite* mySprite1 = new Sprite(100, 100, 50, 50, path0, glm::vec4(1.0f), "src/res/shaders/Basic.shader");
+	Sprite* mySprite2 = new Sprite(200, 100, 50, 58, path1, glm::vec4(1.0f), "src/res/shaders/Basic.shader");
+	Sprite* mySprite3 = new Sprite(300, 100, 50, 50, path4, glm::vec4(1.0f), "src/res/shaders/Debug.shader");
+	Sprite* mySprite4 = new Sprite(400, 100, 50, 50, path5, glm::vec4(1.0f), "src/res/shaders/Sphere.shader");
+	Sprite* mySphere1 = new Sprite(500, 100, 50, 50, path0, glm::vec4(1.0f), "src/res/shaders/Sphere.shader");
+	Sprite* mySphere2 = new Sprite(600, 100, 50, 50, path6, glm::vec4(1.0f), "src/res/shaders/Sphere.shader");
+	Sprite* Player = new Sprite((l_WindowWidth / 2) - 25, (l_WindowHeight / 2) - 25, 50, 50, path7, glm::vec4(1.0f), "src/res/shaders/Sphere.shader");
 
 	//normal camera
 	Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
@@ -175,7 +175,9 @@ int main(void)
 		ImGui::ColorEdit4("StartingColor", glm::value_ptr(ParticleStartingColor));
 		ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
 		ImGui::Checkbox("Enable rotation", &enableRotation);
+		ImGui::SameLine();
 		ImGui::Checkbox("Enable scale", &enableScale);
+		ImGui::SameLine();
 		ImGui::Checkbox("Circles", &enableCircles);
 
 		if(enableCircles)

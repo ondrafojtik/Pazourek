@@ -43,10 +43,7 @@ public:
 	Texture *m_Texture;
 
 public:
-	Sprite(float xPos, float yPos, float m_SpriteWidth, float SpriteHeight, const std::string TexturePath, const std::string shaderPath);
-	Sprite(float xPos, float yPos, float m_SpriteWidth, float SpriteHeight, glm::vec4 color, const std::string shaderPath);
-	//constructors Sprite with its textures original size 
-	Sprite(float xPos, float yPos, std::string TexturePath, std::string shaderPath);
+	Sprite(float xPos, float yPos, float m_SpriteWidth, float SpriteHeight, const std::string TexturePath, glm::vec4 color, const std::string shaderPath);
 	~Sprite();
 
 	void MoveSpriteBy(float xPos, float yPos);

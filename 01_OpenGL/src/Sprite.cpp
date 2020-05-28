@@ -1,9 +1,8 @@
 #include "Sprite.h"
 
-Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, const std::string TexturePath, const std::string shaderPath) 
-	: m_xPos(xPos), m_yPos(yPos), m_TexturePath(TexturePath), m_SpriteWidth(SpriteWidth), m_SpriteHeight(SpriteHeight), m_Color(glm::vec4(1.0f)), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f), m_Size(1.0f)
+Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, const std::string TexturePath, glm::vec4 color, const std::string shaderPath) 
+	: m_xPos(xPos), m_yPos(yPos), m_TexturePath(TexturePath), m_SpriteWidth(SpriteWidth), m_SpriteHeight(SpriteHeight), m_Color(color), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f), m_Size(1.0f)
 {
-	m_originalSize = { m_SpriteWidth, m_SpriteHeight };
 
 	float positions[] = {
 		-0.5f, -0.5f, 0.0f, 0.0f,
@@ -43,112 +42,7 @@ Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, co
 	m_Texture = new Texture(TexturePath);
 	m_Texture->Bind();
 
-	m_VA.Unbind();
-	m_VB->Unbind();
-	m_IB->Unbind();
-	m_Shader->Unbind();
-	m_Texture->Unbind();
-
-}
-
-Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, glm::vec4 color, const std::string shaderPath)
-	: m_xPos(xPos), m_yPos(yPos), m_Color(color), m_SpriteWidth(SpriteWidth), m_SpriteHeight(SpriteHeight), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f),
-	m_Size(1.0f)
-{
 	m_originalSize = { m_SpriteWidth, m_SpriteHeight };
-
-	float positions[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f,
-		 0.5f, -0.5f, 1.0f, 0.0f,
-		 0.5f,  0.5f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-	};
-
-	unsigned int indices[] = {
-			0, 1, 2,
-			2, 3, 0
-	};
-
-	//VAO
-	unsigned int m_VAO;
-	GLCall(glGenVertexArrays(1, &m_VAO));
-	GLCall(glBindVertexArray(m_VAO));
-
-	//VB
-	m_VB = new VertexBuffer(positions, 4 * 4 * sizeof(float));
-
-	//Layout
-	m_Layout.Push<float>(2);
-	m_Layout.Push<float>(2);
-
-	//VA
-	m_VA.AddBuffer(*m_VB, m_Layout);
-
-	//IB
-	m_IB = new IndexBuffer(indices, 6);
-
-	//Shader
-	m_Shader = new Shader(shaderPath);
-	m_Shader->Bind();
-
-	//Texture
-	m_Texture = new Texture("src/res/textures/Blank.png");
-
-	m_Texture->Bind();
-
-	m_VA.Unbind();
-	m_VB->Unbind();
-	m_IB->Unbind();
-	m_Shader->Unbind();
-	m_Texture->Unbind();
-
-}
-
-Sprite::Sprite(float xPos, float yPos, std::string TexturePath, std::string shaderPath) 
-	: m_xPos(xPos), m_yPos(yPos), m_TexturePath(TexturePath), m_SpriteWidth(0), m_SpriteHeight(0), m_Color(glm::vec4(1.0f)), m_colorElement(glm::vec4(1.0f)), m_Rotation(0.0f), m_Size(1.0f)
-{
-	m_originalSize = { m_SpriteWidth, m_SpriteHeight };
-
-	m_Texture = new Texture(TexturePath);
-	m_SpriteWidth = m_Texture->GetWidth();
-	m_SpriteHeight = m_Texture->GetHeight();
-
-	float positions[] = {
-		-0.5f, -0.5f, 0.0f, 0.0f,
-		 0.5f, -0.5f, 1.0f, 0.0f,
-		 0.5f,  0.5f, 1.0f, 1.0f,
-		-0.5f,  0.5f, 0.0f, 1.0f,
-	};
-
-	unsigned int indices[] = {
-			0, 1, 2,
-			2, 3, 0
-	};
-
-	//VAO
-	unsigned int m_VAO;
-	GLCall(glGenVertexArrays(1, &m_VAO));
-	GLCall(glBindVertexArray(m_VAO));
-
-	//VB
-	m_VB = new VertexBuffer(positions, 4 * 4 * sizeof(float));
-
-	//Layout
-	m_Layout.Push<float>(2);
-	m_Layout.Push<float>(2);
-
-	//VA
-	m_VA.AddBuffer(*m_VB, m_Layout);
-
-	//IB
-	m_IB = new IndexBuffer(indices, 6);
-
-	//Shader
-	m_Shader = new Shader(shaderPath);
-	m_Shader->Bind();
-
-	//Texture
-	m_Texture->Bind();
 
 	m_VA.Unbind();
 	m_VB->Unbind();

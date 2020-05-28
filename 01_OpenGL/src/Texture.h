@@ -6,12 +6,18 @@
 #include "GLcall.h"
 #include <sstream>
 
+struct OriginalTextureSize
+{
+	int width, height;
+};
+
 class Texture
 {
 private:
 	unsigned int m_RendererID;
 	unsigned char* m_LocalBuffer;
 	int m_Width, m_Height, m_BPP;
+	OriginalTextureSize m_OrignalSize;
 	
 public:
 	
@@ -23,4 +29,5 @@ public:
 	
 	inline int GetWidth() const { return m_Width; }
 	inline int GetHeight() const { return m_Height; }
+	OriginalTextureSize GetOriginalSize() const { return m_OrignalSize; }
 };
