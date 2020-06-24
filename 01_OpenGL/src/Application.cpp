@@ -50,8 +50,10 @@ int main(void)
 	if (glewInit() != GLEW_OK)
 		std::cout << "Error" << std::endl;
 
+	
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-
+	std::cout << "glew version: " << glewGetString(GLEW_VERSION) << std::endl;
+	std::cout << "glfw version: " << glfwGetVersionString() << std::endl;
 
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
@@ -61,7 +63,9 @@ int main(void)
 	ImGui_ImplGlfwGL3_Init(window.GetWindow(), true);
 	ImGui::StyleColorsDark();
 	////////////////////////////////////////
+
 	
+	const std::string& blank = "src/res/textures/Blank.png";
 	const std::string& path0 = "src/res/textures/grass.png";
 	const std::string& path1 = "src/res/textures/iu.png";
 	const std::string& path3 = "src/res/textures/cobblestone.jpg";
@@ -71,14 +75,8 @@ int main(void)
 	const std::string& path7 = "src/res/textures/bojack.png";
 	const std::string& path8 = "src/res/textures/artifact.png";
 
-	Sprite* mySprite1 = new Sprite(100, 100, 50, 50, path0, glm::vec4(1.0f), "src/res/shaders/Basic.shader");
-	Sprite* mySprite2 = new Sprite(200, 100, 50, 58, path1, glm::vec4(1.0f), "src/res/shaders/Basic.shader");
-	Sprite* mySprite3 = new Sprite(300, 100, 50, 50, path4, glm::vec4(1.0f), "src/res/shaders/Debug.shader");
-	Sprite* mySprite4 = new Sprite(400, 100, 50, 50, path5, glm::vec4(1.0f), "src/res/shaders/Sphere.shader");
-	Sprite* mySphere1 = new Sprite(500, 100, 50, 50, path0, glm::vec4(1.0f), "src/res/shaders/Sphere.shader");
-	Sprite* mySphere2 = new Sprite(600, 100, 50, 50, path6, glm::vec4(1.0f), "src/res/shaders/Sphere.shader");
-	Sprite* Player = new Sprite((l_WindowWidth / 2) - 25, (l_WindowHeight / 2) - 25, 50, 50, path7, glm::vec4(1.0f), "src/res/shaders/Sphere.shader");
-
+	Sprite* atlas = new Sprite(64, 64, 128, 128, "src/res/textures/medievalRTS_spritesheet@2.png", glm::vec4(1.0f), "src/res/shaders/Basic.shader");
+	
 	//normal camera
 	Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
 	//camera when drawing function
@@ -104,24 +102,6 @@ int main(void)
 	int particleShaderIndex = 0;
 	std::string particleShaderPath = "src/res/shaders/Sphere.shader";
 
-	//TRYING TO USE PAZOUREK FOR HIS ORIGINAL PURPOSE
-	glm::vec2 *fPos = new glm::vec2(0.0f);
-	int fFrom = -100;
-	int fTo = 100;
-	std::vector<glm::vec2> fPositions;
-	bool drawed = false;
-	//mapping
-	float currPos = fFrom;
-	while (currPos <= fTo)
-	{
-		float fx, fy;
-		fx = currPos;
-		fy = glm::sin(fx);
-		fPositions.push_back(glm::vec2(fx, fy));
-		currPos += 0.1;
-	}
-	mySprite2->SetPivot(CENTER);
-
 	while (!glfwWindowShouldClose(window.GetWindow()))
 	{
 		//trying mosue input
@@ -133,18 +113,6 @@ int main(void)
 
 		myParticles->OnUpdate();
 		
-		tmpRotation += 0.03f;
-		mySprite2->RotateSprite(tmpRotation);
-
-		//drawing function
-		//if(!drawed)
-		//{
-		//	for (glm::vec2 fPos : fPositions)
-		//		renderer->DrawSprite(new Sprite(fPos.x, fPos.y, 0.3f, 0.3f, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), "src/res/shaders/Basic.shader"));
-		//	drawed = true;
-		//}
-		//renderer->DrawSprite(new Sprite(-0.5f, -0.5f, 1.0f, 1.0f, glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), "src/res/shaders/Basic.shader"));
-
 		renderer->Clear();
 		ImGui_ImplGlfwGL3_NewFrame();
 	
@@ -185,21 +153,12 @@ int main(void)
 		else
 			particleShaderPath = "src/res/shaders/Basic.shader";
 
-		//renderer->DrawSprite(mySprite1);
-		renderer->DrawSprite(mySprite2);
-		//renderer->DrawSprite(mySprite3);
-		//renderer->DrawSprite(mySprite4);
-		//renderer->DrawSprite(mySphere1);
-		//renderer->DrawSprite(mySphere2);
-		//Player->MoveSprite((camera->GetWidth() / 2) + m_CameraX - 25, (camera->GetHeight()/ 2) + m_CameraY - 25);
-		//renderer->DrawSprite(Player);
 		renderer->DrawParticles(myParticles->GetParticles());
-		
-		
-
+		renderer->DrawSprite(atlas);
+	
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);
-
+		
 		ImGui::Render();
 		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
