@@ -63,7 +63,6 @@ int main(void)
 	ImGui_ImplGlfwGL3_Init(window.GetWindow(), true);
 	ImGui::StyleColorsDark();
 	////////////////////////////////////////
-
 	
 	const std::string& blank = "src/res/textures/Blank.png";
 	const std::string& path0 = "src/res/textures/grass.png";
