@@ -8,22 +8,28 @@ Sprite::Sprite(float xPos, float yPos, float SpriteWidth, float SpriteHeight, co
 	m_Texture = new Texture(TexturePath);
 	m_Texture->Bind();
 
-	
-	float x = 1;
-	float y = 15;
-	float spriteWidth = 128.0f;
-	float spriteHeight = 128.0f;
-	float atlasWidth = m_Texture->GetOriginalSize().width;
-	float atlasHeight = m_Texture->GetOriginalSize().height;
 
+	//SubTexture reference! 
 
+	//float x = 0;
+	//float y = 0;
+	//float spriteWidth = 128.0f;
+	//float spriteHeight = 128.0f;
+	//float atlasWidth = m_Texture->GetOriginalSize().width;
+	//float atlasHeight = m_Texture->GetOriginalSize().height;
+
+	//float positions[] = {
+	//	-0.5f, -0.5f, (x * spriteWidth) / atlasWidth,		(y * spriteHeight) / atlasHeight,
+	//	 0.5f, -0.5f, ((x + 1) * spriteWidth) / atlasWidth, (y * spriteHeight) / atlasHeight,
+	//	 0.5f,  0.5f, ((x + 1) * spriteWidth) / atlasWidth, ((y + 1) * spriteHeight) / atlasHeight,
+	//	-0.5f,  0.5f, (x * spriteWidth) / atlasWidth,		((y + 1) * spriteHeight) / atlasHeight,
+	//};
 	float positions[] = {
-		-0.5f, -0.5f, (x * spriteWidth) / atlasWidth,		(y * spriteHeight) / atlasHeight,
-		 0.5f, -0.5f, ((x + 1) * spriteWidth) / atlasWidth, (y * spriteHeight) / atlasHeight,
-		 0.5f,  0.5f, ((x + 1) * spriteWidth) / atlasWidth, ((y + 1) * spriteHeight) / atlasHeight,
-		-0.5f,  0.5f, (x * spriteWidth) / atlasWidth,		((y + 1) * spriteHeight) / atlasHeight,
-	};
-
+			-0.5f, -0.5f, 0.0f, 0.0f,
+			 0.5f, -0.5f, 1.0f, 0.0f,
+			 0.5f,  0.5f, 1.0f, 1.0f,
+			-0.5f,  0.5f, 0.0f, 1.0f,
+		};
 	unsigned int indices[] = {
 			0, 1, 2,
 			2, 3, 0
