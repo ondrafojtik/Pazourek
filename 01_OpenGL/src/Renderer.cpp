@@ -25,17 +25,17 @@ Renderer::Renderer(Camera *camera) : m_Camera(camera)
 void Renderer::DrawQuad(Texture& texture, glm::vec2 position)
 {
 	texture.Bind();
-
+	
 	float rotation = 0.0f;
 	glm::vec2 scale = glm::vec2(128.0f, 128.0f);
-
+	
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
 		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-
+	
 	//std::cout << data.layout.GetElements().size() << std::endl;
 	//std::cout << data.layout.GetStride() << std::endl;
-
+	
 	data.vb->Bind();
 	data.va.Bind();
 	data.ib->Bind();

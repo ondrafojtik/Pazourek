@@ -75,7 +75,7 @@ int main(void)
 	const std::string& path7 = "src/res/textures/bojack.png";
 	const std::string& path8 = "src/res/textures/artifact.png";
 
-	Texture tex("src/res/textures/medievalRTS_spritesheet@2.png");
+	Sprite* atlas = new Sprite(64, 64, 128, 128, "src/res/textures/medievalRTS_spritesheet@2.png", glm::vec4(1.0f), "src/res/shaders/Basic.shader");
 	
 	//normal camera
 	Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
@@ -102,6 +102,7 @@ int main(void)
 	int particleShaderIndex = 0;
 	std::string particleShaderPath = "src/res/shaders/Sphere.shader";
 
+	Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
 	while (!glfwWindowShouldClose(window.GetWindow()))
 	{
 		//trying mosue input
@@ -154,7 +155,8 @@ int main(void)
 			particleShaderPath = "src/res/shaders/Basic.shader";
 
 		renderer->DrawParticles(myParticles->GetParticles());
-		renderer->DrawQuad(tex, glm::vec2(64.0f, 64.0f));
+		renderer->DrawSprite(atlas);
+		renderer->DrawQuad(*tex, glm::vec2(64.0f, 64.0f));
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);
