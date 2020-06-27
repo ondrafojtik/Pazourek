@@ -75,7 +75,8 @@ int main(void)
 	const std::string& path8 = "src/res/textures/artifact.png";
 
 	Sprite* atlas = new Sprite(64, 64, 128, 128, "src/res/textures/medievalRTS_spritesheet@2.png", glm::vec4(1.0f), "src/res/shaders/Basic.shader");
-	
+	Texture tex("src/res/textures/medievalRTS_spritesheet@2.png");
+
 	//normal camera
 	Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
 	//camera when drawing function
@@ -154,7 +155,8 @@ int main(void)
 
 		renderer->DrawParticles(myParticles->GetParticles());
 		renderer->DrawSprite(atlas);
-	
+		//renderer->DrawQuad(tex, glm::vec2(100.0f, 100.0f));
+
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);
 		
