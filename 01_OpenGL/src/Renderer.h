@@ -9,13 +9,15 @@
 #include "VertexBufferLayout.h"
 #include "VertexArray.h"
 #include "IndexBuffer.h"
+#include "SubTexture.h"
+#include "Texture.h"
 
 struct RenderData
 {
 	const int vertexCount = 4;
 
-	glm::vec2* positions = nullptr;
-	glm::vec2* texCoords = nullptr;
+	glm::vec2 positions[4];
+	glm::vec2 texCoords[4];
 
 	unsigned int vao;
 	VertexBuffer* vb = nullptr;
@@ -26,22 +28,16 @@ struct RenderData
 
 	void Init()
 	{
-		glm::vec2 l_positions[] = {
-		{ -0.5f, -0.5f },
-		{  0.5f, -0.5f },
-		{  0.5f,  0.5f },
-		{ -0.5f,  0.5f },
-		};
-
-		glm::vec2 l_coords[] = {
-			{ 0.0f, 0.0f },
-			{ 1.0f, 0.0f },
-			{ 1.0f, 1.0f },
-			{ 0.0f, 1.0f },
-		};
-		positions = l_positions;
-		texCoords = l_coords;
-
+		positions[0] = { -0.5f, -0.5f };
+		positions[1] = {  0.5f, -0.5f };
+		positions[2] = {  0.5f,  0.5f };
+		positions[3] = { -0.5f,  0.5f };
+		
+		texCoords[0] = { 0.0f, 0.0f };
+		texCoords[1] = { 1.0f, 0.0f };
+		texCoords[2] = { 1.0f, 1.0f };
+		texCoords[3] = { 0.0f, 1.0f };
+		
 		unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0
@@ -65,7 +61,6 @@ struct RenderData
 		layout.Push<float>(2);
 
 		va.AddBuffer(*vb, layout);
-
 		ib = new IndexBuffer(indices, 6);
 
 		shader = new Shader("src/res/shaders/Basic.shader");
@@ -82,7 +77,9 @@ struct RenderData
 			pos[i * vertexCount + 2] = texCoords[i].x;
 			pos[i * vertexCount + 3] = texCoords[i].y;
 		}
+
 		vb->RefreshBuffer(pos);
+		va.AddBuffer(*vb, layout);
 	}
 
 };
@@ -94,7 +91,8 @@ private:
 	RenderData data;
 public:
 	void DrawQuad(Texture& texture, glm::vec2 position);
-	
+	void DrawQuad(SubTexture& texture, glm::vec2 position);
+
 	Renderer(Camera *camera);
 	void DrawSprite(Sprite *m_Sprite);
 	void DrawParticles(const std::vector<Particle>& particles);

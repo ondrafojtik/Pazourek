@@ -53,6 +53,42 @@ void Renderer::DrawQuad(Texture& texture, glm::vec2 position)
 
 }
 
+void Renderer::DrawQuad(SubTexture& texture, glm::vec2 position)
+{
+	texture.m_texture->Bind();
+
+	float rotation = 0.0f;
+	glm::vec2 scale = glm::vec2(128.0f, 128.0f);
+
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
+		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+
+	//std::cout << data.layout.GetElements().size() << std::endl;
+	//std::cout << data.layout.GetStride() << std::endl;
+	
+	//assign data
+	for (int i = 0; i < data.vertexCount; i++)
+		data.texCoords[i] = texture.texCoords[i];
+
+	data.RefreshData();
+
+	data.vb->Bind();
+	data.va.Bind();
+	data.ib->Bind();
+	data.shader->Bind();
+	data.shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
+	data.shader->SetUniformMat4f("u_Transform", transform);
+	data.shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+	data.shader->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
+	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+	data.vb->Unbind();
+	data.va.Unbind();
+	data.ib->Unbind();
+	data.shader->Unbind();
+	texture.m_texture->Unbind();
+}
+
 void Renderer::DrawSprite(Sprite *m_Sprite)
 {
 	m_Sprite->m_Shader->Bind();

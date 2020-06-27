@@ -6,12 +6,10 @@
 
 struct SubTexture
 {
-	Texture& m_texture;
+	Texture* m_texture = nullptr;
+	glm::vec2 texCoords[4];
+	
+	SubTexture(Texture& texture, glm::vec2 spriteSize, float x, float y);
 
-
-	SubTexture(Texture& texture, glm::vec2 min, glm::vec2 max);
-	Texture& CreateFromCoords
-
-	glm::vec2 GetPosition() { return glm::vec2(m_x, m_y); }
 
 };
