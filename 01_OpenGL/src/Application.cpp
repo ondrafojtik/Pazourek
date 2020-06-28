@@ -25,7 +25,6 @@
 #include "Texture.h"
 #include <Windows.h>
 #include "Window.h"
-#include "Particle.h"
 #include "ParticleSystem.h"
 #include "Random.h"
 #include "Colors.h"
@@ -50,7 +49,7 @@ int main(void)
 	if (glewInit() != GLEW_OK)
 		std::cout << "Error" << std::endl;
 
-	
+
 	std::cout << "OpenGL version: " << glGetString(GL_VERSION) << std::endl;
 	std::cout << "glew version: " << glewGetString(GLEW_VERSION) << std::endl;
 	std::cout << "glfw version: " << glfwGetVersionString() << std::endl;
@@ -64,7 +63,7 @@ int main(void)
 	ImGui::StyleColorsDark();
 	////////////////////////////////////////
 
-	
+
 	const std::string& blank = "src/res/textures/Blank.png";
 	const std::string& path0 = "src/res/textures/grass.png";
 	const std::string& path1 = "src/res/textures/iu.png";
@@ -79,12 +78,13 @@ int main(void)
 	SubTexture subTex(*tex, glm::vec2(128.0f, 128.0f), 0, 0);
 
 	//normal camera
-	Camera *camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
+	Camera* camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
 	//camera when drawing function
 	//Camera* camera = new Camera(-384.0f, 384.0f, -216.0f, 216.0f);
-	Renderer *renderer = new Renderer(camera);
+	Renderer* renderer = new Renderer(camera);
 
 	ParticleSystem* myParticles = new ParticleSystem();
+	myParticles->Init();
 	
 	double cursorX;
 	double cursorY;
@@ -112,11 +112,9 @@ int main(void)
 		cursorX = (cursorX + camera->GetXOffset());
 		cursorY = (glm::abs(1080 - (float)cursorY) + camera->GetYOffset());
 
-		myParticles->OnUpdate();
-		
 		renderer->Clear();
 		ImGui_ImplGlfwGL3_NewFrame();
-	
+
 		//INPUT
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
 			m_CameraY = m_CameraY + 5;
@@ -131,12 +129,13 @@ int main(void)
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_E) == GLFW_PRESS)
 			m_CameraZOOM = m_CameraZOOM + 1;
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
-			myParticles->AddObject((float)cursorX, (float)cursorY - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath, enableRotation, enableScale);
-		
-		//CAMERA
+			myParticles->Add((float)cursorX, (float)cursorY - 55, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
+		//myParticles->AddObject((float)cursorX, (float)cursorY - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath, enableRotation,	enableScale);
+
+	//CAMERA
 		camera->SetPosition(m_CameraX, m_CameraY);
 		camera->SetZoom(m_CameraZOOM);
-		
+
 
 		//Particles
 		ImGui::SliderFloat("ParticleSize", &ParticleSize, 0, 200);
@@ -148,15 +147,22 @@ int main(void)
 		ImGui::Checkbox("Enable scale", &enableScale);
 		ImGui::SameLine();
 		ImGui::Checkbox("Circles", &enableCircles);
+		ImGui::Text("size: %f", (float)myParticles->buffer.size());
 
-		if(enableCircles)
+		if (enableCircles)
 			particleShaderPath = "src/res/shaders/Sphere.shader";
 		else
 			particleShaderPath = "src/res/shaders/Basic.shader";
 
-		renderer->DrawParticles(myParticles->GetParticles());
+		//particleTest
+		myParticles->Update();
+		for (Particle elem : myParticles->buffer)
+			for(int i = 0; i < 5; i++)
+				renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
+		
 		//renderer->DrawQuad(*tex, glm::vec2(64.0f, 64.0f));
 		renderer->DrawQuad(subTex, glm::vec2(64.0f, 64.0f));
+		//renderer->DrawQuad(COLOR::RED, glm::vec2(300.0f, 100.0f), glm::vec2(100.0f, 100.0f));
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);

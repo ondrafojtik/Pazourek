@@ -9,8 +9,10 @@
 #include "VertexBufferLayout.h"
 #include "VertexArray.h"
 #include "IndexBuffer.h"
-#include "SubTexture.h"
+#include "Shader.h"
+#include "Sprite.h"
 #include "Texture.h"
+#include "SubTexture.h"
 
 struct RenderData
 {
@@ -89,7 +91,12 @@ class Renderer
 private:
 	Camera* m_Camera;
 	RenderData data;
+
+	//blank texture (figure this out later)
+	//u can definitely just pass in the buffer with color, not having to pass texture? or just create blank texutre internally? ?? 
+	Texture* blank = new Texture("src/res/textures/Blank.png");
 public:
+	void DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale);
 	void DrawQuad(Texture& texture, glm::vec2 position);
 	void DrawQuad(SubTexture& texture, glm::vec2 position);
 
