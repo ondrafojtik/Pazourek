@@ -157,8 +157,7 @@ int main(void)
 		//particleTest
 		myParticles->Update();
 		for (Particle elem : myParticles->buffer)
-			for(int i = 0; i < 5; i++)
-				renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
+			renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
 		
 		//renderer->DrawQuad(*tex, glm::vec2(64.0f, 64.0f));
 		renderer->DrawQuad(subTex, glm::vec2(64.0f, 64.0f));

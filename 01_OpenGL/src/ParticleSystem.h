@@ -18,10 +18,12 @@ struct Particle
 	glm::vec2 size;
 
 	glm::vec4 color;
+	glm::vec2 velocity;
 
 	Particle(float xPos, float yPos, float lifePoints, glm::vec4 particleStartingColor, glm::vec4 particleDyingColor, glm::vec2 particleSize)
 		: x(xPos), y(yPos), life(lifePoints), startingColor(particleStartingColor), dyingColor(particleDyingColor), size(particleSize), currLife(lifePoints)
 	{
+		velocity = glm::vec2(Random::Float() * 100 - 50, Random::Float() * 100 - 50);
 	}
 
 	bool Alive() { return currLife > 0; }
@@ -33,7 +35,6 @@ struct Particle
 		color.a = color.a * _life;
 		currLife -= 1;
 		
-		glm::vec2 velocity = glm::vec2(Random::Float() * 100 - 50, Random::Float() * 100 - 50);
 		float speed = 1.0f;
 		x += velocity.x * speed / 100;
 		y += velocity.y * speed / 100;
