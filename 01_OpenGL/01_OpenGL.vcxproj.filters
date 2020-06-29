@@ -468,9 +468,6 @@
     <None Include="src\vendor\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="src\res\shaders\Debug.shader" />
-    <None Include="src\res\shaders\Sphere.shader" />
-    <None Include="src\res\shaders\rndFun.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">

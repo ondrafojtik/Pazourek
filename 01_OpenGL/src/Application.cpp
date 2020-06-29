@@ -89,16 +89,10 @@ int main(void)
 	double cursorX;
 	double cursorY;
 
-	float tmpRotation = 0.0f;
-
-	float ParticleSize = 50.0f;
-	float ParticleLife = 100.0f;
-	float ParticleDyingSpeed = 0.008f;
-	glm::vec4 ParticleStartingColor = COLOR::YELLOW;
-	glm::vec4 ParticleDyingColor = COLOR::RED;
-	bool enableRotation = true;
-	bool enableScale = true;
-	bool enableCircles = true;
+	float ParticleSize = 30.0f;
+	float ParticleLife = 15.0f;
+	glm::vec4 ParticleStartingColor = COLOR::WHITE;
+	glm::vec4 ParticleDyingColor = COLOR::PURPLE;
 	
 	int particleShaderIndex = 0;
 	std::string particleShaderPath = "src/res/shaders/Sphere.shader";
@@ -130,38 +124,27 @@ int main(void)
 			m_CameraZOOM = m_CameraZOOM + 1;
 		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
 			myParticles->Add((float)cursorX, (float)cursorY - 55, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
-		//myParticles->AddObject((float)cursorX, (float)cursorY - 55, ParticleSize, ParticleSize, ParticleStartingColor, ParticleDyingColor, ParticleLife, particleShaderPath, enableRotation,	enableScale);
-
-	//CAMERA
+		
+		//CAMERA
 		camera->SetPosition(m_CameraX, m_CameraY);
 		camera->SetZoom(m_CameraZOOM);
 
-
-		//Particles
+		//Particles Controller
 		ImGui::SliderFloat("ParticleSize", &ParticleSize, 0, 200);
 		ImGui::SliderFloat("ParticleLife", &ParticleLife, 0, 500);
 		ImGui::ColorEdit4("StartingColor", glm::value_ptr(ParticleStartingColor));
 		ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
-		ImGui::Checkbox("Enable rotation", &enableRotation);
-		ImGui::SameLine();
-		ImGui::Checkbox("Enable scale", &enableScale);
-		ImGui::SameLine();
-		ImGui::Checkbox("Circles", &enableCircles);
-		ImGui::Text("size: %f", (float)myParticles->buffer.size());
+		ImGui::Text("particleBufferSize: %f", (float)myParticles->buffer.size());
 
-		if (enableCircles)
-			particleShaderPath = "src/res/shaders/Sphere.shader";
-		else
-			particleShaderPath = "src/res/shaders/Basic.shader";
-
-		//particleTest
 		myParticles->Update();
+
+		renderer->DrawQuad(*tex, glm::vec2(64.0f, 64.0f));
+		renderer->DrawQuad(subTex, glm::vec2(64.0f + 128.0f, 64.0f));
+		renderer->DrawQuad(COLOR::RED, glm::vec2(64.0f + 128.0f + 128.0f, 64.0f), glm::vec2(128.0f, 128.0f));
+		renderer->DrawQuad(*tex, glm::vec2(64.0f + 128.0f + 128.0f + 128.0f, 64.0f));
+
 		for (Particle elem : myParticles->buffer)
 			renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
-		
-		//renderer->DrawQuad(*tex, glm::vec2(64.0f, 64.0f));
-		renderer->DrawQuad(subTex, glm::vec2(64.0f, 64.0f));
-		//renderer->DrawQuad(COLOR::RED, glm::vec2(300.0f, 100.0f), glm::vec2(100.0f, 100.0f));
 
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);
