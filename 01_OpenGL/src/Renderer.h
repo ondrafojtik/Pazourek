@@ -1,8 +1,6 @@
 #pragma once
-
-#include <iostream>
-
 #include "GL/glew.h"
+
 #include "Camera.h"
 #include "ParticleSystem.h"
 #include "VertexBuffer.h"

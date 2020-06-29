@@ -2,48 +2,36 @@
 #include <GLFW/glfw3.h>
 #include <GLFW\glfw3native.h>
 
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
-#include <glm/gtc/type_ptr.hpp>
-
-#include "imgui\imgui.h"
-#include "imgui\imgui_impl_glfw_gl3.h"
-
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
-
-#include "defines.h"
-#include "Camera.h"
-#include "Renderer.h"
-#include "IndexBuffer.h"
-#include "VertexBuffer.h"
-#include "VertexArray.h"
-#include "Shader.h"
-#include "VertexBufferLayout.h"
-#include "Texture.h"
-#include <Windows.h>
-#include "Window.h"
-#include "ParticleSystem.h"
-#include "Random.h"
-#include "Colors.h"
-#include "SubTexture.h"
+#include "PlayGround.h"
 
 float l_WindowWidth = 1920;
 float l_WindowHeight = 1080;
 
-float posX = 0;
-float posY = 0;
-
-float m_CameraX = 0;
-float m_CameraY = 0;
-float m_CameraZOOM = 0;
-
 int main(void)
 {
-	Window window(l_WindowWidth, l_WindowHeight);
-	glfwMakeContextCurrent(window.GetWindow());
+
+	if (!glfwInit())
+		std::cout << "Init fail! Check WindowInit" << std::endl;
+
+	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	GLFWwindow* window = glfwCreateWindow(l_WindowWidth, l_WindowHeight, "GLwindow", NULL, NULL);
+
+	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+	glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+	glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+	/////////////////////////////////////////////////////////////////////////////
+	glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); //VSYNCH
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_COCOA_GRAPHICS_SWITCHING, GLFW_TRUE);
+	glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
+	glfwWindowHint(GLFW_CENTER_CURSOR, GLFW_FALSE);
+	glfwMaximizeWindow(window);
+
+	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 
 	if (glewInit() != GLEW_OK)
@@ -57,107 +45,37 @@ int main(void)
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
-	//////////////IMGUI/////////////////////
+	//imgui Init
 	ImGui::CreateContext();
-	ImGui_ImplGlfwGL3_Init(window.GetWindow(), true);
+	ImGui_ImplGlfwGL3_Init(window, true);
 	ImGui::StyleColorsDark();
-	////////////////////////////////////////
 
+	PlayGround game;
+	game.window = window;
+	game.monitor = monitor;
+	game.OnAttach();
 
-	const std::string& blank = "src/res/textures/Blank.png";
-	const std::string& path0 = "src/res/textures/grass.png";
-	const std::string& path1 = "src/res/textures/iu.png";
-	const std::string& path3 = "src/res/textures/cobblestone.jpg";
-	const std::string& path4 = "src/res/textures/red.png";
-	const std::string& path5 = "src/res/textures/braun.jpg";
-	const std::string& path6 = "src/res/textures/parcFerme.jpg";
-	const std::string& path7 = "src/res/textures/bojack.png";
-	const std::string& path8 = "src/res/textures/artifact.png";
-
-	Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
-	SubTexture subTex(*tex, glm::vec2(128.0f, 128.0f), 0, 0);
-
-	//normal camera
-	Camera* camera = new Camera(0.0f, l_WindowWidth, 0.0f, l_WindowHeight);
-	//camera when drawing function
-	//Camera* camera = new Camera(-384.0f, 384.0f, -216.0f, 216.0f);
-	Renderer* renderer = new Renderer(camera);
-
-	ParticleSystem* myParticles = new ParticleSystem();
-	myParticles->Init();
-	
-	double cursorX;
-	double cursorY;
-
-	float ParticleSize = 30.0f;
-	float ParticleLife = 15.0f;
-	glm::vec4 ParticleStartingColor = COLOR::WHITE;
-	glm::vec4 ParticleDyingColor = COLOR::PURPLE;
-	
-	int particleShaderIndex = 0;
-	std::string particleShaderPath = "src/res/shaders/Sphere.shader";
-
-	while (!glfwWindowShouldClose(window.GetWindow()))
+	while (!glfwWindowShouldClose(game.window))
 	{
-		//trying mosue input
-		//sets the values into cursorX, Y.. 
-		glfwGetCursorPos(window.GetWindow(), &cursorX, &cursorY);
+		
+		game.OnUpdate();
+		game.OnRender();
 
-		cursorX = (cursorX + camera->GetXOffset());
-		cursorY = (glm::abs(1080 - (float)cursorY) + camera->GetYOffset());
-
-		renderer->Clear();
 		ImGui_ImplGlfwGL3_NewFrame();
 
-		//INPUT
-		if (glfwGetKey(window.GetWindow(), GLFW_KEY_W) == GLFW_PRESS)
-			m_CameraY = m_CameraY + 5;
-		if (glfwGetKey(window.GetWindow(), GLFW_KEY_A) == GLFW_PRESS)
-			m_CameraX = m_CameraX - 5;
-		if (glfwGetKey(window.GetWindow(), GLFW_KEY_S) == GLFW_PRESS)
-			m_CameraY = m_CameraY - 5;
-		if (glfwGetKey(window.GetWindow(), GLFW_KEY_D) == GLFW_PRESS)
-			m_CameraX = m_CameraX + 5;
-		if (glfwGetKey(window.GetWindow(), GLFW_KEY_Q) == GLFW_PRESS)
-			m_CameraZOOM = m_CameraZOOM - 1;
-		if (glfwGetKey(window.GetWindow(), GLFW_KEY_E) == GLFW_PRESS)
-			m_CameraZOOM = m_CameraZOOM + 1;
-		if (glfwGetKey(window.GetWindow(), GLFW_KEY_F) == GLFW_PRESS)
-			myParticles->Add((float)cursorX, (float)cursorY - 55, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
-		
-		//CAMERA
-		camera->SetPosition(m_CameraX, m_CameraY);
-		camera->SetZoom(m_CameraZOOM);
+		game.ImGuiOnUpdate();
 
-		//Particles Controller
-		ImGui::SliderFloat("ParticleSize", &ParticleSize, 0, 200);
-		ImGui::SliderFloat("ParticleLife", &ParticleLife, 0, 500);
-		ImGui::ColorEdit4("StartingColor", glm::value_ptr(ParticleStartingColor));
-		ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
-		ImGui::Text("particleBufferSize: %f", (float)myParticles->buffer.size());
-
-		myParticles->Update();
-
-		renderer->DrawQuad(*tex, glm::vec2(64.0f, 64.0f));
-		renderer->DrawQuad(subTex, glm::vec2(64.0f + 128.0f, 64.0f));
-		renderer->DrawQuad(COLOR::RED, glm::vec2(64.0f + 128.0f + 128.0f, 64.0f), glm::vec2(128.0f, 128.0f));
-		renderer->DrawQuad(*tex, glm::vec2(64.0f + 128.0f + 128.0f + 128.0f, 64.0f));
-
-		for (Particle elem : myParticles->buffer)
-			renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
-
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);
-		
 		ImGui::Render();
 		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
-		GLCall(glfwSwapBuffers(window.GetWindow()));
+		
+
+		GLCall(glfwSwapBuffers(game.window));
 		GLCall(glfwPollEvents());
-		}
+	}
+
 	ImGui_ImplGlfwGL3_Shutdown();
 	ImGui::DestroyContext();
-	
 	glfwTerminate();
 	return 0;
 }
