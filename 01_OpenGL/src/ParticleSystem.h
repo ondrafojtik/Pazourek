@@ -35,6 +35,9 @@ struct Particle
 		color.a = color.a * _life;
 		currLife -= 1;
 		
+		size.x -= 0.1f;
+		size.y -= 0.1f;
+
 		float speed = 1.0f;
 		x += velocity.x * speed / 100;
 		y += velocity.y * speed / 100;

@@ -96,6 +96,7 @@ private:
 public:
 	void DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale);
 	void DrawQuad(Texture& texture, glm::vec2 position);
+	void DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size);
 	void DrawQuad(SubTexture& texture, glm::vec2 position);
 
 	Renderer(Camera *camera);

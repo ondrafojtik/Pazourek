@@ -51,11 +51,11 @@ void PlayGround::OnRender()
 
 	renderer->DrawQuad(*tex, glm::vec2(64.0f, 64.0f));
 	renderer->DrawQuad(*subTex, glm::vec2(64.0f + 128.0f, 64.0f));
-	renderer->DrawQuad(glm::vec4(1.0f), glm::vec2(64.0f + 128.0f + 128.0f, 64.0f), glm::vec2(128.0f, 128.0f));
+	renderer->DrawQuad(glm::vec4(1.0f, 1.0f, 0.0f, 0.7f), glm::vec2(64.0f + 128.0f + 128.0f, 64.0f), glm::vec2(128.0f, 128.0f));
 	renderer->DrawQuad(*tex, glm::vec2(64.0f + 128.0f + 128.0f + 128.0f, 64.0f));
 
 	for (Particle elem : myParticles->buffer)
-		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
+			renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
 }
 
 void PlayGround::ImGuiOnUpdate()
