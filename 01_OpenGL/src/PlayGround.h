@@ -39,7 +39,7 @@ private:
 	Renderer* renderer = new Renderer(camera);
 	
 	Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
-	SubTexture* subTex = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 0, 0);
+	SubTexture* subTex = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 3);
 	ParticleSystem* myParticles = new ParticleSystem();
 
 	//Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
