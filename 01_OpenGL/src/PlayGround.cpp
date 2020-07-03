@@ -1,8 +1,23 @@
 #include "PlayGround.h"
 
+static const char* s_grid =
+"GGGGGFGGGGGGGGG"
+"GGGFFFGGGGGUGGG"
+"GGGGFFFGGGGVGGG"
+"GGGGGGGGGGGVGGG"
+"GGGGGGGGGGGDGGG"
+"GGGGGGGGGGGGGGG"
+"GGGGGGFFFGGGGGG"
+"GGGGGGGGFGGGGGG";
+
 void PlayGround::OnAttach()
 {
 	myParticles->Init();
+	textures['G'] = m_SubGrass;
+	textures['F'] = m_SubForest;
+	textures['D'] = m_SubDown;
+	textures['V'] = m_SubVertical;
+	textures['U'] = m_SubUp;
 
 }
 
@@ -11,7 +26,7 @@ void PlayGround::OnDetach()
 	delete camera;
 	delete renderer;
 	delete tex;
-	delete subTex;
+	//delete subTex;
 	delete myParticles;
 }
 
@@ -49,11 +64,18 @@ void PlayGround::OnRender()
 {
 	renderer->Clear();
 
-	renderer->DrawQuad(*tex, glm::vec2(64.0f, 64.0f));
-	renderer->DrawQuad(*subTex, glm::vec2(64.0f + 128.0f, 64.0f));
-	renderer->DrawQuad(glm::vec4(1.0f, 1.0f, 0.0f, 0.7f), glm::vec2(64.0f + 128.0f + 128.0f, 64.0f), glm::vec2(128.0f, 128.0f));
-	renderer->DrawQuad(*tex, glm::vec2(64.0f + 128.0f + 128.0f + 128.0f, 64.0f));
+	//rendering map here, its pretty crappy. Theres definitely nicer way of doing this 
+	int epsilon = 1000;
+	float step = 128;
+	for (int y = 0; y < 8; y++)
+		for (int x = 0; x < 15; x++)
+		{
+			char c = s_grid[x + (y * 15)];
+			SubTexture *t = textures[c];
+			renderer->DrawQuad(*t, { 128 * x, (-128 * y) + epsilon });
+		}
 
+	//particles
 	for (Particle elem : myParticles->buffer)
 			renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
 }

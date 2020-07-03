@@ -44,7 +44,6 @@ int main(void)
 
 	GLCall(glEnable(GL_BLEND));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-
 	//imgui Init
 	ImGui::CreateContext();
 	ImGui_ImplGlfwGL3_Init(window, true);
