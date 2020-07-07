@@ -10,6 +10,6 @@ struct SubTexture
 	glm::vec2 texCoords[4];
 	
 	SubTexture(Texture& texture, glm::vec2 spriteSize, float x, float y);
-
-
+	~SubTexture() { ; }
+	
 };

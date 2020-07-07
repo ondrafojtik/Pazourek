@@ -28,6 +28,11 @@ void PlayGround::OnDetach()
 	delete tex;
 	//delete subTex;
 	delete myParticles;
+	delete m_SubDown;
+	delete m_SubForest;
+	delete m_SubGrass;
+	delete m_SubUp;
+	delete m_SubVertical;
 }
 
 void PlayGround::OnUpdate()
@@ -51,7 +56,7 @@ void PlayGround::OnUpdate()
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 		cameraZoom = cameraZoom + 1;
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-		myParticles->Add((float)cursorX, (float)cursorY - 55, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
+		myParticles->Add((float)cursorX, (float)cursorY - 15, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
 	
 	//setting camera position based on input
 	camera->SetPosition(cameraX, cameraY);
@@ -65,6 +70,8 @@ void PlayGround::OnRender()
 	renderer->Clear();
 
 	//rendering map here, its pretty crappy. Theres definitely nicer way of doing this 
+	
+	//CREATING MEMORY LEAK HERE WITH "NOT DELETING" THE SUBTEXTURE!!!
 	int epsilon = 1000;
 	float step = 128;
 	for (int y = 0; y < 8; y++)

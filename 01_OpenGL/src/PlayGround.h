@@ -10,6 +10,7 @@
 #include "glm/vec4.hpp"
 
 #include <unordered_map>
+#include <memory>
 
 #include "Renderer.h" //it already includes camera, texture etc. 
 

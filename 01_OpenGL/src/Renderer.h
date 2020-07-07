@@ -1,6 +1,8 @@
 #pragma once
 #include "GL/glew.h"
 
+#include <memory>
+
 #include "Camera.h"
 #include "ParticleSystem.h"
 #include "VertexBuffer.h"
@@ -98,7 +100,7 @@ public:
 	void DrawQuad(Texture& texture, glm::vec2 position);
 	void DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size);
 	void DrawQuad(SubTexture& texture, glm::vec2 position);
-
+	
 	Renderer(Camera *camera);
 	void DrawSprite(Sprite *m_Sprite);
 	void DrawParticles(const std::vector<Particle>& particles);
