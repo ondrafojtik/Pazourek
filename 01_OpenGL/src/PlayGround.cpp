@@ -26,13 +26,13 @@ void PlayGround::OnDetach()
 	delete camera;
 	delete renderer;
 	delete tex;
-	//delete subTex;
 	delete myParticles;
 	delete m_SubDown;
 	delete m_SubForest;
 	delete m_SubGrass;
 	delete m_SubUp;
 	delete m_SubVertical;
+	delete m_SubTex;
 }
 
 void PlayGround::OnUpdate()
@@ -78,13 +78,13 @@ void PlayGround::OnRender()
 		for (int x = 0; x < 15; x++)
 		{
 			char c = s_grid[x + (y * 15)];
-			SubTexture *t = textures[c];
-			renderer->DrawQuad(*t, { 128 * x, (-128 * y) + epsilon });
+			m_SubTex = textures[c];
+			renderer->DrawQuad(*m_SubTex, { 128 * x, (-128 * y) + epsilon });
 		}
 
 	//particles
 	for (Particle elem : myParticles->buffer)
-			renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
+		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
 }
 
 void PlayGround::ImGuiOnUpdate()

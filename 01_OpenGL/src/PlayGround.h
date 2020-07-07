@@ -48,7 +48,7 @@ private:
 	SubTexture* m_SubDown = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 5, 5);
 	SubTexture* m_SubVertical = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 0, 0);
 	SubTexture* m_SubUp = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 7);
-
+	SubTexture* m_SubTex = nullptr;
 
 
 	std::unordered_map<char, SubTexture*> textures;

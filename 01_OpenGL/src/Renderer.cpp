@@ -84,9 +84,6 @@ void Renderer::DrawQuad(Texture& texture, glm::vec2 position)
 		data.texCoords[i] = coords[i];
 	data.RefreshData();
 
-	//std::cout << data.layout.GetElements().size() << std::endl;
-	//std::cout << data.layout.GetStride() << std::endl;
-
 	data.vb->Bind();
 	data.va.Bind();
 	data.ib->Bind();
@@ -147,9 +144,6 @@ void Renderer::DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale)
 		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 
-	//std::cout << data.layout.GetElements().size() << std::endl;
-	//std::cout << data.layout.GetStride() << std::endl;
-	
 	data.vb->Bind();
 	data.va.Bind();
 	data.ib->Bind();
@@ -164,23 +158,6 @@ void Renderer::DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale)
 	data.ib->Unbind();
 	data.shader->Unbind();
 	blank->Unbind();
-}
-
-void Renderer::DrawSprite(Sprite *m_Sprite)
-{
-	m_Sprite->m_Shader->Bind();
-	m_Sprite->m_Shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
-	m_Sprite->OnRender();
-}
-
-void Renderer::DrawParticles(const std::vector<Particle>& particles)
-{
-	//for (Particle elem : particles)
-	//{
-	//	elem.GetSprite()->m_Shader->Bind();
-	//	elem.GetSprite()->m_Shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
-	//	elem.GetSprite()->OnRender();
-	//}
 }
 
 void Renderer::Clear() const
