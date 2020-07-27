@@ -10,6 +10,13 @@ static const char* s_grid =
 "GGGGGGFFFGGGGGG"
 "GGGGGGGGFGGGGGG";
 
+static bool isCollidable(char c)
+{
+	if ((c == 'F') || (c == 'V'))
+		return true;
+	return false;
+}
+
 void PlayGround::OnAttach()
 {
 	myParticles->Init();
@@ -40,8 +47,8 @@ void PlayGround::OnUpdate()
 	//getting cursor position
 	glfwGetCursorPos(window, &cursorX, &cursorY);
 	cursorX = (cursorX + camera->GetXOffset());
-	cursorY = (glm::abs(1080 - (float)cursorY) + camera->GetYOffset());
-
+	cursorY = (glm::abs(1080.0f - (float)cursorY) + camera->GetYOffset());
+	
 	//I should rly make some sort of event system
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraY= cameraY + 5;
@@ -56,7 +63,7 @@ void PlayGround::OnUpdate()
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 		cameraZoom = cameraZoom + 1;
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-		myParticles->Add((float)cursorX, (float)cursorY - 15, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
+		myParticles->Add((float)cursorX, (float)cursorY, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
 	
 	//setting camera position based on input
 	camera->SetPosition(cameraX, cameraY);
@@ -69,18 +76,29 @@ void PlayGround::OnRender()
 {
 	renderer->Clear();
 
+	renderer->DrawQuad(glm::vec4(1.0f), { 0.0f, 0.0f }, {50.0f, 50.0f});
+
 	//rendering map here, its pretty crappy. Theres definitely nicer way of doing this 
-	
-	//CREATING MEMORY LEAK HERE WITH "NOT DELETING" THE SUBTEXTURE!!!
-	int epsilon = 1000;
-	float step = 128;
+	float step = 128.0f;
 	for (int y = 0; y < 8; y++)
 		for (int x = 0; x < 15; x++)
 		{
 			char c = s_grid[x + (y * 15)];
 			m_SubTex = textures[c];
-			renderer->DrawQuad(*m_SubTex, { 128 * x, (-128 * y) + epsilon });
+			renderer->DrawQuad(*m_SubTex, { 128 * x, (-128 * y) });
+			
+			if (drawGrid)
+			{
+				if (isCollidable(c)) //bacically "if collidable.." 
+					renderer->DrawGrid(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), { 128 * x, (-128 * y) });
+				else
+					renderer->DrawGrid(glm::vec4(0.1f, 0.05f, 0.1f, 1.0f), { 128 * x, (-128 * y) });
+			}
 		}
+
+	//render player
+	//renderer->DrawQuad(*player, { 128.0f + (float)grid_x * 128.0f, (-(float)grid_y  * 128.0f) });
+	renderer->DrawQuad(*player, { 128.0f + 0 * 128.0f, (-3 * 128.0f) });
 
 	//particles
 	for (Particle elem : myParticles->buffer)
@@ -96,5 +114,10 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::Text("particleBufferSize: %f", (float)myParticles->buffer.size());
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 	ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);
+	ImGui::Checkbox("Grid: ", &drawGrid);
 
+	float tileSize = 128.0f;
+	grid_x = std::floor((cursorX - tileSize / 2) / tileSize);
+	grid_y = std::floor((-cursorY + tileSize / 2) / tileSize);
+	ImGui::Text("Grid X: %i, Y: %i", grid_x, grid_y);
 }

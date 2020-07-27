@@ -14,7 +14,7 @@ int main(void)
 		std::cout << "Init fail! Check WindowInit" << std::endl;
 
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-	GLFWwindow* window = glfwCreateWindow(l_WindowWidth, l_WindowHeight, "GLwindow", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(l_WindowWidth, l_WindowHeight, "GLwindow", monitor, NULL);
 
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
@@ -29,7 +29,7 @@ int main(void)
 	glfwWindowHint(GLFW_COCOA_GRAPHICS_SWITCHING, GLFW_TRUE);
 	glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
 	glfwWindowHint(GLFW_CENTER_CURSOR, GLFW_FALSE);
-	glfwMaximizeWindow(window);
+	//glfwMaximizeWindow(window);
 
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);

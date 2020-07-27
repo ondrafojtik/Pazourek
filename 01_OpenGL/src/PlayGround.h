@@ -11,6 +11,7 @@
 
 #include <unordered_map>
 #include <memory>
+#include <math.h>
 
 #include "Renderer.h" //it already includes camera, texture etc. 
 
@@ -18,9 +19,14 @@ struct PlayGround
 {
 	double cursorX;
 	double cursorY;
+	float fCursorY;
 
-	float cameraX = 0;
-	float cameraY = 0;
+	float relativeCursorX;
+	float relativeCursorY;
+
+	float cameraX = 64.0f;
+	float cameraY = 64.0f - 1026;
+	
 	float cameraZoom = 0;
 
 	float ParticleSize = 30.0f;
@@ -42,7 +48,9 @@ private:
 	Renderer* renderer = new Renderer(camera);
 	
 	Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
-	
+	//Texture* tex = new Texture("src/res/textures/copy.png");
+	Texture* player = new Texture("src/res/textures/player1.png");
+
 	SubTexture* m_SubGrass = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 2, 0);
 	SubTexture* m_SubForest = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 1, 3);
 	SubTexture* m_SubDown = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 5, 5);
@@ -50,9 +58,17 @@ private:
 	SubTexture* m_SubUp = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 7);
 	SubTexture* m_SubTex = nullptr;
 
-
 	std::unordered_map<char, SubTexture*> textures;
 	
 	ParticleSystem* myParticles = new ParticleSystem();
-	
+
+	//might keep it here just for debugging pathFinder
+	bool drawGrid = true;
+
+	//grid def.
+	glm::vec2 grid = glm::vec2(0.0f, 0.0f);
+
+	int grid_x = 0;
+	int grid_y = 0;
+
 };

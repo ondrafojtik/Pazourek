@@ -10,7 +10,6 @@
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
-#include "Sprite.h"
 #include "Texture.h"
 #include "SubTexture.h"
 
@@ -27,6 +26,9 @@ struct RenderData
 	VertexArray va;
 	IndexBuffer* ib = nullptr;
 	Shader* shader = nullptr;
+
+	VertexBuffer* unchanged_vb = nullptr;
+	VertexArray unchanged_va;
 
 	void Init()
 	{
@@ -58,9 +60,12 @@ struct RenderData
 		}
 
 		vb = new VertexBuffer(pos, 4 * 4 * sizeof(float));
+		unchanged_vb = new VertexBuffer(pos, 4 * 4 * sizeof(float));
+		
+		layout.Push<float>(2);
+		layout.Push<float>(2);
 
-		layout.Push<float>(2);
-		layout.Push<float>(2);
+		unchanged_va.AddBuffer(*unchanged_vb, layout);
 
 		va.AddBuffer(*vb, layout);
 		ib = new IndexBuffer(indices, 6);
@@ -95,14 +100,14 @@ private:
 	//blank texture (figure this out later)
 	//u can definitely just pass in the buffer with color, not having to pass texture? or just create blank texutre internally? ?? 
 	Texture* blank = new Texture("src/res/textures/Blank.png");
+	Texture* grid = new Texture("src/res/textures/grid.png");
 public:
 	void DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale);
+	void DrawGrid(glm::vec4 color, glm::vec2 position);
 	void DrawQuad(Texture& texture, glm::vec2 position);
 	void DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size);
 	void DrawQuad(SubTexture& texture, glm::vec2 position);
 	
 	Renderer(Camera *camera);
-	void DrawSprite(Sprite *m_Sprite);
-	void DrawParticles(const std::vector<Particle>& particles);
 	void Clear() const; 
 };

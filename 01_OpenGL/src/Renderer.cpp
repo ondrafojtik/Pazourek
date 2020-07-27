@@ -43,9 +43,6 @@ void Renderer::DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size)
 		data.texCoords[i] = coords[i];
 	data.RefreshData();
 
-	//std::cout << data.layout.GetElements().size() << std::endl;
-	//std::cout << data.layout.GetStride() << std::endl;
-	
 	data.vb->Bind();
 	data.va.Bind();
 	data.ib->Bind();
@@ -158,6 +155,37 @@ void Renderer::DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale)
 	data.ib->Unbind();
 	data.shader->Unbind();
 	blank->Unbind();
+}
+
+void Renderer::DrawGrid(glm::vec4 color, glm::vec2 position)
+{
+	grid->Bind();
+
+	float rotation = 0.0f;
+	glm::vec2 scale = { 128.0f, 128.0f };
+
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
+		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+
+	//data.vb->Bind();
+	data.unchanged_vb->Bind();
+	//data.va.Bind();
+	data.unchanged_va.Bind();
+	data.ib->Bind();
+	data.shader->Bind();
+	data.shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
+	data.shader->SetUniformMat4f("u_Transform", transform);
+	data.shader->SetUniform4f("u_Color", color.r, color.g, color.b, color.a);
+	data.shader->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
+	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+	//data.vb->Unbind();
+	data.unchanged_vb->Unbind();
+	//data.va.Unbind();
+	data.unchanged_va.Unbind();
+	data.ib->Unbind();
+	data.shader->Unbind();
+	grid->Unbind();
 }
 
 void Renderer::Clear() const
