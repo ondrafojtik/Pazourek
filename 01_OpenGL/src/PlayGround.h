@@ -12,8 +12,25 @@
 #include <unordered_map>
 #include <memory>
 #include <math.h>
+#include <array>
 
 #include "Renderer.h" //it already includes camera, texture etc. 
+#include "Pathfinder.h"
+
+static const char* s_grid =
+"GGGGGFGGGGGGGGG"
+"GGGFFFGGGGGUGGG"
+"GGGGFFFGGGGVGGG"
+"GGGGGGGGGGGVGGG"
+"GGGGGGGGGGGDGGG"
+"GGGGGGGGGGGGGGG"
+"GGGGGGFFFGGGGGG"
+"GGGGGGGGFGGGGGG";
+
+static std::array<Node, 15 * 8> s_nodeGrid;
+
+static float tileSize = 128.0f;
+
 
 struct PlayGround
 {
@@ -24,7 +41,7 @@ struct PlayGround
 	float relativeCursorX;
 	float relativeCursorY;
 
-	float cameraX = 64.0f;
+	float cameraX = -64.0f;
 	float cameraY = 64.0f - 1026;
 	
 	float cameraZoom = 0;
@@ -65,10 +82,9 @@ private:
 	//might keep it here just for debugging pathFinder
 	bool drawGrid = true;
 
-	//grid def.
+	//grid as in where I am currently with mouse
 	glm::vec2 grid = glm::vec2(0.0f, 0.0f);
 
-	int grid_x = 0;
-	int grid_y = 0;
+	Pathfinder* pathFinder = new Pathfinder();
 
 };

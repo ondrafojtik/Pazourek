@@ -12,10 +12,13 @@ int main(void)
 
 	if (!glfwInit())
 		std::cout << "Init fail! Check WindowInit" << std::endl;
-
-	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+	
+	int monitorCount;
+	GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
+	GLFWmonitor* monitor = monitors[2];
+	//GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 	GLFWwindow* window = glfwCreateWindow(l_WindowWidth, l_WindowHeight, "GLwindow", monitor, NULL);
-
+	
 	const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 	glfwWindowHint(GLFW_RED_BITS, mode->redBits);
 	glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
