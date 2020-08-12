@@ -1,5 +1,5 @@
 #include "PlayGround.h"
-
+/*
 static glm::vec2 grid_to_position(const glm::vec2& grid)
 {
 	glm::vec2 pos = glm::vec2((grid.x * tileSize), -grid.y * tileSize);
@@ -14,7 +14,7 @@ static glm::vec2 position_to_grid(const glm::vec2& position)
 		std::floorf((-position.y + tileSize / 2) / tileSize)
 	);
 	return grid;
-}
+}*/
 
 void PlayGround::OnAttach()
 {
@@ -91,25 +91,25 @@ void PlayGround::OnRender()
 	{
 		m_SubTex = textures[node.grid_type];
 		renderer->DrawQuad(*m_SubTex, { tileSize * node.position.x, -tileSize * node.position.y });
-		//if (drawGrid)
-		//{
-		//	if (node.collidable) //bacically "if collidable.." 
-		//		renderer->DrawGrid(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), grid_to_position(node.position));
-		//	else
-		//		renderer->DrawGrid(glm::vec4(0.1f, 0.05f, 0.1f, 1.0f), grid_to_position(node.position));
-		//}
+		if (drawGrid)
+		{
+			if (node.collidable) //bacically "if collidable.." 
+				renderer->DrawGrid(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), grid_to_position(node.position));
+			else
+				renderer->DrawGrid(glm::vec4(0.1f, 0.05f, 0.1f, 1.0f), grid_to_position(node.position));
+		}
 	}
 
 	//render player
 	//renderer->DrawQuad(*player, grid_to_position(grid));
 	int x = 4;
 	int y = 4;
-	renderer->DrawQuad(*player, grid_to_position(s_nodeGrid[x + (y * 15)].position));
-	renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[x + (y * 15)].position));
-	renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[(x + 1) + (y * 15)].position));
-	renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[(x - 1) + (y * 15)].position));
-	renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[x + ((y + 1) * 15)].position));
-	renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[x + ((y - 1) * 15)].position));
+	renderer->DrawQuad(*player, grid_to_position(s_nodeGrid[grid_to_i({ x, y })].position));
+	//renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[x + (y * 15)].position));
+	//renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[(x + 1) + (y * 15)].position));
+	//renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[(x - 1) + (y * 15)].position));
+	//renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[x + ((y + 1) * 15)].position));
+	//renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[x + ((y - 1) * 15)].position));
 
 	//particles
 	for (Particle elem : myParticles->buffer)

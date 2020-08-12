@@ -29,9 +29,6 @@ static const char* s_grid =
 
 static std::array<Node, 15 * 8> s_nodeGrid;
 
-static float tileSize = 128.0f;
-
-
 struct PlayGround
 {
 	double cursorX;

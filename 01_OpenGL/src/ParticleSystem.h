@@ -35,8 +35,12 @@ struct Particle
 		color.a = color.a * _life;
 		currLife -= 1;
 		
-		size.x -= 0.1f;
-		size.y -= 0.1f;
+		//fun bug (with no buffer swap and on release - basically need like 1k fps)
+		//size.x -= 0.1f;
+		//size.y -= 0.1f;
+
+		size.x = glm::lerp(0.0f, size.x, _life);
+		size.y = glm::lerp(0.0f, size.y, _life);
 
 		float speed = 1.0f;
 		x += velocity.x * speed / 100;

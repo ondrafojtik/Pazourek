@@ -6,6 +6,29 @@
 
 #include <iostream>
 
+static float tileSize = 128.0f;
+
+static glm::vec2 grid_to_position(const glm::vec2& grid)
+{
+	glm::vec2 pos = glm::vec2((grid.x * tileSize), -grid.y * tileSize);
+	//{ 128.0f + grid.x * 128.0f, (-grid.y * 128.0f) }
+	return pos;
+}
+
+static glm::vec2 position_to_grid(const glm::vec2& position)
+{
+	glm::vec2 grid = glm::vec2(
+		std::ceilf((position.x - tileSize / 2) / tileSize),
+		std::floorf((-position.y + tileSize / 2) / tileSize)
+	);
+	return grid;
+}
+
+static int grid_to_i(const glm::vec2 grid)
+{
+	return ((int)grid.x + ((int)grid.y * 15));
+}
+
 struct Node
 {
 	bool collidable = false;
@@ -15,7 +38,8 @@ struct Node
 	glm::vec2 position;
 	//std::vector<Node> adj;
 	std::vector<glm::vec2> adj;
-	Node* parent = nullptr;
+	//Node* parent = nullptr;
+	glm::vec2 parentPos;
 	//represents the "grid color" and whether its collidable or not
 	char grid_type;
 };
@@ -29,7 +53,7 @@ static bool isCollidable(char c)
 	return false;
 }
 
-static int distance(Node* lhs, Node* rhs)
+static float distance(Node* lhs, Node* rhs)
 {
 	return std::sqrtf(std::powf(lhs->position.x - rhs->position.x, 2) + std::powf(lhs->position.y - rhs->position.y, 2));
 }
@@ -49,11 +73,11 @@ struct Pathfinder
 				node.collidable = false;
 			node.global_cost = INFINITY;
 			node.local_cost = INFINITY;
-			node.parent = nullptr;
+			node.parentPos = { -1, -1 };
 			node.visited = false;
 
-			int x = node.position.x;
-			int y = node.position.y;
+			int x = (int)node.position.x;
+			int y = (int)node.position.y;
 
 			if (x > 0)
 				node.adj.push_back(grid[(x - 1) + ((y + 0) * 15)].position);
@@ -78,26 +102,86 @@ struct Pathfinder
 				node.collidable = false;
 			node.global_cost = INFINITY;
 			node.local_cost = INFINITY;
-			node.parent = nullptr;
+			node.parentPos = { -1, -1 };
 			node.visited = false;
 
+			int x = (int)node.position.x;
+			int y = (int)node.position.y;
 
-			//if (y > 0)
-			//	nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[(y - 1) * nMapWidth + (x + 0)]);
-			//if (y < nMapHeight - 1)
-			//	nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[(y + 1) * nMapWidth + (x + 0)]);
-			//if (x > 0)
-			//	nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[(y + 0) * nMapWidth + (x - 1)]);
-			//if (x < nMapWidth - 1)
-			//	nodes[y * nMapWidth + x].vecNeighbours.push_back(&nodes[(y + 0) * nMapWidth + (x + 1)]);
+			if (x > 0)
+				node.adj.push_back(grid[(x - 1) + ((y + 0) * 15)].position);
+			if (x < 15 - 1)
+				node.adj.push_back(grid[(x + 1) + ((y + 0) * 15)].position);
+			if (y > 0)
+				node.adj.push_back(grid[(x + 0) + ((y - 1) * 15)].position);
+			if (y < 8 - 1)
+				node.adj.push_back(grid[(x + 0) + ((y + 1) * 15)].position);
+
 		}
 	}
 	
 	//creates the path
 	void Solve(std::array<Node, (15 * 8)>& grid, Node start, Node end)
 	{
+		std::vector<Node> notTestedNodes;
 		
+		Node currNode = start;
+		currNode.local_cost = 0.0f;
+		currNode.global_cost = distance(&currNode, &end);
+		for (glm::vec2 nodePosition : currNode.adj)
+		{
+			glm::vec2 pos = position_to_grid(nodePosition);
+			notTestedNodes.push_back(grid[grid_to_i(pos)]);
+		}
 
+		notTestedNodes.push_back(currNode);
+		while (!notTestedNodes.empty() && currNode.position != end.position)
+		{
+			
+			//sort the list (so that theres higher chance of getting the correct one) 
+			bool sorted = false;
+			while (!sorted)
+			{
+				sorted = true;
+				for (int i = 0; i < notTestedNodes.size() - 1; i++)
+					if (notTestedNodes[i].global_cost < notTestedNodes[i + 1].global_cost)
+					{
+						std::swap(notTestedNodes[i], notTestedNodes[i + 1]);
+						sorted = false;
+					}
+			}
+
+			while (!notTestedNodes.empty() && notTestedNodes[0].visited)
+				notTestedNodes.erase(notTestedNodes.begin());
+
+			if (notTestedNodes.empty())
+				break;
+
+			currNode = notTestedNodes[0];
+			currNode.visited = true;
+
+			for (glm::vec2 position : currNode.adj)
+			{
+				glm::vec2 _grid = position_to_grid(position);
+				Node nodeNeighbour = grid[grid_to_i(_grid)];
+
+				if (!nodeNeighbour.visited && !nodeNeighbour.collidable)
+					notTestedNodes.push_back(nodeNeighbour);
+
+				float lowerTest = currNode.local_cost + distance(&currNode, &nodeNeighbour);
+				if (lowerTest < nodeNeighbour.local_cost)
+				{
+					nodeNeighbour.parentPos = currNode.position;
+					nodeNeighbour.local_cost = lowerTest;
+					nodeNeighbour.global_cost = nodeNeighbour.local_cost + distance(&nodeNeighbour, &end);
+				}
+
+
+			}
+
+		}
+
+		std::cout << "Found way!\n";
 	}
 	
 };

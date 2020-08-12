@@ -4,8 +4,8 @@
 
 #include "PlayGround.h"
 
-float l_WindowWidth = 1920;
-float l_WindowHeight = 1080;
+int l_WindowWidth = 1920;
+int l_WindowHeight = 1080;
 
 int main(void)
 {
