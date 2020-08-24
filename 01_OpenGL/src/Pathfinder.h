@@ -94,6 +94,8 @@ struct Pathfinder
 
 	void Solve(std::array<Node, (15 * 8)>& grid, Node* start, Node* end)
 	{
+		Init(grid);
+
 		Node* currNode = start;
 		std::list<Node*> notTested;
 		start->local_cost = 0.0f;

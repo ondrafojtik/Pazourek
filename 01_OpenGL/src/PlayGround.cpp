@@ -74,7 +74,7 @@ void PlayGround::OnUpdate()
 		myParticles->Add((float)cursorX, (float)cursorY, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
 	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
 	{
-		pathFinder->Solve(s_nodeGrid, &s_nodeGrid[4], &s_nodeGrid[6]);
+		pathFinder->Solve(s_nodeGrid, &s_nodeGrid[4], &s_nodeGrid[grid_to_i(grid)]);
 		pathFound = 1;
 	}
 	//setting camera position based on input
@@ -119,7 +119,9 @@ void PlayGround::OnRender()
 
 	if(pathFound)
 	{
-		Node node = s_nodeGrid[6];
+		//Node node = s_nodeGrid[6];
+		Node node = s_nodeGrid[grid_to_i(grid)];
+
 		while (node.parent != nullptr)
 		{
 			renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(node.position));
