@@ -73,8 +73,10 @@ void PlayGround::OnUpdate()
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 		myParticles->Add((float)cursorX, (float)cursorY, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
 	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
-		pathFinder->Solve(s_nodeGrid, s_nodeGrid[0], s_nodeGrid[87]);
-
+	{
+		pathFinder->Solve(s_nodeGrid, &s_nodeGrid[4], &s_nodeGrid[6]);
+		pathFound = 1;
+	}
 	//setting camera position based on input
 	camera->SetPosition(cameraX, cameraY);
 	camera->SetZoom(cameraZoom);
@@ -103,7 +105,7 @@ void PlayGround::OnRender()
 	//render player
 	//renderer->DrawQuad(*player, grid_to_position(grid));
 	int x = 4;
-	int y = 4;
+	int y = 0;
 	renderer->DrawQuad(*player, grid_to_position(s_nodeGrid[grid_to_i({ x, y })].position));
 	//renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[x + (y * 15)].position));
 	//renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[(x + 1) + (y * 15)].position));
@@ -114,6 +116,17 @@ void PlayGround::OnRender()
 	//particles
 	for (Particle elem : myParticles->buffer)
 		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
+
+	if(pathFound)
+	{
+		Node node = s_nodeGrid[6];
+		while (node.parent != nullptr)
+		{
+			renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(node.position));
+			node = *node.parent;
+		}
+		renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position({x, y}));
+	}
 }
 
 void PlayGround::ImGuiOnUpdate()

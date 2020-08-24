@@ -44,9 +44,9 @@ struct PlayGround
 	float cameraZoom = 0;
 
 	float ParticleSize = 30.0f;
-	float ParticleLife = 15.0f;
-	glm::vec4 ParticleStartingColor = glm::vec4(1.0f);
-	glm::vec4 ParticleDyingColor = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+	float ParticleLife = 150.0f;
+	glm::vec4 ParticleStartingColor = glm::vec4(0.8f, 0.15f, 0.05f, 1.0f);
+	glm::vec4 ParticleDyingColor = glm::vec4(0.15f, 0.1f, 0.75f, 1.0f);
 
 	GLFWmonitor* monitor = nullptr;
 	GLFWwindow* window = nullptr;
@@ -83,5 +83,5 @@ private:
 	glm::vec2 grid = glm::vec2(0.0f, 0.0f);
 
 	Pathfinder* pathFinder = new Pathfinder();
-
+	bool pathFound = false;
 };
