@@ -71,12 +71,27 @@ void PlayGround::OnUpdate()
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 		cameraZoom = cameraZoom + 1;
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-		myParticles->Add((float)cursorX, (float)cursorY, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
+	{ 
+		float windowWidth = 1920.0f;
+		float windowHeight = 1080.0f;
+
+		//float posX = cursorX + (camera->GetZoom() * );
+		//float posY = (camera->GetHeight() / windowHeight) * cursorY;
+
+		float posX = (camera->GetWidth() / windowWidth) * cursorX;
+		float posY = (camera->GetHeight() / windowHeight) * cursorY;
+		myParticles->Add(posX, posY, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
+		
+	}
 	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
 	{
 		pathFinder->Solve(s_nodeGrid, &s_nodeGrid[4], &s_nodeGrid[grid_to_i(grid)]);
-		pathFound = 1;
+		node_to_render_from = s_nodeGrid[grid_to_i(grid)];
+		render_path = 1;
 	}
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+		render_path = 0;
+	
 	//setting camera position based on input
 	camera->SetPosition(cameraX, cameraY);
 	camera->SetZoom(cameraZoom);
@@ -117,11 +132,10 @@ void PlayGround::OnRender()
 	for (Particle elem : myParticles->buffer)
 		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
 
-	if(pathFound)
+	if(render_path)
 	{
 		//Node node = s_nodeGrid[6];
-		Node node = s_nodeGrid[grid_to_i(grid)];
-
+		Node node = node_to_render_from;
 		while (node.parent != nullptr)
 		{
 			renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(node.position));
@@ -150,7 +164,10 @@ void PlayGround::ImGuiOnUpdate()
 	}
 
 	grid = position_to_grid(glm::vec2(cursorX, cursorY));
-
+	if (ImGui::Button("Terminate", { 100, 20 }))
+	{
+		glfwTerminate();
+	}
 	//grid.x = std::ceilf((cursorX - tileSize / 2) / tileSize);
 	//grid.y = std::floorf((-cursorY + tileSize / 2) / tileSize);
 	ImGui::Text("Grid X: %i, Y: %i, Final: %i", (int)grid.x, (int)grid.y, (int)(grid.x + (grid.y * 15)));

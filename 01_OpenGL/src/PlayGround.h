@@ -25,7 +25,7 @@ static const char* s_grid =
 "GGGGGGGGGGGDGGG"
 "GGGGGGGGGGGGGGG"
 "GGGGGGFFFGGGGGG"
-"GGGGGGGGFGGGGGG";
+"GGGGGGFGFGGGGGG";
 
 static std::array<Node, 15 * 8> s_nodeGrid;
 
@@ -83,5 +83,7 @@ private:
 	glm::vec2 grid = glm::vec2(0.0f, 0.0f);
 
 	Pathfinder* pathFinder = new Pathfinder();
-	bool pathFound = false;
+	bool render_path = false;
+	//just def. value so I dont get nullptr..
+	Node node_to_render_from = s_nodeGrid[0];
 };

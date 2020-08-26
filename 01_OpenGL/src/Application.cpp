@@ -59,7 +59,6 @@ int main(void)
 
 	while (!glfwWindowShouldClose(game.window))
 	{
-		
 		game.OnUpdate();
 		game.OnRender();
 
@@ -69,8 +68,6 @@ int main(void)
 
 		ImGui::Render();
 		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
-
-		
 
 		GLCall(glfwSwapBuffers(game.window));
 		GLCall(glfwPollEvents());

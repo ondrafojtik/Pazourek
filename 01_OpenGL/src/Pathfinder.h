@@ -76,6 +76,38 @@ struct Pathfinder
 			node.local_cost = INFINITY;
 			//node.parentPos = { -1, -1 };
 			node.visited = false;
+			node.parent = nullptr;
+
+			int x = (int)node.position.x;
+			int y = (int)node.position.y;
+
+			if (x > 0)
+				node.adj.push_back(&grid[(x - 1) + ((y + 0) * 15)]);
+			if (x < 15 - 1)
+				node.adj.push_back(&grid[(x + 1) + ((y + 0) * 15)]);
+			if (y > 0)
+				node.adj.push_back(&grid[(x + 0) + ((y - 1) * 15)]);
+			if (y < 8 - 1)
+				node.adj.push_back(&grid[(x + 0) + ((y + 1) * 15)]);
+
+		}
+	}
+
+	void Reset(std::array<Node, (15 * 8)>& grid)
+	{
+		for (Node& node : grid)
+		{
+			if (isCollidable(node.grid_type))
+				node.collidable = true;
+			else
+				node.collidable = false;
+			node.global_cost = INFINITY;
+			node.local_cost = INFINITY;
+			//node.parentPos = { -1, -1 };
+			node.visited = false;
+			node.parent = nullptr;
+
+			node.adj.clear();
 
 			int x = (int)node.position.x;
 			int y = (int)node.position.y;
@@ -94,7 +126,11 @@ struct Pathfinder
 
 	void Solve(std::array<Node, (15 * 8)>& grid, Node* start, Node* end)
 	{
-		Init(grid);
+		
+		Reset(grid);
+
+		if (start->collidable || end->collidable)
+			return;
 
 		Node* currNode = start;
 		std::list<Node*> notTested;
@@ -128,13 +164,11 @@ struct Pathfinder
 					adj->local_cost = lowerTest;
 					adj->global_cost = adj->local_cost + distance(adj, end);
 				}
-
 			}
-
-
 		}
-		std::cout << "Algo over!\n";
-
+		currNode = nullptr;
+		notTested.clear();
+		//std::cout << "Algo over!\n";
 	}
 
 	~Pathfinder()
