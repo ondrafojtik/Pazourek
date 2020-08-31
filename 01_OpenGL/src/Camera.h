@@ -49,5 +49,6 @@ public:
 	glm::mat4 ViewProjectionMatrix;
 	glm::vec3 position = { 0.0f, 0.0f, 0.0f };
 	cameraBounds bounds = { -ar.x * m_Zoom, ar.x * m_Zoom, -ar.y * m_Zoom, ar.y * m_Zoom };
+	float rotation = 0.0f;
 
 };

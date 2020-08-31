@@ -34,8 +34,8 @@ void PlayGround::OnAttach()
 	textures['V'] = m_SubVertical;
 	textures['U'] = m_SubUp;
 	
-	camera->position.x = -896;
-	camera->position.y = 420;
+	camera->position.x = 896;
+	camera->position.y = -420;
 }
 
 void PlayGround::OnDetach()
@@ -61,13 +61,13 @@ void PlayGround::OnUpdate()
 	
 	//I should rly make some sort of event system
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera->position.y -= 2.0f;
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera->position.x += 2.0f;
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
 		camera->position.y += 2.0f;
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
 		camera->position.x -= 2.0f;
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		camera->position.y -= 2.0f;
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera->position.x += 2.0f;
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		cameraZoom = cameraZoom + 2;
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
@@ -92,7 +92,10 @@ void PlayGround::OnUpdate()
 	}
 	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
 		render_path = 0;
-	
+	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
+		camera->rotation += 0.01f;
+
+
 	//setting camera position based on input
 	camera->SetPosition(cameraX, cameraY);
 	camera->SetZoom(cameraZoom);
@@ -161,6 +164,7 @@ void PlayGround::ImGuiOnUpdate()
 	{
 		camera->position.x = -896;
 		camera->position.y = 420;
+		camera->rotation = 0.0f;
 		cameraZoom = 60;
 		//cameraX = -64.0f;
 		//cameraY = 64.0f - 1026;
@@ -177,4 +181,5 @@ void PlayGround::ImGuiOnUpdate()
 	//grid.y = std::floorf((-cursorY + tileSize / 2) / tileSize);
 	ImGui::Text("Grid X: %i, Y: %i, Final: %i", (int)grid.x, (int)grid.y, (int)(grid.x + (grid.y * 15)));
 	ImGui::Text("CameraZoom: %f", camera->GetZoom());
+	ImGui::Text("Camera position: %f, %f", camera->position.x, camera->position.y);
 }
