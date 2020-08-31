@@ -34,6 +34,8 @@ void PlayGround::OnAttach()
 	textures['V'] = m_SubVertical;
 	textures['U'] = m_SubUp;
 	
+	camera->position.x = -896;
+	camera->position.y = 420;
 }
 
 void PlayGround::OnDetach()
@@ -59,28 +61,27 @@ void PlayGround::OnUpdate()
 	
 	//I should rly make some sort of event system
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraY= cameraY + 5;
+		camera->position.y -= 2.0f;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraX = cameraX - 5;
+		camera->position.x += 2.0f;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraY = cameraY - 5;
+		camera->position.y += 2.0f;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraX = cameraX + 5;
+		camera->position.x -= 2.0f;
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		cameraZoom = cameraZoom - 1;
+		cameraZoom = cameraZoom + 2;
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		cameraZoom = cameraZoom + 1;
+		cameraZoom = cameraZoom - 2;
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 	{ 
 		float windowWidth = 1920.0f;
 		float windowHeight = 1080.0f;
 
-		//float posX = cursorX + (camera->GetZoom() * );
-		//float posY = (camera->GetHeight() / windowHeight) * cursorY;
-
-		float posX = (camera->GetWidth() / windowWidth) * cursorX;
-		float posY = (camera->GetHeight() / windowHeight) * cursorY;
-		myParticles->Add(posX, posY, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
+		float x = 16 * camera->GetZoom();
+		float y = 9 * camera->GetZoom();
+		//float posX = (-camera->position.x - 896 + cursorX) + (windowWidth / 2 / x);
+		//float posY = cursorY; // + (windowHeight / 2 / y);
+		myParticles->Add(cursorX, cursorY, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
 		
 	}
 	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
@@ -158,9 +159,12 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::SameLine();
 	if (ImGui::Button("Reset camera", { 100, 20 }))
 	{
-		cameraX = -64.0f;
-		cameraY = 64.0f - 1026;
-		cameraZoom = 1.0f;
+		camera->position.x = -896;
+		camera->position.y = 420;
+		cameraZoom = 60;
+		//cameraX = -64.0f;
+		//cameraY = 64.0f - 1026;
+		//cameraZoom = 1.0f;
 		std::cout << "camera reset!\n";
 	}
 

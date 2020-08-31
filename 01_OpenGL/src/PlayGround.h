@@ -41,7 +41,7 @@ struct PlayGround
 	float cameraX = -64.0f;
 	float cameraY = 64.0f - 1026;
 	
-	float cameraZoom = 0;
+	float cameraZoom = 60;
 
 	float ParticleSize = 30.0f;
 	float ParticleLife = 150.0f;

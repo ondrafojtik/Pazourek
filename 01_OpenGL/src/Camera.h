@@ -3,6 +3,16 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
+struct cameraBounds
+{
+	float left, right, bottom, top;
+};
+
+struct AspectRatio
+{
+	int x, y;
+};
+
 class Camera 
 {
 private:
@@ -13,8 +23,9 @@ private:
 	float m_Top;
 	float m_xCameraOff = 0;
 	float m_yCameraOff = 0;
-	float m_Zoom = 0;
-	
+	float m_Zoom = 60;
+	AspectRatio ar = { 16,9 };
+
 public: 
 	Camera(float left, float right, float bottom, float top);
 	~Camera();
@@ -36,6 +47,7 @@ public:
 	inline float GetYOffset() const { return m_yCameraOff; }
 public: 
 	glm::mat4 ViewProjectionMatrix;
-
+	glm::vec3 position = { 0.0f, 0.0f, 0.0f };
+	cameraBounds bounds = { -ar.x * m_Zoom, ar.x * m_Zoom, -ar.y * m_Zoom, ar.y * m_Zoom };
 
 };
