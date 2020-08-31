@@ -14,15 +14,14 @@ private:
 	float m_xCameraOff = 0;
 	float m_yCameraOff = 0;
 	float m_Zoom = 0;
-	glm::mat4 ViewProjectionMatrix;
-
+	
 public: 
 	Camera(float left, float right, float bottom, float top);
 	~Camera();
 
 	void SetPosition(float xPos, float yPos);
 	void SetZoom(float Zoom);
-	inline glm::mat4 GetProjection() const { return m_Proj; }
+	inline glm::mat4 GetProjection() const { return ViewProjectionMatrix; }
 	inline float GetCameraX() const { return m_xCameraOff; }
 	inline float GetCameraY() const { return m_yCameraOff; }
 	inline float GetRealLeftPos() const { return ((m_Left + m_xCameraOff) + (m_Zoom * 16)); }
@@ -35,4 +34,8 @@ public:
 	inline float GetZoom() const { return m_Zoom; }
 	inline float GetXOffset() const { return m_xCameraOff; }  
 	inline float GetYOffset() const { return m_yCameraOff; }
+public: 
+	glm::mat4 ViewProjectionMatrix;
+
+
 };

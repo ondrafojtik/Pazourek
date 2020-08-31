@@ -17,7 +17,12 @@ void Camera::SetPosition(float xPos, float yPos)
 		(m_Bottom + m_yCameraOff) + (m_Zoom * 9), 
 		(m_Top + m_yCameraOff) - (m_Zoom * 9));
 
-	
+	glm::vec3 position = { 0.0f, 0.0f, 0.0f };
+	float rotation = 0.0f;
+	glm::mat4 view = glm::translate(glm::mat4(1.0f), position)
+		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f });
+
+	ViewProjectionMatrix = m_Proj * view;
 
 }
 

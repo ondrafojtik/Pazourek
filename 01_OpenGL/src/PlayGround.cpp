@@ -160,6 +160,7 @@ void PlayGround::ImGuiOnUpdate()
 	{
 		cameraX = -64.0f;
 		cameraY = 64.0f - 1026;
+		cameraZoom = 1.0f;
 		std::cout << "camera reset!\n";
 	}
 
@@ -171,4 +172,5 @@ void PlayGround::ImGuiOnUpdate()
 	//grid.x = std::ceilf((cursorX - tileSize / 2) / tileSize);
 	//grid.y = std::floorf((-cursorY + tileSize / 2) / tileSize);
 	ImGui::Text("Grid X: %i, Y: %i, Final: %i", (int)grid.x, (int)grid.y, (int)(grid.x + (grid.y * 15)));
+	ImGui::Text("CameraZoom: %f", camera->GetZoom());
 }
