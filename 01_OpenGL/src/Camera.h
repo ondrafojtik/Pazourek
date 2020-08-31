@@ -32,6 +32,8 @@ public:
 
 	void SetPosition(float xPos, float yPos);
 	void SetZoom(float Zoom);
+	void RecalculateVP();
+
 	inline glm::mat4 GetProjection() const { return ViewProjectionMatrix; }
 	inline float GetCameraX() const { return m_xCameraOff; }
 	inline float GetCameraY() const { return m_yCameraOff; }

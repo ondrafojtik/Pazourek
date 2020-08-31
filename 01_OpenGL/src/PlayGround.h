@@ -38,8 +38,8 @@ struct PlayGround
 	float relativeCursorX;
 	float relativeCursorY;
 
-	float cameraX = -64.0f;
-	float cameraY = 64.0f - 1026;
+	float cameraX = 0;
+	float cameraY = 0;
 	
 	float cameraZoom = 60;
 
@@ -58,7 +58,7 @@ struct PlayGround
 	void OnRender();
 	void ImGuiOnUpdate();
 private:
-	Camera* camera = new Camera(0, 1920, 0, 1080);
+	Camera* camera = new Camera(-16, 16, -9, 9);
 	Renderer* renderer = new Renderer(camera);
 	
 	Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");

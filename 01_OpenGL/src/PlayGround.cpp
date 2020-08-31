@@ -61,13 +61,13 @@ void PlayGround::OnUpdate()
 	
 	//I should rly make some sort of event system
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera->position.y += 2.0f;
+		cameraY += 2.0f;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera->position.x -= 2.0f;
+		cameraX -= 2.0f;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera->position.y -= 2.0f;
+		cameraY -= 2.0f;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera->position.x += 2.0f;
+		cameraX += 2.0f;
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		cameraZoom = cameraZoom + 2;
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
@@ -162,17 +162,19 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::SameLine();
 	if (ImGui::Button("Reset camera", { 100, 20 }))
 	{
-		camera->position.x = -896;
-		camera->position.y = 420;
+		cameraX = 0;
+		cameraY = 0;
 		camera->rotation = 0.0f;
 		cameraZoom = 60;
+		camera->SetZoom(cameraZoom);
+		camera->SetPosition(cameraX, cameraY);
 		//cameraX = -64.0f;
 		//cameraY = 64.0f - 1026;
 		//cameraZoom = 1.0f;
 		std::cout << "camera reset!\n";
 	}
 
-	grid = position_to_grid(glm::vec2(cursorX, cursorY));
+	grid = position_to_grid(glm::vec2(cursorX, -cursorY));
 	if (ImGui::Button("Terminate", { 100, 20 }))
 	{
 		glfwTerminate();

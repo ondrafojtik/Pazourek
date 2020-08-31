@@ -11,24 +11,27 @@ Camera::Camera(float left, float right, float bottom, float top) : m_Left(left),
 
 Camera::~Camera() {}
 
-void Camera::SetPosition(float xPos, float yPos)
+void Camera::RecalculateVP()
 {
-	m_xCameraOff = xPos;
-	m_yCameraOff = yPos;
-
-	bounds = { -ar.x * m_Zoom, ar.x * m_Zoom, -ar.y * m_Zoom, ar.y * m_Zoom };
 	m_Proj = glm::ortho(bounds.left, bounds.right, bounds.bottom, bounds.top);
-
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
 		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f });
 	glm::mat4 view = glm::inverse(transform);
 
 	ViewProjectionMatrix = m_Proj * view;
+}
 
+void Camera::SetPosition(float xPos, float yPos)
+{
+	position.x = xPos;
+	position.y = yPos;
+	RecalculateVP();
 }
 
 void Camera::SetZoom(float Zoom)
 {
 	m_Zoom = Zoom;
+	bounds = { -ar.x * m_Zoom, ar.x * m_Zoom, -ar.y * m_Zoom, ar.y * m_Zoom };
+	RecalculateVP();
 }
