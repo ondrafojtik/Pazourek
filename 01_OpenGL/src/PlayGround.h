@@ -58,7 +58,7 @@ struct PlayGround
 	void OnRender();
 	void ImGuiOnUpdate();
 private:
-	Camera* camera = new Camera(-16, 16, -9, 9);
+	Camera* camera = new Camera(0, 32, 0, 18);
 	Renderer* renderer = new Renderer(camera);
 	
 	Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");

@@ -102,7 +102,7 @@ private:
 	Texture* blank = new Texture("src/res/textures/Blank.png");
 	Texture* grid = new Texture("src/res/textures/grid.png");
 public:
-	void DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale);
+	void DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale, float rotation);
 	void DrawGrid(glm::vec4 color, glm::vec2 position);
 	void DrawQuad(Texture& texture, glm::vec2 position);
 	void DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size);

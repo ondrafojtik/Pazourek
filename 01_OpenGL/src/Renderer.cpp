@@ -131,14 +131,12 @@ void Renderer::DrawQuad(SubTexture& texture, glm::vec2 position)
 	texture.m_texture->Unbind();
 }
 
-void Renderer::DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale)
+void Renderer::DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale, float rotation)
 {
 	blank->Bind();
 
-	float rotation = 0.0f;
-	
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
-		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 
 	data.vb->Bind();

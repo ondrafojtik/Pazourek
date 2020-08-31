@@ -16,7 +16,7 @@ void Camera::RecalculateVP()
 	m_Proj = glm::ortho(bounds.left, bounds.right, bounds.bottom, bounds.top);
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
-		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f });
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f });
 	glm::mat4 view = glm::inverse(transform);
 
 	ViewProjectionMatrix = m_Proj * view;

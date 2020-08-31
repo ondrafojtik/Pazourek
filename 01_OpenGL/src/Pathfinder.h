@@ -18,9 +18,10 @@ static glm::vec2 grid_to_position(const glm::vec2& grid)
 static glm::vec2 position_to_grid(const glm::vec2& position)
 {
 	glm::vec2 grid = glm::vec2(
-		std::ceilf((position.x - tileSize / 2) / tileSize),
-		std::floorf((-position.y + tileSize / 2) / tileSize)
+		std::ceilf((position.x - tileSize) / tileSize),
+		std::floorf(position.y / tileSize)
 	);
+	grid.y = glm::abs(grid.y - 7);
 	return grid;
 }
 

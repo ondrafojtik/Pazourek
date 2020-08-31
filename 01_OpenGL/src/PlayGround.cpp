@@ -33,9 +33,9 @@ void PlayGround::OnAttach()
 	textures['D'] = m_SubDown;
 	textures['V'] = m_SubVertical;
 	textures['U'] = m_SubUp;
-	
-	camera->position.x = 896;
-	camera->position.y = -420;
+
+	cameraX = 896;
+	cameraY = -420;
 }
 
 void PlayGround::OnDetach()
@@ -58,7 +58,7 @@ void PlayGround::OnUpdate()
 	glfwGetCursorPos(window, &cursorX, &cursorY);
 	cursorX = (cursorX + camera->GetXOffset());
 	cursorY = (glm::abs(1080.0f - (float)cursorY) + camera->GetYOffset());
-	
+
 	//I should rly make some sort of event system
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraY += 2.0f;
@@ -73,16 +73,16 @@ void PlayGround::OnUpdate()
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
 		cameraZoom = cameraZoom - 2;
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
-	{ 
+	{
 		float windowWidth = 1920.0f;
 		float windowHeight = 1080.0f;
 
-		float x = 16 * camera->GetZoom();
-		float y = 9 * camera->GetZoom();
+		float xPos = cursorX + cameraX - windowWidth / 2;
+		float yPos = cursorY + cameraY - windowHeight / 2;
 		//float posX = (-camera->position.x - 896 + cursorX) + (windowWidth / 2 / x);
 		//float posY = cursorY; // + (windowHeight / 2 / y);
-		myParticles->Add(cursorX, cursorY, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
-		
+		myParticles->Add(xPos, yPos, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
+
 	}
 	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
 	{
@@ -93,7 +93,7 @@ void PlayGround::OnUpdate()
 	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
 		render_path = 0;
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
-		camera->rotation += 0.01f;
+		camera->rotation += 0.1f;
 
 
 	//setting camera position based on input
@@ -101,6 +101,8 @@ void PlayGround::OnUpdate()
 	camera->SetZoom(cameraZoom);
 
 	myParticles->Update();
+
+	grid = position_to_grid(glm::vec2(cursorX, cursorY));
 }
 
 void PlayGround::OnRender()
@@ -134,9 +136,9 @@ void PlayGround::OnRender()
 
 	//particles
 	for (Particle elem : myParticles->buffer)
-		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size);
+		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size, 0.0f);
 
-	if(render_path)
+	if (render_path)
 	{
 		//Node node = s_nodeGrid[6];
 		Node node = node_to_render_from;
@@ -145,7 +147,7 @@ void PlayGround::OnRender()
 			renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(node.position));
 			node = *node.parent;
 		}
-		renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position({x, y}));
+		renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position({ x, y }));
 	}
 }
 
@@ -162,8 +164,8 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::SameLine();
 	if (ImGui::Button("Reset camera", { 100, 20 }))
 	{
-		cameraX = 0;
-		cameraY = 0;
+		cameraX = 896;
+		cameraY = -420;
 		camera->rotation = 0.0f;
 		cameraZoom = 60;
 		camera->SetZoom(cameraZoom);
@@ -174,7 +176,7 @@ void PlayGround::ImGuiOnUpdate()
 		std::cout << "camera reset!\n";
 	}
 
-	grid = position_to_grid(glm::vec2(cursorX, -cursorY));
+	
 	if (ImGui::Button("Terminate", { 100, 20 }))
 	{
 		glfwTerminate();
