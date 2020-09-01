@@ -135,10 +135,6 @@ void PlayGround::OnRender()
 	//renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[x + ((y + 1) * 15)].position));
 	//renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position(s_nodeGrid[x + ((y - 1) * 15)].position));
 
-	//particles
-	for (Particle elem : myParticles->buffer)
-		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size, 0.0f);
-
 	if (render_path)
 	{
 		//Node node = s_nodeGrid[6];
@@ -150,6 +146,20 @@ void PlayGround::OnRender()
 		}
 		renderer->DrawGrid(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), grid_to_position({ x, y }));
 	}
+
+	//BEGINNING OF EDIT MODE!!!_________________________________________________________________________________________
+	if (editMode)
+	{
+		renderer->DrawQuad(*m_TextureEditMode, grid_to_position(grid));
+
+	}
+
+
+
+	//particles
+	for (Particle elem : myParticles->buffer)
+		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size, 0.0f);
+
 }
 
 void PlayGround::ImGuiOnUpdate()
@@ -192,8 +202,13 @@ void PlayGround::ImGuiOnUpdate()
 
 	ImGui::Begin("Level Editor");
 
+
+	//theres a need of use "PushID and PopID" since ImGui doesnt like 2widgets or w/e with same "identity". 
+	//This goes to ID conflict and it seems like it thinks theres only 1widget (even tho it might render more)
+	int iter = 0;
 	for (std::pair<char, SubTexture*> sub : textures)
 	{
+		ImGui::PushID(iter);
 		ImGui::SameLine();
 		sub.second->m_texture->Bind();
 		ImTextureID id = (ImTextureID)sub.second->m_texture->GetTexID();
@@ -205,17 +220,26 @@ void PlayGround::ImGuiOnUpdate()
 
 		//ImGui::Image(id, ImVec2(512, 512), { right, top }, { left, bottom });
 
-		if (ImGui::ImageButton(id, { 64, 64 }, { right, top }, { left, bottom }));
+		if (ImGui::ImageButton(id, { 64, 64 }, { right, top }, { left, bottom }))
 		{
-
+			m_TextureEditMode = sub.second;
 		}
+		ImGui::PopID();
+		iter += 1;
 	}
 
+	m_TextureEditMode->m_texture->Bind();
+	ImTextureID id = (ImTextureID)m_TextureEditMode->m_texture->GetTexID();
+	float left = m_TextureEditMode->texCoords[0].x;
+	float right = m_TextureEditMode->texCoords[1].x;
+	float bottom = m_TextureEditMode->texCoords[0].y;
+	float top = m_TextureEditMode->texCoords[3].y;
+	ImGui::Text("Currently bound");
+	ImGui::Text("x: %f, y: %f", m_TextureEditMode->texCoords[0].x, m_TextureEditMode->texCoords[0].y);
+	ImGui::SameLine();
+	ImGui::Image(id, ImVec2(128, 128), { right, top }, { left, bottom });
 
-	//gives me the whole texture, not subtex, (so I have to specify the coords manually)
-
-	//{ t->texCoords[3].x, t->texCoords[3].y }, { t->texCoords[0].x, t->texCoords[0].y}
-
+	ImGui::Checkbox("Edit mode", &editMode);
 	
 
 	ImGui::End();

@@ -87,4 +87,7 @@ private:
 	bool render_path = false;
 	//just def. value so I dont get nullptr..
 	Node node_to_render_from = s_nodeGrid[0];
+
+	bool editMode = false;
+	SubTexture* m_TextureEditMode = m_SubGrass;
 };
