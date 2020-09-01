@@ -33,6 +33,7 @@ void PlayGround::OnAttach()
 	textures['D'] = m_SubDown;
 	textures['V'] = m_SubVertical;
 	textures['U'] = m_SubUp;
+	textures['I'] = m_SubIce;
 
 	cameraX = 896;
 	cameraY = -420;
@@ -153,6 +154,7 @@ void PlayGround::OnRender()
 
 void PlayGround::ImGuiOnUpdate()
 {
+	ImGui::Begin("Debug");
 	ImGui::SliderFloat("ParticleSize", &ParticleSize, 0, 200);
 	ImGui::SliderFloat("ParticleLife", &ParticleLife, 0, 500);
 	ImGui::ColorEdit4("StartingColor", glm::value_ptr(ParticleStartingColor));
@@ -176,7 +178,7 @@ void PlayGround::ImGuiOnUpdate()
 		std::cout << "camera reset!\n";
 	}
 
-	
+
 	if (ImGui::Button("Terminate", { 100, 20 }))
 	{
 		glfwTerminate();
@@ -186,4 +188,36 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::Text("Grid X: %i, Y: %i, Final: %i", (int)grid.x, (int)grid.y, (int)(grid.x + (grid.y * 15)));
 	ImGui::Text("CameraZoom: %f", camera->GetZoom());
 	ImGui::Text("Camera position: %f, %f", camera->position.x, camera->position.y);
+	ImGui::End();
+
+	ImGui::Begin("Level Editor");
+
+	for (std::pair<char, SubTexture*> sub : textures)
+	{
+		ImGui::SameLine();
+		sub.second->m_texture->Bind();
+		ImTextureID id = (ImTextureID)sub.second->m_texture->GetTexID();
+		
+		float left = sub.second->texCoords[0].x;
+		float right = sub.second->texCoords[1].x;
+		float bottom = sub.second->texCoords[0].y;
+		float top = sub.second->texCoords[3].y;
+
+		//ImGui::Image(id, ImVec2(512, 512), { right, top }, { left, bottom });
+
+		if (ImGui::ImageButton(id, { 64, 64 }, { right, top }, { left, bottom }));
+		{
+
+		}
+	}
+
+
+	//gives me the whole texture, not subtex, (so I have to specify the coords manually)
+
+	//{ t->texCoords[3].x, t->texCoords[3].y }, { t->texCoords[0].x, t->texCoords[0].y}
+
+	
+
+	ImGui::End();
+
 }

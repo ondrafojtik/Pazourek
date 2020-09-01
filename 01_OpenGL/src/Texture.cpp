@@ -9,7 +9,6 @@ Texture::Texture(const std::string& path)
 	
 	GLCall(glGenTextures(1, &m_RendererID));
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_RendererID));
-
 	//this(nearest) solves the "weird lines" artifact when resizing and stuff. BUT IT LOOKS MORE LIKE AN ASS (GL_LINEAR IS WAYYYY PRETTIER!!!!!!!!!!)
 	GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
 	GLCall(glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
