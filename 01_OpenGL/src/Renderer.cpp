@@ -98,7 +98,6 @@ void Renderer::DrawQuad(Texture& texture, glm::vec2 position)
 
 }
 
-
 void Renderer::DrawQuad(SubTexture& texture, glm::vec2 position)
 {
 	texture.m_texture->Bind();

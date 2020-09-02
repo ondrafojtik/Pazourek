@@ -238,6 +238,7 @@
     <ClInclude Include="src\defines.h" />
     <ClInclude Include="src\GLcall.h" />
     <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\Map.h" />
     <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Pathfinder.h" />
     <ClInclude Include="src\PlayGround.h" />

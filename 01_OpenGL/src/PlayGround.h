@@ -17,15 +17,9 @@
 #include "Renderer.h" //it already includes camera, texture etc. 
 #include "Pathfinder.h"
 
-static const char* s_grid =
-"GGGGGFGGGGGGGGG"
-"GGGFFFGGGGGUGIG"
-"GGGGFFFGGGGVGGG"
-"GGGGGGGGGGGVGGG"
-"GGGGGGFFFGGDGGG"
-"GGGGGGGGGGGGGGG"
-"GGGGGGFFFGGGGGG"
-"GGGGGGFGFGGGGGG";
+#include "Map.h"
+
+static std::string s_grid;
 
 static std::array<Node, 15 * 8> s_nodeGrid;
 
@@ -60,7 +54,9 @@ struct PlayGround
 private:
 	Camera* camera = new Camera(0, 32, 0, 18);
 	Renderer* renderer = new Renderer(camera);
-	
+
+	Shader* shader_basic = new Shader("src/res/shaders/Basic.shader");
+
 	Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
 	//Texture* tex = new Texture("src/res/textures/copy.png");
 	Texture* player = new Texture("src/res/textures/player1.png");
@@ -71,6 +67,7 @@ private:
 	SubTexture* m_SubVertical = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 0, 0);
 	SubTexture* m_SubUp = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 7);
 	SubTexture* m_SubIce = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 3, 0);
+	SubTexture* m_SubTree = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 1);
 	SubTexture* m_SubTex = nullptr;
 
 	std::unordered_map<char, SubTexture*> textures;
@@ -78,7 +75,7 @@ private:
 	ParticleSystem* myParticles = new ParticleSystem();
 
 	//might keep it here just for debugging pathFinder
-	bool drawGrid = true;
+	bool drawGrid = false;
 
 	//grid as in where I am currently with mouse
 	glm::vec2 grid = glm::vec2(0.0f, 0.0f);
@@ -90,4 +87,7 @@ private:
 
 	bool editMode = false;
 	SubTexture* m_TextureEditMode = m_SubGrass;
+	std::pair<char, SubTexture*> m_EditMode = { 'G', m_SubGrass };
+
+	Map* map = new Map("map.txt");
 };

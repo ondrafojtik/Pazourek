@@ -19,6 +19,10 @@ static glm::vec2 position_to_grid(const glm::vec2& position)
 void PlayGround::OnAttach()
 {
 	//grid init!
+	map->Save(s_grid);
+	map->Reload();
+	s_grid = map->s_grid;
+
 	for (int y = 0; y < 8; y++)
 		for (int x = 0; x < 15; x++)
 		{
@@ -34,9 +38,12 @@ void PlayGround::OnAttach()
 	textures['V'] = m_SubVertical;
 	textures['U'] = m_SubUp;
 	textures['I'] = m_SubIce;
+	textures['T'] = m_SubTree;
 
 	cameraX = 896;
 	cameraY = -420;
+
+	
 }
 
 void PlayGround::OnDetach()
@@ -95,7 +102,24 @@ void PlayGround::OnUpdate()
 		render_path = 0;
 	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
 		camera->rotation += 0.1f;
+	//might be worth it make it so it deltects it only once.. (so the way to do this is have a var. that u set to false once GLFW_PRESS is 1
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+	{
+		if(editMode && !ImGui::IsMouseHoveringAnyWindow())
+		{
+			s_grid[grid_to_i(grid)] = m_EditMode.first;
+			map->Reload();
 
+			for (int y = 0; y < 8; y++)
+				for (int x = 0; x < 15; x++)
+				{
+					s_nodeGrid[x + (y * 15)].grid_type = s_grid[x + (y * 15)];
+					s_nodeGrid[x + (y * 15)].position = { x, y };
+				}
+
+			pathFinder->Init(s_nodeGrid);
+		}
+	}
 
 	//setting camera position based on input
 	camera->SetPosition(cameraX, cameraY);
@@ -150,7 +174,7 @@ void PlayGround::OnRender()
 	//BEGINNING OF EDIT MODE!!!_________________________________________________________________________________________
 	if (editMode)
 	{
-		renderer->DrawQuad(*m_TextureEditMode, grid_to_position(grid));
+		renderer->DrawQuad(*m_EditMode.second, grid_to_position(grid));
 
 	}
 
@@ -222,25 +246,40 @@ void PlayGround::ImGuiOnUpdate()
 
 		if (ImGui::ImageButton(id, { 64, 64 }, { right, top }, { left, bottom }))
 		{
-			m_TextureEditMode = sub.second;
+			m_EditMode = sub;
 		}
 		ImGui::PopID();
 		iter += 1;
 	}
 
-	m_TextureEditMode->m_texture->Bind();
-	ImTextureID id = (ImTextureID)m_TextureEditMode->m_texture->GetTexID();
-	float left = m_TextureEditMode->texCoords[0].x;
-	float right = m_TextureEditMode->texCoords[1].x;
-	float bottom = m_TextureEditMode->texCoords[0].y;
-	float top = m_TextureEditMode->texCoords[3].y;
+	m_EditMode.second->m_texture->Bind();
+	ImTextureID id = (ImTextureID)m_EditMode.second->m_texture->GetTexID();
+	float left = m_EditMode.second->texCoords[0].x;
+	float right = m_EditMode.second->texCoords[1].x;
+	float bottom = m_EditMode.second->texCoords[0].y;
+	float top = m_EditMode.second->texCoords[3].y;
 	ImGui::Text("Currently bound");
-	ImGui::Text("x: %f, y: %f", m_TextureEditMode->texCoords[0].x, m_TextureEditMode->texCoords[0].y);
+	ImGui::Text("x: %f, y: %f", m_EditMode.second->texCoords[0].x, m_EditMode.second->texCoords[0].y);
 	ImGui::SameLine();
 	ImGui::Image(id, ImVec2(128, 128), { right, top }, { left, bottom });
 
 	ImGui::Checkbox("Edit mode", &editMode);
 	
+	if (ImGui::Button("Save changes"))
+	{
+		map->Save(s_grid);
+		map->Reload();
+		s_grid = map->s_grid;
+
+		for (int y = 0; y < 8; y++)
+			for (int x = 0; x < 15; x++)
+			{
+				s_nodeGrid[x + (y * 15)].grid_type = s_grid[x + (y * 15)];
+				s_nodeGrid[x + (y * 15)].position = { x, y };
+			}
+
+		pathFinder->Init(s_nodeGrid);
+	}
 
 	ImGui::End();
 
