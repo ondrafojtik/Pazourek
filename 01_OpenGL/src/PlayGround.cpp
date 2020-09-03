@@ -178,11 +178,20 @@ void PlayGround::OnRender()
 
 	}
 
-
-
+	
 	//particles
 	for (Particle elem : myParticles->buffer)
 		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size, 0.0f);
+
+	
+	//additive blending test
+	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE));
+	//lightning test
+	renderer->DrawQuad(*tex_alonso, { -500, -500 });
+	renderer->DrawLighning({ 1, 1, 0, 1 }, { -400, -500 }, { 2048, 2048 });
+
+	//reset for normal blending 
+	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
 }
 

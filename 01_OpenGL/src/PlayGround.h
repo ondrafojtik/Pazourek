@@ -56,10 +56,12 @@ private:
 	Renderer* renderer = new Renderer(camera);
 
 	Shader* shader_basic = new Shader("src/res/shaders/Basic.shader");
+	Shader* shader_lightning = new Shader("src/res/shaders/basic_lightning.shader");
 
 	Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
 	//Texture* tex = new Texture("src/res/textures/copy.png");
 	Texture* player = new Texture("src/res/textures/player1.png");
+	Texture* tex_alonso = new Texture("src/res/textures/alonso.jpg");
 
 	SubTexture* m_SubGrass = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 2, 0);
 	SubTexture* m_SubForest = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 1, 3);

@@ -154,6 +154,32 @@ void Renderer::DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale, fl
 	blank->Unbind();
 }
 
+void Renderer::DrawLighning(glm::vec4 color, glm::vec2 position, glm::vec2 size)
+{
+	blank->Bind();
+
+	float rotation = 0.0f;
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
+		* glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+	data.vb->Bind();
+	data.va.Bind();
+	data.ib->Bind();
+	data.shader_lightning->Bind();
+	data.shader_lightning->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
+	data.shader_lightning->SetUniformMat4f("u_Transform", transform);
+	data.shader_lightning->SetUniform4f("u_Color", color.r, color.g, color.b, color.a);
+	data.shader_lightning->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
+	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+	data.vb->Unbind();
+	data.va.Unbind();
+	data.ib->Unbind();
+	data.shader_lightning->Unbind();
+	blank->Unbind();
+}
+
+
 void Renderer::DrawGrid(glm::vec4 color, glm::vec2 position)
 {
 	grid->Bind();
@@ -187,6 +213,6 @@ void Renderer::DrawGrid(glm::vec4 color, glm::vec2 position)
 
 void Renderer::Clear() const
 {
-	GLCall(glClearColor(0.1f, 0.05f, 0.05f, 1.0f));
+	GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT));
 }

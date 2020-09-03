@@ -34,6 +34,8 @@ int main(void)
 	glfwWindowHint(GLFW_CENTER_CURSOR, GLFW_FALSE);
 	//glfwMaximizeWindow(window);
 
+
+
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 

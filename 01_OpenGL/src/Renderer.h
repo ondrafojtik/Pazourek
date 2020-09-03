@@ -25,7 +25,9 @@ struct RenderData
 	VertexBufferLayout layout;
 	VertexArray va;
 	IndexBuffer* ib = nullptr;
+	//make this into some sorta std::unordered_map<std::string, Shader> or smth (and keep it here)
 	Shader* shader = nullptr;
+	Shader* shader_lightning = nullptr;
 
 	VertexBuffer* unchanged_vb = nullptr;
 	VertexArray unchanged_va;
@@ -71,7 +73,7 @@ struct RenderData
 		ib = new IndexBuffer(indices, 6);
 
 		shader = new Shader("src/res/shaders/Basic.shader");
-
+		shader_lightning = new Shader("src/res/shaders/basic_lightning.shader");
 	}
 
 	void RefreshData()
@@ -107,7 +109,9 @@ public:
 	void DrawQuad(Texture& texture, glm::vec2 position);
 	void DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size);
 	void DrawQuad(SubTexture& texture, glm::vec2 position);
-	
+	//this is what lightning is as of now
+	void DrawLighning(glm::vec4 color, glm::vec2 position, glm::vec2 scale);
+
 	Renderer(Camera *camera);
 	void Clear() const; 
 };
