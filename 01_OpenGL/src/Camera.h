@@ -6,6 +6,8 @@
 struct cameraBounds
 {
 	float left, right, bottom, top;
+	float getWidth() { return right - left; }
+	float getHeight() { return top - bottom; };
 };
 
 struct AspectRatio

@@ -38,9 +38,10 @@ void main()
 	float distance_from_middle = length(coords);
 	distance_from_middle = distance_from_middle + 0.5;
 	//very strong
-	color = vec4(color.x, color.y, color.z, color.a * (1.0 - distance_from_middle)) * v_colorElement;
+	//color = vec4(color.x, color.y, color.z, color.a * (1.0 - distance_from_middle)) * v_colorElement;
 	//more realistic
-	//color = vec4(color.x, color.y, color.z, color.a * (pow(0.01, distance_from_middle) - 0.01)) * v_colorElement;
+	color = vec4(color.x, color.y, color.z, color.a * (pow(0.01, distance_from_middle) - 0.01)) * v_colorElement;// *vec4(5, 5, 5, 5);
+	color.xyza *= 10;
 	//this one is like if u were staring into light bulb XD
 	//color = vec4(color.x, color.y, color.z, color.a * ((1.0 / distance_from_middle) - distance_from_middle)) * v_colorElement;
 

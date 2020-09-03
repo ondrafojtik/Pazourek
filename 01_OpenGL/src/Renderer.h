@@ -12,6 +12,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "SubTexture.h"
+#include <unordered_map>
 
 struct RenderData
 {
@@ -26,8 +27,9 @@ struct RenderData
 	VertexArray va;
 	IndexBuffer* ib = nullptr;
 	//make this into some sorta std::unordered_map<std::string, Shader> or smth (and keep it here)
-	Shader* shader = nullptr;
-	Shader* shader_lightning = nullptr;
+	//Shader* shader = nullptr;
+	//Shader* shader_lightning = nullptr;
+	std::unordered_map<std::string, Shader*> shaders;
 
 	VertexBuffer* unchanged_vb = nullptr;
 	VertexArray unchanged_va;
@@ -72,8 +74,11 @@ struct RenderData
 		va.AddBuffer(*vb, layout);
 		ib = new IndexBuffer(indices, 6);
 
-		shader = new Shader("src/res/shaders/Basic.shader");
-		shader_lightning = new Shader("src/res/shaders/basic_lightning.shader");
+		//shader = new Shader("src/res/shaders/Basic.shader");
+		//shader_lightning = new Shader("src/res/shaders/basic_lightning.shader");
+
+		shaders["basic"] = new Shader("src/res/shaders/Basic.shader");
+		shaders["lightning"] = new Shader("src/res/shaders/basic_lightning.shader");
 	}
 
 	void RefreshData()

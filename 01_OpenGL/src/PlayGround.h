@@ -23,12 +23,14 @@ static std::string s_grid;
 
 static std::array<Node, 15 * 8> s_nodeGrid;
 
+struct MousePosition
+{
+	double x, y;
+	double GetYInverse() { return (glm::abs(1080.0f - (float)y)); }
+};
+
 struct PlayGround
 {
-	double cursorX;
-	double cursorY;
-	float fCursorY;
-
 	float relativeCursorX;
 	float relativeCursorY;
 
@@ -92,4 +94,12 @@ private:
 	std::pair<char, SubTexture*> m_EditMode = { 'G', m_SubGrass };
 
 	Map* map = new Map("map.txt");
+
+	float lightning_x = -100;
+	float lightning_y = -400;
+	float side_x = 1;
+	float side_y = 1;
+
+	MousePosition* mouse_position = new MousePosition();
+
 };

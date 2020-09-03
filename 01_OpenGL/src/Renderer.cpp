@@ -46,16 +46,16 @@ void Renderer::DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size)
 	data.vb->Bind();
 	data.va.Bind();
 	data.ib->Bind();
-	data.shader->Bind();
-	data.shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
-	data.shader->SetUniformMat4f("u_Transform", transform);
-	data.shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
-	data.shader->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
+	data.shaders["basic"]->Bind();
+	data.shaders["basic"]->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
+	data.shaders["basic"]->SetUniformMat4f("u_Transform", transform);
+	data.shaders["basic"]->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+	data.shaders["basic"]->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
 	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 	data.vb->Unbind();
 	data.va.Unbind();
 	data.ib->Unbind();
-	data.shader->Unbind();
+	data.shaders["basic"]->Unbind();
 	texture.Unbind();
 
 }
@@ -84,16 +84,16 @@ void Renderer::DrawQuad(Texture& texture, glm::vec2 position)
 	data.vb->Bind();
 	data.va.Bind();
 	data.ib->Bind();
-	data.shader->Bind();
-	data.shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
-	data.shader->SetUniformMat4f("u_Transform", transform);
-	data.shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
-	data.shader->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
+	data.shaders["basic"]->Bind();
+	data.shaders["basic"]->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
+	data.shaders["basic"]->SetUniformMat4f("u_Transform", transform);
+	data.shaders["basic"]->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+	data.shaders["basic"]->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
 	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 	data.vb->Unbind();
 	data.va.Unbind();
 	data.ib->Unbind();
-	data.shader->Unbind();
+	data.shaders["basic"]->Unbind();
 	texture.Unbind();
 
 }
@@ -117,16 +117,16 @@ void Renderer::DrawQuad(SubTexture& texture, glm::vec2 position)
 	data.vb->Bind();
 	data.va.Bind();
 	data.ib->Bind();
-	data.shader->Bind();
-	data.shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
-	data.shader->SetUniformMat4f("u_Transform", transform);
-	data.shader->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
-	data.shader->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
+	data.shaders["basic"]->Bind();
+	data.shaders["basic"]->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
+	data.shaders["basic"]->SetUniformMat4f("u_Transform", transform);
+	data.shaders["basic"]->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
+	data.shaders["basic"]->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
 	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 	data.vb->Unbind();
 	data.va.Unbind();
 	data.ib->Unbind();
-	data.shader->Unbind();
+	data.shaders["basic"]->Unbind();
 	texture.m_texture->Unbind();
 }
 
@@ -141,16 +141,16 @@ void Renderer::DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale, fl
 	data.vb->Bind();
 	data.va.Bind();
 	data.ib->Bind();
-	data.shader->Bind();
-	data.shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
-	data.shader->SetUniformMat4f("u_Transform", transform);
-	data.shader->SetUniform4f("u_Color", color.r, color.g, color.b, color.a);
-	data.shader->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
+	data.shaders["basic"]->Bind();
+	data.shaders["basic"]->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
+	data.shaders["basic"]->SetUniformMat4f("u_Transform", transform);
+	data.shaders["basic"]->SetUniform4f("u_Color", color.r, color.g, color.b, color.a);
+	data.shaders["basic"]->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
 	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 	data.vb->Unbind();
 	data.va.Unbind();
 	data.ib->Unbind();
-	data.shader->Unbind();
+	data.shaders["basic"]->Unbind();
 	blank->Unbind();
 }
 
@@ -166,16 +166,16 @@ void Renderer::DrawLighning(glm::vec4 color, glm::vec2 position, glm::vec2 size)
 	data.vb->Bind();
 	data.va.Bind();
 	data.ib->Bind();
-	data.shader_lightning->Bind();
-	data.shader_lightning->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
-	data.shader_lightning->SetUniformMat4f("u_Transform", transform);
-	data.shader_lightning->SetUniform4f("u_Color", color.r, color.g, color.b, color.a);
-	data.shader_lightning->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
+	data.shaders["lightning"]->Bind();
+	data.shaders["lightning"]->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
+	data.shaders["lightning"]->SetUniformMat4f("u_Transform", transform);
+	data.shaders["lightning"]->SetUniform4f("u_Color", color.r, color.g, color.b, color.a);
+	data.shaders["lightning"]->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
 	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 	data.vb->Unbind();
 	data.va.Unbind();
 	data.ib->Unbind();
-	data.shader_lightning->Unbind();
+	data.shaders["lightning"]->Unbind();
 	blank->Unbind();
 }
 
@@ -196,18 +196,18 @@ void Renderer::DrawGrid(glm::vec4 color, glm::vec2 position)
 	//data.va.Bind();
 	data.unchanged_va.Bind();
 	data.ib->Bind();
-	data.shader->Bind();
-	data.shader->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
-	data.shader->SetUniformMat4f("u_Transform", transform);
-	data.shader->SetUniform4f("u_Color", color.r, color.g, color.b, color.a);
-	data.shader->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
+	data.shaders["basic"]->Bind();
+	data.shaders["basic"]->SetUniformMat4f("u_Proj", m_Camera->GetProjection());
+	data.shaders["basic"]->SetUniformMat4f("u_Transform", transform);
+	data.shaders["basic"]->SetUniform4f("u_Color", color.r, color.g, color.b, color.a);
+	data.shaders["basic"]->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
 	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 	//data.vb->Unbind();
 	data.unchanged_vb->Unbind();
 	//data.va.Unbind();
 	data.unchanged_va.Unbind();
 	data.ib->Unbind();
-	data.shader->Unbind();
+	data.shaders["basic"]->Unbind();
 	grid->Unbind();
 }
 

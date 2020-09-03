@@ -63,10 +63,8 @@ void PlayGround::OnDetach()
 void PlayGround::OnUpdate()
 {
 	//getting cursor position
-	glfwGetCursorPos(window, &cursorX, &cursorY);
-	cursorX = (cursorX + camera->GetXOffset());
-	cursorY = (glm::abs(1080.0f - (float)cursorY) + camera->GetYOffset());
-
+	glfwGetCursorPos(window, &mouse_position->x, &mouse_position->y);
+	
 	//I should rly make some sort of event system
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraY += 2.0f;
@@ -82,14 +80,20 @@ void PlayGround::OnUpdate()
 		cameraZoom = cameraZoom - 2;
 	if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS)
 	{
+		float x = mouse_position->x;
+		float y = mouse_position->y;
+
 		float windowWidth = 1920.0f;
 		float windowHeight = 1080.0f;
 
-		float xPos = cursorX + cameraX - windowWidth / 2;
-		float yPos = cursorY + cameraY - windowHeight / 2;
-		//float posX = (-camera->position.x - 896 + cursorX) + (windowWidth / 2 / x);
-		//float posY = cursorY; // + (windowHeight / 2 / y);
-		myParticles->Add(xPos, yPos, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
+		cameraBounds bounds = camera->bounds;
+		auto pos = camera->position;
+		x = (x / windowWidth) * bounds.getWidth() - bounds.getWidth() * 0.5f;
+		y = bounds.getHeight() * 0.5f - (y / windowHeight) * bounds.getHeight();
+		x = x + pos.x;
+		y = y + pos.y;
+		
+		myParticles->Add(x, y, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
 
 	}
 	if (glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS)
@@ -127,7 +131,7 @@ void PlayGround::OnUpdate()
 
 	myParticles->Update();
 
-	grid = position_to_grid(glm::vec2(cursorX, cursorY));
+	grid = position_to_grid(glm::vec2(mouse_position->x, mouse_position->GetYInverse()));
 }
 
 void PlayGround::OnRender()
@@ -188,7 +192,21 @@ void PlayGround::OnRender()
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE));
 	//lightning test
 	renderer->DrawQuad(*tex_alonso, { -500, -500 });
-	renderer->DrawLighning({ 1, 1, 0, 1 }, { -400, -500 }, { 2048, 2048 });
+	renderer->DrawLighning({ 0.5f, 0.45f, 0.05f, 1 }, { lightning_x, lightning_y }, { 2048, 2048 });
+	//having fun with lighning
+
+	if (lightning_x >= 0)
+		side_x = -1;
+	if (lightning_x <= -300)
+		side_x = 1;
+	if (lightning_y >= -200)
+		side_y = -1;
+	if (lightning_y <= -500)
+		side_y = 1;
+
+
+	lightning_x += 0.3 * side_x;
+	lightning_y += 0.1 * side_y;
 
 	//reset for normal blending 
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
@@ -204,7 +222,7 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::ColorEdit4("DyingColor", glm::value_ptr(ParticleDyingColor));
 	ImGui::Text("particleBufferSize: %f", (float)myParticles->buffer.size());
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-	ImGui::Text("Cursor X: %f, Y: %f", (float)cursorX, (float)cursorY);
+	ImGui::Text("Cursor X: %f, Y: %f", (float)mouse_position->x, (float)mouse_position->GetYInverse());
 	ImGui::Checkbox("Grid: ", &drawGrid);
 	ImGui::SameLine();
 	if (ImGui::Button("Reset camera", { 100, 20 }))
