@@ -67,13 +67,13 @@ void PlayGround::OnUpdate()
 	
 	//I should rly make some sort of event system
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraY += 2.0f;
+		cameraY += 8.0f;
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraX -= 2.0f;
+		cameraX -= 8.0f;
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraY -= 2.0f;
+		cameraY -= 8.0f;
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraX += 2.0f;
+		cameraX += 8.0f;
 	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
 		cameraZoom = cameraZoom + 2;
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
@@ -93,6 +93,8 @@ void PlayGround::OnUpdate()
 		x = x + pos.x;
 		y = y + pos.y;
 		
+		myParticles->Add(x, y, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
+		myParticles->Add(x, y, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
 		myParticles->Add(x, y, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
 
 	}
@@ -201,13 +203,13 @@ void PlayGround::OnRender()
 	//having fun with lighning
 
 	if (lightning_x >= 0)
-		side_x = -1;
+		side_x = -2;
 	if (lightning_x <= -300)
-		side_x = 1;
+		side_x = 2;
 	if (lightning_y >= -200)
-		side_y = -1;
+		side_y = -2;
 	if (lightning_y <= -500)
-		side_y = 1;
+		side_y = 2;
 
 
 	lightning_x += 0.3 * side_x;

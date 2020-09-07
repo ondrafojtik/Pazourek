@@ -5,6 +5,8 @@
 
 #include "PlayGround.h"
 
+float MAX_FPS = 16; //(16ms per update)
+
 int l_WindowWidth = 1920;
 int l_WindowHeight = 1080;
 
@@ -38,7 +40,7 @@ int main(void)
 
 
 	glfwMakeContextCurrent(window);
-	glfwSwapInterval(1);
+	glfwSwapInterval(0);
 
 	if (glewInit() != GLEW_OK)
 		std::cout << "Error" << std::endl;
@@ -60,22 +62,28 @@ int main(void)
 	game.monitor = monitor;
 	game.OnAttach();
 
+	auto last = std::chrono::high_resolution_clock::now();
+
 	while (!glfwWindowShouldClose(game.window))
 	{
+		auto time = std::chrono::high_resolution_clock::now() - last;
+		
+		if(time.count() > MAX_FPS * 1000000)
+		{
+			last = std::chrono::high_resolution_clock::now();
+			game.OnUpdate();
+			game.OnRender();
 
+			ImGui_ImplGlfwGL3_NewFrame();
 
-		game.OnUpdate();
-		game.OnRender();
+			game.ImGuiOnUpdate();
 
-		ImGui_ImplGlfwGL3_NewFrame();
+			ImGui::Render();
+			ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
-		game.ImGuiOnUpdate();
-
-		ImGui::Render();
-		ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
-
-		GLCall(glfwSwapBuffers(game.window));
-		GLCall(glfwPollEvents());
+			GLCall(glfwSwapBuffers(game.window));
+			GLCall(glfwPollEvents());
+		}
 	}
 
 	ImGui_ImplGlfwGL3_Shutdown();

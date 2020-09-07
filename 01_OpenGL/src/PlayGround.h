@@ -41,7 +41,7 @@ struct PlayGround
 	float cameraZoom = 60;
 
 	float ParticleSize = 30.0f;
-	float ParticleLife = 150.0f;
+	float ParticleLife = 70.0f;
 	glm::vec4 ParticleStartingColor = glm::vec4(0.8f, 0.15f, 0.05f, 1.0f);
 	glm::vec4 ParticleDyingColor = glm::vec4(0.15f, 0.1f, 0.75f, 1.0f);
 
@@ -63,15 +63,7 @@ private:
 
 	//Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
 	Texture* tex = new Texture("src/res/textures/copy.png");
-	Texture* anim = new Texture("src/res/textures/anim_test.png");
-	SubTexture* m_SubAni1 = new SubTexture(*anim, { 240.0f, 240.0f }, 0, 0);
-	SubTexture* m_SubAni2 = new SubTexture(*anim, { 240.0f, 240.0f }, 1, 0);
-	SubTexture* m_SubAni3 = new SubTexture(*anim, { 240.0f, 240.0f }, 2, 0);
-	SubTexture* m_SubAni4 = new SubTexture(*anim, { 240.0f, 240.0f }, 3, 0);
-	SubTexture* m_SubAni5 = new SubTexture(*anim, { 240.0f, 240.0f }, 4, 0);
-	SubTexture* m_SubAni6 = new SubTexture(*anim, { 240.0f, 240.0f }, 5, 0);
-
-
+	
 	//Texture* tex = new Texture("src/res/textures/copy.png");
 	Texture* player = new Texture("src/res/textures/player1.png");
 	Texture* tex_alonso = new Texture("src/res/textures/alonso.jpg");
@@ -83,10 +75,10 @@ private:
 	SubTexture* m_SubUp = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 7);
 	SubTexture* m_SubIce = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 3, 0);
 	SubTexture* m_SubTree = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 1);
-	
 	SubTexture* m_SubTex = nullptr;
 
-	Animation* m_Animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.1f);
+	Texture* anim = new Texture("src/res/textures/anim_test.png");
+	Animation* m_Animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
 
 	std::unordered_map<char, SubTexture*> textures;
 	
