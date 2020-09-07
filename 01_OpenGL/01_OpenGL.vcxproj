@@ -235,6 +235,7 @@
     <None Include="src\vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\defines.h" />
     <ClInclude Include="src\GLcall.h" />

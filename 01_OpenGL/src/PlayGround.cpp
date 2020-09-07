@@ -39,9 +39,7 @@ void PlayGround::OnAttach()
 	textures['U'] = m_SubUp;
 	textures['I'] = m_SubIce;
 	textures['T'] = m_SubTree;
-	textures['A'] = m_SubAni1;
-	textures['S'] = m_SubAni2;
-
+	
 	cameraX = 896;
 	cameraY = -420;
 
@@ -134,6 +132,8 @@ void PlayGround::OnUpdate()
 	myParticles->Update();
 
 	grid = position_to_grid(glm::vec2(mouse_position->x, mouse_position->GetYInverse()));
+
+	m_Animation->OnUpdate();
 }
 
 void PlayGround::OnRender()
@@ -190,6 +190,9 @@ void PlayGround::OnRender()
 		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size, 0.0f);
 
 	
+	//rendering anim.
+	renderer->DrawQuad(*m_Animation->currentAnimation, { 768, -128 });
+
 	//additive blending test
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE));
 	//lightning test
