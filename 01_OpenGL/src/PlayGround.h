@@ -60,7 +60,9 @@ private:
 	Shader* shader_basic = new Shader("src/res/shaders/Basic.shader");
 	Shader* shader_lightning = new Shader("src/res/shaders/basic_lightning.shader");
 
-	Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
+	//Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
+	Texture* tex = new Texture("src/res/textures/copy.png");
+	
 	//Texture* tex = new Texture("src/res/textures/copy.png");
 	Texture* player = new Texture("src/res/textures/player1.png");
 	Texture* tex_alonso = new Texture("src/res/textures/alonso.jpg");
@@ -72,6 +74,9 @@ private:
 	SubTexture* m_SubUp = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 7);
 	SubTexture* m_SubIce = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 3, 0);
 	SubTexture* m_SubTree = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 1);
+	SubTexture* m_SubAni1 = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 5, 1);
+	SubTexture* m_SubAni2 = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 5, 2);
+
 	SubTexture* m_SubTex = nullptr;
 
 	std::unordered_map<char, SubTexture*> textures;

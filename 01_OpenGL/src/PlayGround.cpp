@@ -39,6 +39,8 @@ void PlayGround::OnAttach()
 	textures['U'] = m_SubUp;
 	textures['I'] = m_SubIce;
 	textures['T'] = m_SubTree;
+	textures['A'] = m_SubAni1;
+	textures['S'] = m_SubAni2;
 
 	cameraX = 896;
 	cameraY = -420;
@@ -109,7 +111,7 @@ void PlayGround::OnUpdate()
 	//might be worth it make it so it deltects it only once.. (so the way to do this is have a var. that u set to false once GLFW_PRESS is 1
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
-		if(editMode && !ImGui::IsMouseHoveringAnyWindow())
+		if(editMode && !ImGui::IsMouseHoveringAnyWindow() && (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) == false)
 		{
 			s_grid[grid_to_i(grid)] = m_EditMode.first;
 			map->Reload();
@@ -260,9 +262,11 @@ void PlayGround::ImGuiOnUpdate()
 	for (std::pair<char, SubTexture*> sub : textures)
 	{
 		ImGui::PushID(iter);
-		ImGui::SameLine();
 		sub.second->m_texture->Bind();
 		ImTextureID id = (ImTextureID)sub.second->m_texture->GetTexID();
+		
+		if (iter % 5 != 0 && iter != 0)
+			ImGui::SameLine();
 		
 		float left = sub.second->texCoords[0].x;
 		float right = sub.second->texCoords[1].x;
@@ -275,6 +279,7 @@ void PlayGround::ImGuiOnUpdate()
 		{
 			m_EditMode = sub;
 		}
+
 		ImGui::PopID();
 		iter += 1;
 	}
@@ -287,8 +292,7 @@ void PlayGround::ImGuiOnUpdate()
 	float top = m_EditMode.second->texCoords[3].y;
 	ImGui::Text("Currently bound");
 	ImGui::Text("x: %f, y: %f", m_EditMode.second->texCoords[0].x, m_EditMode.second->texCoords[0].y);
-	ImGui::SameLine();
-	ImGui::Image(id, ImVec2(128, 128), { right, top }, { left, bottom });
+	ImGui::Image(id, ImVec2(64, 64), { right, top }, { left, bottom });
 
 	ImGui::Checkbox("Edit mode", &editMode);
 	
