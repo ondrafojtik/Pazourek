@@ -70,15 +70,15 @@ void Renderer::DrawQuad(Texture& texture, glm::vec2 position, float rotation)
 		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 1.0f, 1.0f, 1.0f })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 		
-	glm::vec2 coords[4];
-	coords[0] = { 0.0f, 0.0f };
-	coords[1] = { 1.0f, 0.0f };
-	coords[2] = { 1.0f, 1.0f };
-	coords[3] = { 0.0f, 1.0f };
-
-	for (int i = 0; i < data.vertexCount; i++)
-		data.texCoords[i] = coords[i];
-	data.RefreshData();
+	//glm::vec2 coords[4];
+	//coords[0] = { 0.0f, 0.0f };
+	//coords[1] = { 1.0f, 0.0f };
+	//coords[2] = { 1.0f, 1.0f };
+	//coords[3] = { 0.0f, 1.0f };
+	//
+	//for (int i = 0; i < data.vertexCount; i++)
+	//	data.texCoords[i] = coords[i];
+	//data.RefreshData();
 
 	data.vb->Bind();
 	data.va.Bind();

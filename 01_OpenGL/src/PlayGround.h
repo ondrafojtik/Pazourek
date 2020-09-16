@@ -61,5 +61,7 @@ public:
 
 	//animation test
 	Texture* anim = new Texture("src/res/textures/anim_test.png");
+	Texture* grass = new Texture("src/res/textures/minecraft_grass.png");
 	Animation* animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
+
 };

@@ -34,9 +34,9 @@ uniform vec4 u_Color;
 
 void main()
 {
-	//vec4 texColor = texture(u_Texture, v_TexCoord) * 1.0;
-	//color = texture(u_Texture, v_TexCoord * 1) * u_Color;
-	//color = vec4(color.x, color.y, color.z, color.a) * v_colorElement;
-	color = v_position;
-	color.a = 0.5;
+	vec4 texColor = texture(u_Texture, v_TexCoord) * 1.0;
+	color = texture(u_Texture, v_TexCoord * 1) * u_Color;
+	color = vec4(color.x, color.y, color.z, color.a) * v_colorElement;
+	//color = v_position;
+	//color.a = 0.5;
 }
