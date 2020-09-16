@@ -16,11 +16,11 @@
 
 struct RenderData
 {
-	const int vertexCount = 4; 
+	const int vertexCount = 8; 
 	const int vertexInfo = 5;	//not "vertexCount, but how much info does 1 vertex carry (3 + 2) - you should make this more "normal"
 
 	glm::vec3 positions[8];
-	glm::vec2 texCoords[4];
+	glm::vec2 texCoords[8];
 
 	unsigned int vao;
 	VertexBuffer* vb = nullptr;
@@ -38,40 +38,47 @@ struct RenderData
 	void Init()
 	{
 		//side 1 (front)
-		positions[0] = { -0.5f, -0.5f, 0.5f };
-		positions[1] = {  0.5f, -0.5f, 0.5f };
-		positions[2] = {  0.5f,  0.5f, 0.5f };
-		positions[3] = { -0.5f,  0.5f, 0.5f };
+		positions[0] = { -0.5f, -0.5f, -0.5f };
+		positions[1] = {  0.5f, -0.5f, -0.5f };
+		positions[2] = {  0.5f,  0.5f, -0.5f };
+		positions[3] = { -0.5f,  0.5f, -0.5f };
 		
 		//side 2 (back)
-		positions[4] = { -0.5f, -0.5f, -0.5f };
-		positions[5] = {  0.5f, -0.5f, -0.5f };
-		positions[6] = {  0.5f,  0.5f, -0.5f };
-		positions[7] = { -0.5f,  0.5f, -0.5f };
+		positions[4] = { -0.5f, -0.5f, 0.5f };
+		positions[5] = {  0.5f, -0.5f, 0.5f };
+		positions[6] = {  0.5f,  0.5f, 0.5f };
+		positions[7] = { -0.5f,  0.5f, 0.5f };
 
 
 		texCoords[0] = { 0.0f, 0.0f };
 		texCoords[1] = { 1.0f, 0.0f };
 		texCoords[2] = { 1.0f, 1.0f };
 		texCoords[3] = { 0.0f, 1.0f };
+
+		texCoords[4] = { 0.0f, 0.0f };
+		texCoords[5] = { 1.0f, 0.0f };
+		texCoords[6] = { 1.0f, 1.0f };
+		texCoords[7] = { 0.0f, 1.0f };
 		
 		unsigned int indices[] = {
 		0, 1, 2, //front
 		2, 3, 0,
 		1, 5, 6, //right
 		6, 2, 1,
+		5, 4, 7, //back
+		7, 6, 5,
 		4, 0, 3, //left
 		3, 7, 4,
-		3, 2, 6, //top
-		6, 7, 3,
 		0, 1, 5, //bottom
 		5, 4, 0,
+		4, 5, 1, //top
+		1, 0, 4,
 		};
 
 		GLCall(glGenVertexArrays(1, &vao));
 		GLCall(glBindVertexArray(vao));
 
-		float pos[(3 + 2) * 4];
+		float pos[(3 + 2) * 8];
 		for (int i = 0; i < vertexCount; i++)
 		{
 			pos[i * vertexInfo + 0] = positions[i].x;
@@ -81,16 +88,16 @@ struct RenderData
 			pos[i * vertexInfo + 4] = texCoords[i].y;
 		}
 
-		vb = new VertexBuffer(positions, 4 * 8 * sizeof(float));
-		unchanged_vb = new VertexBuffer(positions, 4 * 8 * sizeof(float));
+		vb = new VertexBuffer(pos, 8 * (3 + 2) * sizeof(float));
+		unchanged_vb = new VertexBuffer(pos, 8 * (3 + 2) * sizeof(float));
 		
 		layout.Push<float>(3);
-		//layout.Push<float>(2);
+		layout.Push<float>(2);
 
 		unchanged_va.AddBuffer(*unchanged_vb, layout);
 
 		va.AddBuffer(*vb, layout);
-		ib = new IndexBuffer(indices, 24);
+		ib = new IndexBuffer(indices, 36);
 
 		shaders["basic"] = new Shader("src/res/shaders/Basic.shader");
 		shaders["lightning"] = new Shader("src/res/shaders/basic_lightning.shader");
@@ -98,7 +105,7 @@ struct RenderData
 
 	void RefreshData()
 	{
-		float pos[(3 + 2) * 4];
+		float pos[(3 + 2) * 8];
 		for (int i = 0; i < vertexCount; i++)
 		{
 			pos[i * vertexInfo + 0] = positions[i].x;
@@ -120,7 +127,7 @@ private:
 	Camera* m_Camera;
 	RenderData data;
 
-	//blank texture (figure this out later)
+	//blank texture (figure this out later) 
 	//u can definitely just pass in the buffer with color, not having to pass texture? or just create blank texutre internally? ?? 
 	Texture* blank = new Texture("src/res/textures/Blank.png");
 	Texture* grid = new Texture("src/res/textures/grid.png");
