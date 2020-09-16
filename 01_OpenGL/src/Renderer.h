@@ -19,7 +19,7 @@ struct RenderData
 	const int vertexCount = 4; 
 	const int vertexInfo = 5;	//not "vertexCount, but how much info does 1 vertex carry (3 + 2) - you should make this more "normal"
 
-	glm::vec3 positions[4];
+	glm::vec3 positions[8];
 	glm::vec2 texCoords[4];
 
 	unsigned int vao;
@@ -37,19 +37,35 @@ struct RenderData
 
 	void Init()
 	{
-		positions[0] = { -0.5f, -0.5f, 0.0f };
-		positions[1] = {  0.5f, -0.5f, 0.0f };
-		positions[2] = {  0.5f,  0.5f, 0.0f };
-		positions[3] = { -0.5f,  0.5f, 0.0f };
+		//side 1 (front)
+		positions[0] = { -0.5f, -0.5f, 0.5f };
+		positions[1] = {  0.5f, -0.5f, 0.5f };
+		positions[2] = {  0.5f,  0.5f, 0.5f };
+		positions[3] = { -0.5f,  0.5f, 0.5f };
 		
+		//side 2 (back)
+		positions[4] = { -0.5f, -0.5f, -0.5f };
+		positions[5] = {  0.5f, -0.5f, -0.5f };
+		positions[6] = {  0.5f,  0.5f, -0.5f };
+		positions[7] = { -0.5f,  0.5f, -0.5f };
+
+
 		texCoords[0] = { 0.0f, 0.0f };
 		texCoords[1] = { 1.0f, 0.0f };
 		texCoords[2] = { 1.0f, 1.0f };
 		texCoords[3] = { 0.0f, 1.0f };
 		
 		unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
+		0, 1, 2, //front
+		2, 3, 0,
+		1, 5, 6, //right
+		6, 2, 1,
+		4, 0, 3, //left
+		3, 7, 4,
+		3, 2, 6, //top
+		6, 7, 3,
+		0, 1, 5, //bottom
+		5, 4, 0,
 		};
 
 		GLCall(glGenVertexArrays(1, &vao));
@@ -65,16 +81,16 @@ struct RenderData
 			pos[i * vertexInfo + 4] = texCoords[i].y;
 		}
 
-		vb = new VertexBuffer(pos, 4 * 5 * sizeof(float));
-		unchanged_vb = new VertexBuffer(pos, 4 * 5 * sizeof(float));
+		vb = new VertexBuffer(positions, 4 * 8 * sizeof(float));
+		unchanged_vb = new VertexBuffer(positions, 4 * 8 * sizeof(float));
 		
 		layout.Push<float>(3);
-		layout.Push<float>(2);
+		//layout.Push<float>(2);
 
 		unchanged_va.AddBuffer(*unchanged_vb, layout);
 
 		va.AddBuffer(*vb, layout);
-		ib = new IndexBuffer(indices, 6);
+		ib = new IndexBuffer(indices, 24);
 
 		shaders["basic"] = new Shader("src/res/shaders/Basic.shader");
 		shaders["lightning"] = new Shader("src/res/shaders/basic_lightning.shader");
