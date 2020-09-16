@@ -45,7 +45,6 @@ void main()
 	//this one is like if u were staring into light bulb XD
 	//color = vec4(color.x, color.y, color.z, color.a * ((1.0 / distance_from_middle) - distance_from_middle)) * v_colorElement;
 
-
 }
 //for debuging purpouse
 /*if (distance_from_middle > 0)

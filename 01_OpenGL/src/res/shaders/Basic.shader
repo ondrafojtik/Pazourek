@@ -1,7 +1,7 @@
 #shader vertex
 #version 330 core
 
-layout(location = 0) in vec4 position;
+layout(location = 0) in vec4 position; //meaning -0.5f, .. (vertexBuff more or less) 
 layout(location = 1) in vec2 texCoord;
 
 out vec2 v_TexCoord;

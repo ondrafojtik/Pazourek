@@ -40,11 +40,6 @@ struct PlayGround
 	
 	float cameraZoom = 60;
 
-	float ParticleSize = 30.0f;
-	float ParticleLife = 70.0f;
-	glm::vec4 ParticleStartingColor = glm::vec4(0.8f, 0.15f, 0.05f, 1.0f);
-	glm::vec4 ParticleDyingColor = glm::vec4(0.15f, 0.1f, 0.75f, 1.0f);
-
 	GLFWmonitor* monitor = nullptr;
 	GLFWwindow* window = nullptr;
 
@@ -57,55 +52,14 @@ struct PlayGround
 private:
 	Camera* camera = new Camera(0, 32, 0, 18);
 	Renderer* renderer = new Renderer(camera);
+public:
+	float rotation = 0;
 
-	Shader* shader_basic = new Shader("src/res/shaders/Basic.shader");
-	Shader* shader_lightning = new Shader("src/res/shaders/basic_lightning.shader");
-
-	//Texture* tex = new Texture("src/res/textures/medievalRTS_spritesheet@2.png");
+	Texture* alonso = new Texture("src/res/textures/alonso.jpg");
 	Texture* tex = new Texture("src/res/textures/copy.png");
-	
-	//Texture* tex = new Texture("src/res/textures/copy.png");
-	Texture* player = new Texture("src/res/textures/player1.png");
-	Texture* tex_alonso = new Texture("src/res/textures/alonso.jpg");
+	SubTexture* sub = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 2, 0);
 
-	SubTexture* m_SubGrass = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 2, 0);
-	SubTexture* m_SubForest = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 1, 3);
-	SubTexture* m_SubDown = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 5, 5);
-	SubTexture* m_SubVertical = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 0, 0);
-	SubTexture* m_SubUp = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 7);
-	SubTexture* m_SubIce = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 3, 0);
-	SubTexture* m_SubTree = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 4, 1);
-	SubTexture* m_SubTex = nullptr;
-
+	//animation test
 	Texture* anim = new Texture("src/res/textures/anim_test.png");
-	Animation* m_Animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
-
-	std::unordered_map<char, SubTexture*> textures;
-	
-	ParticleSystem* myParticles = new ParticleSystem();
-
-	//might keep it here just for debugging pathFinder
-	bool drawGrid = false;
-
-	//grid as in where I am currently with mouse
-	glm::vec2 grid = glm::vec2(0.0f, 0.0f);
-
-	Pathfinder* pathFinder = new Pathfinder();
-	bool render_path = false;
-	//just def. value so I dont get nullptr..
-	Node node_to_render_from = s_nodeGrid[0];
-
-	bool editMode = false;
-	SubTexture* m_TextureEditMode = m_SubGrass;
-	std::pair<char, SubTexture*> m_EditMode = { 'G', m_SubGrass };
-
-	Map* map = new Map("map.txt");
-
-	float lightning_x = -100;
-	float lightning_y = -400;
-	float side_x = 1;
-	float side_y = 1;
-
-	MousePosition* mouse_position = new MousePosition();
-
+	Animation* animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
 };

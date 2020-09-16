@@ -26,7 +26,7 @@ private:
 	float m_xCameraOff = 0;
 	float m_yCameraOff = 0;
 	float m_Zoom = 60;
-	AspectRatio ar = { 16,9 };
+	AspectRatio ar = { 1,1 };
 
 public: 
 	Camera(float left, float right, float bottom, float top);

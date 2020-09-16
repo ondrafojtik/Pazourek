@@ -60,17 +60,16 @@ void Renderer::DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size)
 
 }
 
-void Renderer::DrawQuad(Texture& texture, glm::vec2 position)
+void Renderer::DrawQuad(Texture& texture, glm::vec2 position, float rotation)
 {
 	texture.Bind();
 
-	float rotation = 0.0f;
-	glm::vec2 scale = glm::vec2(128.0f, 128.0f);
+	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
-		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 1.0f, 1.0f, 1.0f })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
-
+		
 	glm::vec2 coords[4];
 	coords[0] = { 0.0f, 0.0f };
 	coords[1] = { 1.0f, 0.0f };
@@ -98,15 +97,14 @@ void Renderer::DrawQuad(Texture& texture, glm::vec2 position)
 
 }
 
-void Renderer::DrawQuad(SubTexture& texture, glm::vec2 position)
+void Renderer::DrawQuad(SubTexture& texture, glm::vec2 position, float rotation)
 {
 	texture.m_texture->Bind();
 
-	float rotation = 0.0f;
-	glm::vec2 scale = glm::vec2(128.0f, 128.0f);
+	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
-		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 
 	//assign data
@@ -135,7 +133,7 @@ void Renderer::DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale, fl
 	blank->Bind();
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
-		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0.0f, 0.0f, 1.0f })
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 1.0f, 0.0f, 0.0f })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 
 	data.vb->Bind();

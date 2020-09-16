@@ -16,9 +16,10 @@
 
 struct RenderData
 {
-	const int vertexCount = 4;
+	const int vertexCount = 4; 
+	const int vertexInfo = 5;	//not "vertexCount, but how much info does 1 vertex carry (3 + 2) - you should make this more "normal"
 
-	glm::vec2 positions[4];
+	glm::vec3 positions[4];
 	glm::vec2 texCoords[4];
 
 	unsigned int vao;
@@ -36,10 +37,10 @@ struct RenderData
 
 	void Init()
 	{
-		positions[0] = { -0.5f, -0.5f };
-		positions[1] = {  0.5f, -0.5f };
-		positions[2] = {  0.5f,  0.5f };
-		positions[3] = { -0.5f,  0.5f };
+		positions[0] = { -0.5f, -0.5f, 0.0f };
+		positions[1] = {  0.5f, -0.5f, 0.0f };
+		positions[2] = {  0.5f,  0.5f, 0.0f };
+		positions[3] = { -0.5f,  0.5f, 0.0f };
 		
 		texCoords[0] = { 0.0f, 0.0f };
 		texCoords[1] = { 1.0f, 0.0f };
@@ -54,19 +55,20 @@ struct RenderData
 		GLCall(glGenVertexArrays(1, &vao));
 		GLCall(glBindVertexArray(vao));
 
-		float pos[(2 + 2) * 4];
+		float pos[(3 + 2) * 4];
 		for (int i = 0; i < vertexCount; i++)
 		{
-			pos[i * vertexCount + 0] = positions[i].x;
-			pos[i * vertexCount + 1] = positions[i].y;
-			pos[i * vertexCount + 2] = texCoords[i].x;
-			pos[i * vertexCount + 3] = texCoords[i].y;
+			pos[i * vertexInfo + 0] = positions[i].x;
+			pos[i * vertexInfo + 1] = positions[i].y;
+			pos[i * vertexInfo + 2] = positions[i].z;
+			pos[i * vertexInfo + 3] = texCoords[i].x;
+			pos[i * vertexInfo + 4] = texCoords[i].y;
 		}
 
-		vb = new VertexBuffer(pos, 4 * 4 * sizeof(float));
-		unchanged_vb = new VertexBuffer(pos, 4 * 4 * sizeof(float));
+		vb = new VertexBuffer(pos, 4 * 5 * sizeof(float));
+		unchanged_vb = new VertexBuffer(pos, 4 * 5 * sizeof(float));
 		
-		layout.Push<float>(2);
+		layout.Push<float>(3);
 		layout.Push<float>(2);
 
 		unchanged_va.AddBuffer(*unchanged_vb, layout);
@@ -74,24 +76,22 @@ struct RenderData
 		va.AddBuffer(*vb, layout);
 		ib = new IndexBuffer(indices, 6);
 
-		//shader = new Shader("src/res/shaders/Basic.shader");
-		//shader_lightning = new Shader("src/res/shaders/basic_lightning.shader");
-
 		shaders["basic"] = new Shader("src/res/shaders/Basic.shader");
 		shaders["lightning"] = new Shader("src/res/shaders/basic_lightning.shader");
 	}
 
 	void RefreshData()
 	{
-		float pos[(2 + 2) * 4];
+		float pos[(3 + 2) * 4];
 		for (int i = 0; i < vertexCount; i++)
 		{
-			pos[i * vertexCount + 0] = positions[i].x;
-			pos[i * vertexCount + 1] = positions[i].y;
-			pos[i * vertexCount + 2] = texCoords[i].x;
-			pos[i * vertexCount + 3] = texCoords[i].y;
+			pos[i * vertexInfo + 0] = positions[i].x;
+			pos[i * vertexInfo + 1] = positions[i].y;
+			pos[i * vertexInfo + 2] = positions[i].z;
+			pos[i * vertexInfo + 3] = texCoords[i].x;
+			pos[i * vertexInfo + 4] = texCoords[i].y;
 		}
-
+	
 		vb->RefreshBuffer(pos);
 		va.AddBuffer(*vb, layout);
 	}
@@ -111,9 +111,9 @@ private:
 public:
 	void DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale, float rotation);
 	void DrawGrid(glm::vec4 color, glm::vec2 position);
-	void DrawQuad(Texture& texture, glm::vec2 position);
+	void DrawQuad(Texture& texture, glm::vec2 position, float rotation);
 	void DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size);
-	void DrawQuad(SubTexture& texture, glm::vec2 position);
+	void DrawQuad(SubTexture& texture, glm::vec2 position, float rotation);
 	//this is what lightning is as of now
 	void DrawLighning(glm::vec4 color, glm::vec2 position, glm::vec2 scale);
 
