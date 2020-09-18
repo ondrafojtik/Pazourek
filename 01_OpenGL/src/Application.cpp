@@ -51,6 +51,7 @@ int main(void)
 	std::cout << "glfw version: " << glfwGetVersionString() << std::endl;
 
 	GLCall(glEnable(GL_BLEND));
+	GLCall(glEnable(GL_DEPTH_TEST));
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 	//imgui Init
 	ImGui::CreateContext();

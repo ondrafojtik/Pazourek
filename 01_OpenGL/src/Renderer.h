@@ -55,9 +55,9 @@ struct RenderData
 		positions[7] = {  0.5f,  0.5f, -0.5f };
 
 		texCoords[4] = { 0.5f, 0.33333f };
-		texCoords[5] = { 0.5f, 0.33333f };
-		texCoords[6] = { 0.5f, 0.66666f };
-		texCoords[7] = { 0.25f, 0.66666f };
+		texCoords[5] = { 0.75f, 0.33333f };
+		texCoords[6] = { 0.75f, 0.66666f };
+		texCoords[7] = { 0.5f, 0.66666f };
 
 		//side 3 (back)
 		positions[8] =  {  0.5f, -0.5f, 0.5f };
@@ -178,7 +178,7 @@ private:
 public:
 	void DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale, float rotation);
 	void DrawGrid(glm::vec4 color, glm::vec2 position);
-	void DrawQuad(Texture& texture, glm::vec2 position, float rotation);
+	void DrawQuad(Texture& texture, glm::vec2 position, float rotation, float xAxes, float yAxes, float zAxes);
 	void DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size);
 	void DrawQuad(SubTexture& texture, glm::vec2 position, float rotation);
 	//this is what lightning is as of now

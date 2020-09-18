@@ -38,7 +38,7 @@ struct PlayGround
 	float cameraX = 0;
 	float cameraY = 0;
 	
-	float cameraZoom = 60;
+	float cameraZoom = 2;
 
 	GLFWmonitor* monitor = nullptr;
 	GLFWwindow* window = nullptr;

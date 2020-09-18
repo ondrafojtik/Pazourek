@@ -60,14 +60,14 @@ void Renderer::DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size)
 
 }
 
-void Renderer::DrawQuad(Texture& texture, glm::vec2 position, float rotation)
+void Renderer::DrawQuad(Texture& texture, glm::vec2 position, float rotation, float xAxes, float yAxes, float zAxes)
 {
 	texture.Bind();
 
 	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, 0.0f })
-		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 1.0f, 1.0f, 1.0f })
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { xAxes, yAxes, zAxes })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 		
 	//glm::vec2 coords[4];
@@ -211,6 +211,6 @@ void Renderer::DrawGrid(glm::vec4 color, glm::vec2 position)
 
 void Renderer::Clear() const
 {
-	GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-	GLCall(glClear(GL_COLOR_BUFFER_BIT));
+	GLCall(glClearColor(0.1f, 0.05f, 0.05f, 1.0f));
+	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
