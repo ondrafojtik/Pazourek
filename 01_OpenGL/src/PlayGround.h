@@ -45,7 +45,7 @@ struct PlayGround
 	void OnRender();
 	void ImGuiOnUpdate();
 private:
-	Camera* camera = new Camera({0, 0, -5}, 70, AspectRatio(16, 9), 0.01f, 100.0f);
+	Camera* camera = new Camera({5, 2, -5}, 70, AspectRatio(16, 9), 0.01f, 100.0f);
 	Renderer* renderer = new Renderer(camera);
 public:
 	float rotation = 0;
@@ -59,5 +59,5 @@ public:
 	Texture* grass = new Texture("src/res/textures/minecraft_grass.png");
 	Animation* animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
 	bool mouseMovement = false;
-	
+	glm::vec3 lightPos;
 };

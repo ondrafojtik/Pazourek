@@ -214,8 +214,9 @@ private:
 	Texture* blank = new Texture("src/res/textures/Blank.png");
 	Texture* grid = new Texture("src/res/textures/grid.png");
 public:
-	void DrawCube(Texture& texture, glm::vec2 position, float rotation, float xAxes, float yAxes, float zAxes);
-	
+	void DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, const glm::vec3& lightPos);
+	void DrawLight(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, const glm::vec3& lightPos);
+
 	Renderer(Camera *camera);
 	void Clear() const; 
 };
