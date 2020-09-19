@@ -39,13 +39,10 @@ void PlayGround::OnRender()
 {
 	renderer->Clear();
 
+	
 	rotation += 0.3;
-	//renderer->DrawQuad(glm::vec4(1.0f), { 0, 0 }, {20, 20}, rotation);
-	//renderer->DrawQuad(*alonso, { 0, 0 }, rotation);
-	//renderer->DrawQuad(*sub, { 1, 1 });
-	//renderer->DrawQuad(*animation->currentAnimation, { 0, 0 }, rotation);
 	renderer->DrawQuad(*grass, { 0, 0 }, rotation, 1, 1, 1);
-	//renderer->DrawQuad(glm::vec4(1.0f), { 0, 0 }, { 1,1 }, rotation);
+
 }
 
 void PlayGround::ImGuiOnUpdate()

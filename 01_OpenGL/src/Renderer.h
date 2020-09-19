@@ -22,6 +22,7 @@ struct RenderData
 	glm::vec3 positions[24];
 	glm::vec2 texCoords[24];
 
+
 	unsigned int vao;
 	VertexBuffer* vb = nullptr;
 	VertexBufferLayout layout;
