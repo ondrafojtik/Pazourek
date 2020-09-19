@@ -7,8 +7,8 @@
 
 float MAX_FPS = 16; //(16ms per update)
 
-int l_WindowWidth = 860;
-int l_WindowHeight = 860;
+int l_WindowWidth = 960;
+int l_WindowHeight = 540;
 
 int main(void)
 {

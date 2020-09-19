@@ -10,28 +10,28 @@ void PlayGround::OnDetach()
 
 void PlayGround::OnUpdate()
 {
-	
 	//I should rly make some sort of event system
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		cameraY += 1.0f;
+		camera->MoveForward();
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		cameraX -= 1.0f;
+		camera->MoveLeft();
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		cameraY -= 1.0f;
+		camera->MoveBackward();
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		cameraX += 1.0f;
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-		cameraZoom = cameraZoom + 0.5f;
+		camera->MoveRight();
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+		camera->MoveUp();
+	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+		camera->MoveDown();
 	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		cameraZoom = cameraZoom - 0.5f;
-	if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS)
-		camera->rotation += 0.1f;
-
-	//setting camera position based on input
-	camera->SetPosition(cameraX, cameraY);
-	camera->SetZoom(cameraZoom);
-
-
+		mouseMovement = !mouseMovement;
+	
+	if(mouseMovement)
+	{
+		glm::dvec2 mousePos;
+		glfwGetCursorPos(window, &mousePos.x, &mousePos.y);
+		camera->mouseUpdate(mousePos);
+	}
 	animation->OnUpdate();
 }
 
@@ -41,13 +41,14 @@ void PlayGround::OnRender()
 
 	
 	rotation += 0.3;
-	renderer->DrawQuad(*grass, { 0, 0 }, rotation, 1, 1, 1);
+	renderer->DrawCube(*grass, { 0, 0 }, rotation, 1, 1, 1);
 
 }
 
 void PlayGround::ImGuiOnUpdate()
 {
 	ImGui::Begin("Debug");
+	ImGui::Checkbox("Enable mouse movement", &mouseMovement);
 	ImGui::End();
 
 

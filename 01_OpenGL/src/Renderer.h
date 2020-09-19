@@ -17,11 +17,11 @@
 struct RenderData
 {
 	const int vertexCount = 24; 
-	const int vertexInfo = 5;	//not "vertexCount, but how much info does 1 vertex carry (3 + 2) - you should make this more "normal"
+	const int vertexInfo = 3 + 2 + 3;	//not "vertexCount, but how much info does 1 vertex carry (3 + 2) - you should make this more "normal"
 
 	glm::vec3 positions[24];
 	glm::vec2 texCoords[24];
-
+	glm::vec3 normal[24];
 
 	unsigned int vao;
 	VertexBuffer* vb = nullptr;
@@ -48,6 +48,11 @@ struct RenderData
 		texCoords[1] = { 0.5f, 0.33333f };
 		texCoords[2] = { 0.5f, 0.66666f };
 		texCoords[3] = { 0.25f, 0.66666f };
+		
+		normal[0] = { 0.0f, 0.0f, -1.0f };
+		normal[1] = { 0.0f, 0.0f, -1.0f };
+		normal[2] = { 0.0f, 0.0f, -1.0f };
+		normal[3] = { 0.0f, 0.0f, -1.0f };
 
 		//side 2 (right)
 		positions[4] = {  0.5f, -0.5f, -0.5f };
@@ -60,6 +65,11 @@ struct RenderData
 		texCoords[6] = { 0.75f, 0.66666f };
 		texCoords[7] = { 0.5f, 0.66666f };
 
+		normal[4] = { 1.0f, 0.0f, 0.0f };
+		normal[5] = { 1.0f, 0.0f, 0.0f };
+		normal[6] = { 1.0f, 0.0f, 0.0f };
+		normal[7] = { 1.0f, 0.0f, 0.0f };
+
 		//side 3 (back)
 		positions[8] =  {  0.5f, -0.5f, 0.5f };
 		positions[9] =  { -0.5f, -0.5f, 0.5f };
@@ -70,6 +80,11 @@ struct RenderData
 		texCoords[9] =  { 1.0f, 0.33333f };
 		texCoords[10] = { 1.0f, 0.66666f };
 		texCoords[11] = { 0.75f, 0.66666f };
+
+		normal[8]  = { 0.0f, 0.0f, 1.0f };
+		normal[9]  = { 0.0f, 0.0f, 1.0f };
+		normal[10] = { 0.0f, 0.0f, 1.0f };
+		normal[11] = { 0.0f, 0.0f, 1.0f };
 
 		//side 4 (left)
 		positions[12] = { -0.5f, -0.5f,  0.5f };
@@ -82,6 +97,11 @@ struct RenderData
 		texCoords[14] = { 0.25f, 0.66666f };
 		texCoords[15] = { 0.0f, 0.66666f };
 
+		normal[12] = { -1.0f, 0.0f, 0.0f };
+		normal[13] = { -1.0f, 0.0f, 0.0f };
+		normal[14] = { -1.0f, 0.0f, 0.0f };
+		normal[15] = { -1.0f, 0.0f, 0.0f };
+
 		//side 5 (bottom)
 		positions[16] = { -0.5f, -0.5f, -0.5f };
 		positions[17] = {  0.5f, -0.5f, -0.5f };
@@ -92,6 +112,11 @@ struct RenderData
 		texCoords[17] = { 0.5f, 0.33333f };
 		texCoords[18] = { 0.5f, 0.0f };
 		texCoords[19] = { 0.25f, 0.0f };
+		
+		normal[16] = { 0.0f, -1.0f, 0.0f };
+		normal[17] = { 0.0f, -1.0f, 0.0f };
+		normal[18] = { 0.0f, -1.0f, 0.0f };
+		normal[19] = { 0.0f, -1.0f, 0.0f };
 
 		//side 5 (top)
 		positions[20] = { -0.5f, 0.5f, -0.5f };
@@ -104,6 +129,10 @@ struct RenderData
 		texCoords[22] = { 0.5f, 1.0f };
 		texCoords[23] = { 0.25f, 1.0f };
 
+		normal[20] = { 0.0f, 1.0f, 0.0f };
+		normal[21] = { 0.0f, 1.0f, 0.0f };
+		normal[22] = { 0.0f, 1.0f, 0.0f };
+		normal[23] = { 0.0f, 1.0f, 0.0f };
 
 		unsigned int indices[] = {
 		0, 1, 2, //front
@@ -123,7 +152,8 @@ struct RenderData
 		GLCall(glGenVertexArrays(1, &vao));
 		GLCall(glBindVertexArray(vao));
 
-		float pos[(3 + 2) * 24];
+		//position, texCoords, normal
+		float pos[(3 + 2 + 3) * 24];
 		for (int i = 0; i < vertexCount; i++)
 		{
 			pos[i * vertexInfo + 0] = positions[i].x;
@@ -131,13 +161,17 @@ struct RenderData
 			pos[i * vertexInfo + 2] = positions[i].z;
 			pos[i * vertexInfo + 3] = texCoords[i].x;
 			pos[i * vertexInfo + 4] = texCoords[i].y;
+			pos[i * vertexInfo + 5] = normal[i].x;
+			pos[i * vertexInfo + 5] = normal[i].y;
+			pos[i * vertexInfo + 5] = normal[i].z;
 		}
 
-		vb = new VertexBuffer(pos, vertexCount * (3 + 2) * sizeof(float));
-		unchanged_vb = new VertexBuffer(pos, vertexCount * (3 + 2) * sizeof(float));
+		vb = new VertexBuffer(pos, vertexCount * (3 + 2 + 3) * sizeof(float));
+		unchanged_vb = new VertexBuffer(pos, vertexCount * (3 + 2 + 3) * sizeof(float));
 		
 		layout.Push<float>(3);
 		layout.Push<float>(2);
+		layout.Push<float>(3);
 
 		unchanged_va.AddBuffer(*unchanged_vb, layout);
 
@@ -150,14 +184,17 @@ struct RenderData
 
 	void RefreshData()
 	{
-		float pos[(3 + 2) * 24];
+		float pos[(3 + 2 + 3) * 24];
 		for (int i = 0; i < vertexCount; i++)
 		{
 			pos[i * vertexInfo + 0] = positions[i].x;
 			pos[i * vertexInfo + 1] = positions[i].y;
 			pos[i * vertexInfo + 2] = positions[i].z;
 			pos[i * vertexInfo + 3] = texCoords[i].x;
-			pos[i * vertexInfo + 4] = texCoords[i].y;
+			pos[i * vertexInfo + 4] = texCoords[i].y; 
+			pos[i * vertexInfo + 5] = normal[i].x;
+			pos[i * vertexInfo + 5] = normal[i].y;
+			pos[i * vertexInfo + 5] = normal[i].z;
 		}
 	
 		vb->RefreshBuffer(pos);
@@ -177,14 +214,8 @@ private:
 	Texture* blank = new Texture("src/res/textures/Blank.png");
 	Texture* grid = new Texture("src/res/textures/grid.png");
 public:
-	void DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale, float rotation);
-	void DrawGrid(glm::vec4 color, glm::vec2 position);
-	void DrawQuad(Texture& texture, glm::vec2 position, float rotation, float xAxes, float yAxes, float zAxes);
-	void DrawQuad(Texture& texture, glm::vec2 position, glm::vec2 size);
-	void DrawQuad(SubTexture& texture, glm::vec2 position, float rotation);
-	//this is what lightning is as of now
-	void DrawLighning(glm::vec4 color, glm::vec2 position, glm::vec2 scale);
-
+	void DrawCube(Texture& texture, glm::vec2 position, float rotation, float xAxes, float yAxes, float zAxes);
+	
 	Renderer(Camera *camera);
 	void Clear() const; 
 };

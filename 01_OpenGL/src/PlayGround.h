@@ -35,11 +35,6 @@ struct PlayGround
 	float relativeCursorX;
 	float relativeCursorY;
 
-	float cameraX = 0;
-	float cameraY = 0;
-	
-	float cameraZoom = 2;
-
 	GLFWmonitor* monitor = nullptr;
 	GLFWwindow* window = nullptr;
 
@@ -50,7 +45,7 @@ struct PlayGround
 	void OnRender();
 	void ImGuiOnUpdate();
 private:
-	Camera* camera = new Camera(0, 32, 0, 18);
+	Camera* camera = new Camera({0, 0, -5}, 70, AspectRatio(16, 9), 0.01f, 100.0f);
 	Renderer* renderer = new Renderer(camera);
 public:
 	float rotation = 0;
@@ -63,5 +58,6 @@ public:
 	Texture* anim = new Texture("src/res/textures/anim_test.png");
 	Texture* grass = new Texture("src/res/textures/minecraft_grass.png");
 	Animation* animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
-
+	bool mouseMovement = false;
+	
 };
