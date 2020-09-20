@@ -60,4 +60,8 @@ public:
 	Animation* animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
 	bool mouseMovement = false;
 	glm::vec3 lightPos;
+	float ambientStrength = 0.1f;
+	int shininess = 32;
+	glm::vec3 lightColor = glm::vec3(1.0f);
+
 };

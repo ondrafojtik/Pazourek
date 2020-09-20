@@ -162,8 +162,8 @@ struct RenderData
 			pos[i * vertexInfo + 3] = texCoords[i].x;
 			pos[i * vertexInfo + 4] = texCoords[i].y;
 			pos[i * vertexInfo + 5] = normal[i].x;
-			pos[i * vertexInfo + 5] = normal[i].y;
-			pos[i * vertexInfo + 5] = normal[i].z;
+			pos[i * vertexInfo + 6] = normal[i].y;
+			pos[i * vertexInfo + 7] = normal[i].z;
 		}
 
 		vb = new VertexBuffer(pos, vertexCount * (3 + 2 + 3) * sizeof(float));
@@ -180,6 +180,7 @@ struct RenderData
 
 		shaders["basic"] = new Shader("src/res/shaders/Basic.shader");
 		shaders["lightning"] = new Shader("src/res/shaders/basic_lightning.shader");
+		shaders["plainColor"] = new Shader("src/res/shaders/plainColor.shader");
 	}
 
 	void RefreshData()
@@ -193,8 +194,8 @@ struct RenderData
 			pos[i * vertexInfo + 3] = texCoords[i].x;
 			pos[i * vertexInfo + 4] = texCoords[i].y; 
 			pos[i * vertexInfo + 5] = normal[i].x;
-			pos[i * vertexInfo + 5] = normal[i].y;
-			pos[i * vertexInfo + 5] = normal[i].z;
+			pos[i * vertexInfo + 6] = normal[i].y;
+			pos[i * vertexInfo + 7] = normal[i].z;
 		}
 	
 		vb->RefreshBuffer(pos);
@@ -214,8 +215,8 @@ private:
 	Texture* blank = new Texture("src/res/textures/Blank.png");
 	Texture* grid = new Texture("src/res/textures/grid.png");
 public:
-	void DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, const glm::vec3& lightPos);
-	void DrawLight(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, const glm::vec3& lightPos);
+	void DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, const glm::vec3& lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess);
+	void DrawColor(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, const glm::vec3& lightPos);
 
 	Renderer(Camera *camera);
 	void Clear() const; 

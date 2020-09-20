@@ -1,0 +1,77 @@
+* [33m69c1260[m[33m ([m[1;36mHEAD -> [m[1;32mPazourek3D[m[33m)[m light prob. not working correctly
+* [33m0723a3f[m working camera
+* [33m827873f[m pre-lightninig
+* [33m5806f56[m fixed sides rendering one over another
+* [33m3b657cb[m[33m ([m[1;31morigin/Pazourek3D[m[33m)[m cube sides seem to be rendering over one another
+* [33md9ab394[m cube now works correctly
+* [33m792d586[m rendering cube!
+* [33m6fd5675[m 3d drawing working, next up 3d cube
+* [33m1b076e1[m not sure what was broken, but now it works!
+* [33m17818d6[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m added some basic frame limiter (and set it to 60)
+* [33mca327c9[m added animation
+* [33ma1c00b9[m edited edit window
+* [33m49b5f1a[m finally made mouse position so that it (scales) with camera zoom
+* [33mba8c47c[m added basic lightningÂ
+* [33mb95d730[m got lvl editor to lvl where I wanted it as of now
+* [33mff3e54f[m level editor nice fine state, just doesnt change anything yet
+* [33m834b48d[m imgui level editor (beginnig)
+* [33mddc9719[m changed how camera works, fixed other stuff that was broken
+* [33me2b588c[m fixed pathfinder and everything else that camera messed up
+* [33m0391cd8[m pre-fix
+* [33mf515cd0[m actually inversing camera
+* [33ma643b8e[m somewhat added camera transforms and stuff
+* [33m7846380[m beginning of normal camera system
+* [33m53a2185[m minor pathfinder edit
+* [33m54a8b5a[m fix where range whouldnt go everywhere when clicking multiple times
+* [33m0829ab7[m pathfinder
+* [33mae51a03[m moving to ntb
+* [33m6557f1c[m beginning of A* alg
+* [33m665faf9[m grid + fixed inconzistency (now in fullscreen...)
+* [33m86e7d79[m memory leak at VB, next up subData
+* [33mc1b11ab[m before fixed memory
+* [33mf8ca9e3[m added grid with some other tweeks
+* [33m88d8212[m added renderer option for textures to be rendered with size
+* [33m6235594[m subTexture fix
+* [33m91f2927[m game-like enviroment
+* [33ma7e5738[m before game-like enviroment
+* [33m1f96154[m minor tweeks, mainly moving things to laptop
+* [33m5659bc6[m particles are now working again
+* [33mf4a7ef9[m added subTextures
+* [33m8b0b021[m fix
+*   [33m6024e21[m final version of the new render system
+[32m|[m[33m\[m  
+[32m|[m * [33mda5b631[m moving stuff back to pc
+[32m|[m * [33m2625db6[m moving stuff to laptop cuz of storm
+* [33m|[m [33mec0c200[m final version of the new render system
+* [33m|[m [33me3acfbe[m attempt1
+[33m|[m[33m/[m  
+* [33m9bf6e63[m removed win32 support
+* [33mbd80347[m mostly removed constructors since they ddnt owrk
+* [33mc645df5[m introduced imgui checkbox for contorll purpose
+* [33m4104d86[m particles now scale and rotate
+* [33md12e8b7[m pivot system
+* [33m9498d5f[m big boy cleanup
+* [33m531512f[m minor fix
+* [33m46bd75c[m major changes in engine, functional rotation
+* [33md479721[m optimizating particleSystem
+* [33mcad502a[m pazoureks original purpouse thing
+*   [33me4d6626[m fix
+[34m|[m[35m\[m  
+[34m|[m * [33m67bc318[m renaming dir
+* [35m|[m [33mf7c4cd3[m .
+* [35m|[m [33ma2c7921[m cleanup
+[35m|[m[35m/[m  
+* [33mfd69388[m gitignore edit
+* [33md2cb5e6[m introduced bounds
+* [33m4801e96[m introduced bounds to window to make more sence
+* [33m10926a1[m starder working on particles with scaling
+* [33mde9f219[m fixed color namespace
+* [33ma9b3198[m saturday cleanup
+* [33m590b0c4[m color namespace and cleanup
+* [33mbafd2d1[m changing particles via gui, glm::lerp, sprite constructor that constructs with original dims
+* [33m3a1dd8e[m better randomGenerator
+* [33m1bcff68[m particles dont destruct correctly
+* [33me396f0c[m mouse X and Y finally works correctly (0, 0) would be bottom left, scaling still doesnt work
+* [33med8d15e[m particle system + random
+* [33m9bb9c9f[m gitignore fix
+* [33mecf2357[m starting git rep just now cuz I dont have brain
