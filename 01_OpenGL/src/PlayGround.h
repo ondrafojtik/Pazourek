@@ -59,9 +59,9 @@ public:
 	Texture* grass = new Texture("src/res/textures/minecraft_grass.png");
 	Animation* animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
 	bool mouseMovement = false;
-	glm::vec3 lightPos;
+	glm::vec3 lightPositions[2];
 	float ambientStrength = 0.1f;
+	float SpecularStrength = 0.5f;
 	int shininess = 32;
 	glm::vec3 lightColor = glm::vec3(1.0f);
-
 };

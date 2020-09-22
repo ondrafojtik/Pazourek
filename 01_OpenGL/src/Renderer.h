@@ -2,6 +2,7 @@
 #include "GL/glew.h"
 
 #include <memory>
+#include <string>
 
 #include "Camera.h"
 #include "ParticleSystem.h"
@@ -215,8 +216,8 @@ private:
 	Texture* blank = new Texture("src/res/textures/Blank.png");
 	Texture* grid = new Texture("src/res/textures/grid.png");
 public:
-	void DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, const glm::vec3& lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess);
-	void DrawColor(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, const glm::vec3& lightPos);
+	void DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength);
+	void DrawColor(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes);
 
 	Renderer(Camera *camera);
 	void Clear() const; 

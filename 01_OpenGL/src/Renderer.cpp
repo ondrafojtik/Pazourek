@@ -22,7 +22,7 @@ Renderer::Renderer(Camera *camera) : m_Camera(camera)
 	data.Init();
 }
 
-void Renderer::DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, const glm::vec3& lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess)
+void Renderer::DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength)
 {
 	texture.Bind();
 
@@ -32,10 +32,6 @@ void Renderer::DrawCube(Texture& texture, glm::vec3 position, float rotation, fl
 		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { xAxes, yAxes, zAxes })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 
-	/*uniform float u_AmbientStrength;
-uniform vec3 u_lightColor;
-uniform float u_Shininess;*/
-
 	data.vb->Bind();
 	data.va.Bind();
 	data.ib->Bind();
@@ -44,9 +40,17 @@ uniform float u_Shininess;*/
 	data.shaders["basic"]->SetUniformMat4f("u_Model", transform);
 	data.shaders["basic"]->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
 	data.shaders["basic"]->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
-	data.shaders["basic"]->SetUniform3f("u_lightPos0", lightPos.x, lightPos.y, lightPos.z);
 	data.shaders["basic"]->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
+	data.shaders["basic"]->SetUniform1f("u_SpecularStrength", SpecularStrength);
 	//uniforms for testing
+	//sending all the "lightPos" info into frangment
+	int iter = 0;
+	for (int i = 0; i < 2; i++)
+	{
+		std::string u_name = "u_lightPos" + std::to_string(i);
+		data.shaders["basic"]->SetUniform3f(u_name, lightPos[i].x, lightPos[i].y, lightPos[i].z);
+	}
+	
 	data.shaders["basic"]->SetUniform1f("u_AmbientStrength", ambientStrength);
 	data.shaders["basic"]->SetUniform3f("u_lightColor", lightColor.r, lightColor.g, lightColor.b);
 	data.shaders["basic"]->SetUniform1f("u_Shininess", Shininess);
@@ -60,11 +64,8 @@ uniform float u_Shininess;*/
 
 }
 
-void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, const glm::vec3& lightPos)
+void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes)
 {
-	
-	//blank->Bind();
-
 	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })

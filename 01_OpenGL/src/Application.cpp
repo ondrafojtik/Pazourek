@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 #include <GLFW\glfw3native.h>
 #include <chrono>
-
 #include "PlayGround.h"
 
 float MAX_FPS = 16; //(16ms per update)
