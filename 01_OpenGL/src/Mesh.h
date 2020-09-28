@@ -9,7 +9,7 @@
 #include "glm/vec3.hpp"
 #include "glm/vec2.hpp"
 
-#define MAX_VERTEX_COUNT 100
+//#define MAX_VERTEX_COUNT 100
 
 struct Vertex
 {
@@ -161,8 +161,8 @@ struct Mesh
 		GLCall(glGenVertexArrays(1, &vao));
 		GLCall(glBindVertexArray(vao));
 		//position, texCoords, normal
-		//float* pos = new float[(sizeof(Vertex) / sizeof(float)) * vertices.size()];
-		float pos[sizeof(Vertex) * MAX_VERTEX_COUNT];
+		float* pos = new float[(sizeof(Vertex) / sizeof(float)) * vertexCount]; //it seems it CAN be dynamic! 
+		//float pos[sizeof(Vertex) * MAX_VERTEX_COUNT];
 		for (int i = 0; i < vertexCount; i++)
 		{
 			pos[i * vertexInfo + 0] = positions[i].x;
@@ -175,7 +175,7 @@ struct Mesh
 			pos[i * vertexInfo + 7] = normal[i].z;
 		}
 		
-		vb = new VertexBuffer(pos, vertexCount * (3 + 2 + 3) * sizeof(float));
+		vb = new VertexBuffer(pos, vertexCount * (3 + 2 + 3) * sizeof(float)); //(pos, vertices.size() * sizeof(Vertex))
 		layout.Push<float>(3);
 		layout.Push<float>(2);
 		layout.Push<float>(3);
