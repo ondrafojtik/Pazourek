@@ -1276,7 +1276,7 @@
     <ClInclude Include="src\Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\newShader.h">
+    <ClInclude Include="src\Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

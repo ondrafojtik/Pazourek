@@ -20,6 +20,7 @@
 #include "Map.h"
 #include "Animation.h"
 
+
 static std::string s_grid;
 
 static std::array<Node, 15 * 8> s_nodeGrid;

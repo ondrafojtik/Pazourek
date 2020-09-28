@@ -242,7 +242,7 @@
     <ClInclude Include="src\GLcall.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Map.h" />
-    <ClInclude Include="src\newShader.h" />
+    <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Pathfinder.h" />
     <ClInclude Include="src\PlayGround.h" />

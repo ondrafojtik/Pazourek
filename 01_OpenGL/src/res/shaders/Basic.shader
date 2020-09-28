@@ -53,10 +53,9 @@ uniform float u_SpecularStrength;
 uniform vec3 u_lightColor;
 uniform float u_Shininess;
 
-vec3 calculateLight(vec3 lightPos)
+vec3 calculateLight(vec3 lightPos, vec3 lightColor)
 {
 	//ambient
-	vec3 lightColor = u_lightColor;
 	float ambientStrength = u_AmbientStrength;
 	vec3 ambient = ambientStrength * lightColor;
 
@@ -84,7 +83,7 @@ vec3 calculateLight(vec3 lightPos)
 void main()
 {
 	
-	vec3 result = (calculateLight(u_lightPos0) + calculateLight(u_lightPos1)) / 2;
+	vec3 result = (calculateLight(u_lightPos0, u_lightColor) + calculateLight(u_lightPos1, vec3(1.0f, 1.0f, 1.0f))) / 2;
 
 
 	vec4 texColor = texture(u_Texture, v_TexCoord) * 1.0;
