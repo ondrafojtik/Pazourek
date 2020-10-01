@@ -89,9 +89,8 @@ void Renderer::DrawModel(Texture& texture, glm::vec3 position, glm::vec3* lightP
 {
 	for(int i = 0; i < model.meshes.size(); i++)
 	{
-		Mesh mesh = model.meshes[i];
 		texture.Bind();
-
+		
 		float rotation = 0.0f;
 		glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
@@ -99,9 +98,9 @@ void Renderer::DrawModel(Texture& texture, glm::vec3 position, glm::vec3* lightP
 			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 })
 			* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
 
-		mesh.vb->Bind();
-		mesh.va.Bind();
-		mesh.ib->Bind();
+		model.meshes[i].vb->Bind();
+		model.meshes[i].va->Bind();
+		model.meshes[i].ib->Bind();
 		data.shaders["basic"]->Bind();
 		data.shaders["basic"]->SetUniformMat4f("u_ViewProjection", m_Camera->GetProjection());
 		data.shaders["basic"]->SetUniformMat4f("u_Model", transform);
@@ -121,10 +120,10 @@ void Renderer::DrawModel(Texture& texture, glm::vec3 position, glm::vec3* lightP
 		data.shaders["basic"]->SetUniform1f("u_AmbientStrength", ambientStrength);
 		data.shaders["basic"]->SetUniform3f("u_lightColor", lightColor.r, lightColor.g, lightColor.b);
 		data.shaders["basic"]->SetUniform1f("u_Shininess", Shininess);
-		GLCall(glDrawElements(GL_TRIANGLES, mesh.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
-		data.vb->Unbind();
-		data.va.Unbind();
-		data.ib->Unbind();
+		GLCall(glDrawElements(GL_TRIANGLES, model.meshes[i].ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+		model.meshes[i].vb->Unbind();
+		model.meshes[i].va->Unbind();
+		model.meshes[i].ib->Unbind();
 		data.shaders["basic"]->Unbind();
 		texture.Unbind();
 	}

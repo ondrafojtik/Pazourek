@@ -156,6 +156,7 @@ struct RenderData
 
 		//position, texCoords, normal
 		float pos[(3 + 2 + 3) * 24];
+		//float* pos = new float[24 * 8];
 		for (int i = 0; i < vertexCount; i++)
 		{
 			pos[i * vertexInfo + 0] = positions[i].x;

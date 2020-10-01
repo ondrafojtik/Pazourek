@@ -30,7 +30,7 @@ struct Mesh
 	unsigned int vao;
 	VertexBuffer* vb = nullptr;
 	VertexBufferLayout layout;
-	VertexArray va;
+	VertexArray* va = nullptr;
 	IndexBuffer* ib = nullptr;
 
 	//Mesh(std::vector<Vertex> __vertices, std::vector<unsigned int> __indices, std::vector<Texture> __textures)
@@ -51,8 +51,7 @@ struct Mesh
 		GLCall(glGenVertexArrays(1, &vao));
 		GLCall(glBindVertexArray(vao));
 		//position, texCoords, normal
-		float* pos = new float[(sizeof(Vertex) / sizeof(float)) * vertexCount]; //it seems it CAN be dynamic! 
-		std::cout << "size: " << sizeof(pos) << std::endl;
+		float* pos = new float[(sizeof(Vertex) / sizeof(float)) * _vertexCount]; //it seems it CAN be dynamic! 
 		//float pos[sizeof(Vertex) * MAX_VERTEX_COUNT];
 	
 		for (int i = 0; i < _vertexCount; i++)
@@ -68,12 +67,13 @@ struct Mesh
 
 		}
 		
-		vb = new VertexBuffer(pos, vertexCount * (3 + 2 + 3) * sizeof(float)); //(pos, vertices.size() * sizeof(Vertex))
+		vb = new VertexBuffer(pos, _vertexCount * sizeof(Vertex));
 		layout.Push<float>(3);
 		layout.Push<float>(2);
 		layout.Push<float>(3);
 
-		va.AddBuffer(*vb, layout);
+		va = new VertexArray();
+		va->AddBuffer(*vb, layout);
 		unsigned int* _data;
 		_data = &indices[0];
 		ib = new IndexBuffer(_data, indices.size());
@@ -82,14 +82,14 @@ struct Mesh
 	void Bind()
 	{
 		vb->Bind();
-		va.Bind();
+		va->Bind();
 		ib->Bind();
 	}
 
 	void UnBind()
 	{
 		vb->Unbind();
-		va.Unbind();
+		va->Unbind();
 		ib->Unbind();
 	}
 	

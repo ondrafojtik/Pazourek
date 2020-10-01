@@ -25,9 +25,3 @@ private:
 	std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 
 };
-
-/*
-draw________
-	for(int i = 0; i < meshes.size(); i++)
-		meshes[i].Draw();
-*/
