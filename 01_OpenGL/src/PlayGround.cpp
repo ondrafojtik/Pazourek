@@ -4,6 +4,11 @@ void PlayGround::OnAttach()
 {
 	lightPositions[0] = glm::vec3(5, 5, -10);
 	lightPositions[1] = glm::vec3(8, 5, -10);
+
+	std::cout << sizeof(float_t) <<  sizeof(uint32_t) << std::endl;
+
+	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack.obj");
+	
 }
 
 void PlayGround::OnDetach()
@@ -41,10 +46,7 @@ void PlayGround::OnRender()
 {
 	renderer->Clear();
 	rotation += 0.3;
-	
-	//lightPos.z += 0.1f;
-	
-	/*
+#if 0
 	for (int y = 1; y < 10; y++)
 		for (int x = 0; x < 10; x++)
 			renderer->DrawCube(*grass, { x, y, 0 }, 0, 1, 1, 1, lightPositions, ambientStrength, lightColor, shininess, SpecularStrength);
@@ -52,14 +54,13 @@ void PlayGround::OnRender()
 	for (int x = 0; x < 10; x++)
 		for (int z = 0; z < 10; z++)
 			renderer->DrawCube(*grass, {x, 0, -z}, 0, 1, 1, 1, lightPositions, ambientStrength, lightColor, shininess, SpecularStrength);
-			
-	*/
-	Mesh* mesh = new Mesh();
+#endif			
+	
+	renderer->DrawModel(*grass, { 5, 2, 2 }, lightPositions, ambientStrength, lightColor, shininess, SpecularStrength, *model);
 	//render light cube
-	renderer->DrawMesh(*grass, { 5, 2, 0 }, lightPositions, ambientStrength, lightColor, shininess, SpecularStrength, *mesh);
 	renderer->DrawColor(glm::vec4(lightColor.r, lightColor.g, lightColor.b, 1.0f), lightPositions[0], 0, 1, 1, 1);
 	renderer->DrawColor(glm::vec4(1.0f), lightPositions[1], 0, 1, 1, 1);
-
+	
 }
 
 void PlayGround::ImGuiOnUpdate()

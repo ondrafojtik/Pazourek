@@ -14,8 +14,7 @@
 #include "Texture.h"
 #include "SubTexture.h"
 #include <unordered_map>
-
-#include "Mesh.h"
+#include "Model.h"
 
 struct RenderData
 {
@@ -220,7 +219,7 @@ private:
 public:
 	void DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength);
 	void DrawColor(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes);
-	void DrawMesh(Texture& texture, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength, Mesh mesh);
+	void DrawModel(Texture& texture, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength, Model model);
 
 	Renderer(Camera *camera);
 	void Clear() const; 

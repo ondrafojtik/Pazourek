@@ -65,4 +65,6 @@ public:
 	float SpecularStrength = 0.5f;
 	int shininess = 32;
 	glm::vec3 lightColor = glm::vec3(1.0f);
+
+	Model* model = nullptr;
 };

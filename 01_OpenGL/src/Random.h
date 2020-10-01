@@ -16,6 +16,7 @@ public:
 	{
 		return (float)s_Distribution(s_RandomEngine) / (float)std::numeric_limits<uint32_t>::max();
 	}
+	Random() = delete;
 
 private:
 	static std::mt19937 s_RandomEngine;
