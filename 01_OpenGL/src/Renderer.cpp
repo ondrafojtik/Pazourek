@@ -85,12 +85,12 @@ void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position, float rotat
 	data.shaders["plainColor"]->Unbind();
 }
 
-void Renderer::DrawModel(Texture& texture, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength, Model model)
+void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, Texture& ambient, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength, Model model)
 {
 	for(int i = 0; i < model.meshes.size(); i++)
 	{
-		texture.Bind();
 		
+
 		float rotation = 0.0f;
 		glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
@@ -102,6 +102,15 @@ void Renderer::DrawModel(Texture& texture, glm::vec3 position, glm::vec3* lightP
 		model.meshes[i].va->Bind();
 		model.meshes[i].ib->Bind();
 		data.shaders["basic"]->Bind();
+		diffuse.Bind(0);
+		data.shaders["basic"]->SetUniform1i("u_diffuseMap", 0);
+		specular.Bind(1);
+		data.shaders["basic"]->SetUniform1i("u_specularMap", 1);
+		//normals.Bind(2);
+		//data.shaders["basic"]->SetUniform1i("u_normalMap", 2);
+		//ambient.Bind(3);
+		//data.shaders["basic"]->SetUniform1i("u_roughtnessMap", 3);
+
 		data.shaders["basic"]->SetUniformMat4f("u_ViewProjection", m_Camera->GetProjection());
 		data.shaders["basic"]->SetUniformMat4f("u_Model", transform);
 		data.shaders["basic"]->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
@@ -125,7 +134,7 @@ void Renderer::DrawModel(Texture& texture, glm::vec3 position, glm::vec3* lightP
 		model.meshes[i].va->Unbind();
 		model.meshes[i].ib->Unbind();
 		data.shaders["basic"]->Unbind();
-		texture.Unbind();
+		diffuse.Unbind();
 	}
 }
 

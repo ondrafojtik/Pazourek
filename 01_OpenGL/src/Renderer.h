@@ -220,7 +220,7 @@ private:
 public:
 	void DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength);
 	void DrawColor(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes);
-	void DrawModel(Texture& texture, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength, Model model);
+	void DrawModel(Texture& diffuse, Texture& specular, Texture& normals, Texture& ambient, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength, Model model);
 
 	Renderer(Camera *camera);
 	void Clear() const; 

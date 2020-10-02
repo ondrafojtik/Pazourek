@@ -53,6 +53,13 @@ public:
 
 	Texture* alonso = new Texture("src/res/textures/alonso.jpg");
 	Texture* tex = new Texture("src/res/textures/copy.png");
+	
+	Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
+	Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
+	Texture* normal = new Texture("src/res/models/backpack/normal.jpg");
+	Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
+
+
 	SubTexture* sub = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 2, 0);
 
 	//animation test

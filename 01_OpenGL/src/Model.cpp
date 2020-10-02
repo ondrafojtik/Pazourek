@@ -48,6 +48,17 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
         if(mesh->HasNormals())
             vertex.normal =     { mesh->mNormals[i].x,          mesh->mNormals[i].y,            mesh->mNormals[i].z     };
     
+        //materials and maps (diffuse, specular, normal, ambient)
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+        std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
+        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+        std::vector<Texture> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+        textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
+        std::vector<Texture> ambientMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+        textures.insert(textures.end(), ambientMaps.begin(), ambientMaps.end());
+
         vertices.push_back(vertex);
     }
 
