@@ -108,11 +108,10 @@ void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position, float rotat
 	data.shaders["plainColor"]->Unbind();
 }
 
-void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, Texture& ambient, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength, Model model)
+void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, Texture& AO, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, Model model)
 {
 	for(int i = 0; i < model.meshes.size(); i++)
 	{
-		
 		float rotation = 0.0f;
 		glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
@@ -128,15 +127,14 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, 
 		data.shaders["basic"]->SetUniform1i("u_diffuseMap", 0);
 		specular.Bind(1);
 		data.shaders["basic"]->SetUniform1i("u_specularMap", 1);
-		normals.Bind(2);
-		data.shaders["basic"]->SetUniform1i("u_normalMap", 2);
-		ambient.Bind(3);
-		data.shaders["basic"]->SetUniform1i("u_roughtnessMap", 3);
+		//normals.Bind(2);
+		//data.shaders["basic"]->SetUniform1i("u_normalMap", 2);
+		AO.Bind(3);
+		data.shaders["basic"]->SetUniform1i("u_AO", 3);
 
 		data.shaders["basic"]->SetUniformMat4f("u_ViewProjection", m_Camera->GetProjection());
 		data.shaders["basic"]->SetUniformMat4f("u_Model", transform);
 		data.shaders["basic"]->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
-		//uniforms for testing
 		//sending all the "lightPos" info into frangment
 		int iter = 0;
 		for (int i = 0; i < 2; i++)
@@ -145,7 +143,7 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, 
 			data.shaders["basic"]->SetUniform3f(u_name, lightPos[i].x, lightPos[i].y, lightPos[i].z);
 		}
 
-		//data.shaders["basic"]->SetUniform1f("u_SpecularStrength", SpecularStrength);
+		//uniforms for testing
 		data.shaders["basic"]->SetUniform1f("u_AmbientStrength", ambientStrength);
 		data.shaders["basic"]->SetUniform3f("u_lightColor", lightColor.r, lightColor.g, lightColor.b);
 		data.shaders["basic"]->SetUniform1f("u_Shininess", Shininess);

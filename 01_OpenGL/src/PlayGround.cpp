@@ -58,7 +58,7 @@ void PlayGround::OnRender()
 			renderer->DrawCube(*grass, {x, 0, -z}, 0, 1, 1, 1, lightPositions, ambientStrength, lightColor, shininess, SpecularStrength);
 #endif			
 	
-	renderer->DrawModel(*diffuse, *specular, *normal, *roughness, { 5, 2, 2 }, lightPositions, ambientStrength, lightColor, shininess, SpecularStrength, *model);
+	renderer->DrawModel(*diffuse, *specular, *normal, *ao, { 5, 2, 2 }, lightPositions, ambientStrength, lightColor, shininess, *model);
 	//render light cube
 	renderer->DrawColor(glm::vec4(lightColor.r, lightColor.g, lightColor.b, 1.0f), lightPositions[0], 0, 1, 1, 1);
 	renderer->DrawColor(glm::vec4(1.0f), lightPositions[1], 0, 1, 1, 1);

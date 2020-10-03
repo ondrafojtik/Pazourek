@@ -10,8 +10,6 @@ out vec4 v_colorElement;
 out vec3 v_position;
 out vec3 v_normal;
 
-out vec3 testNormal;
-
 out vec3 v_FragPos;
 
 uniform mat4 u_ViewProjection;
@@ -24,7 +22,6 @@ void main()
 	
 	v_FragPos = vec3(u_Model * vec4(position, 1.0f));
 	v_normal = inverse(transpose(mat3(u_Model))) * normal;
-	testNormal = normal;
 }
 
 #shader fragment
@@ -38,12 +35,11 @@ in vec3 v_position;
 in vec3 v_normal;
 
 in vec3 v_FragPos;
-in vec3 testNormal;
 
 uniform sampler2D u_diffuseMap;
 uniform sampler2D u_specularMap;
 uniform sampler2D u_normalMap;
-uniform sampler2D u_roughtnessMap;
+uniform sampler2D u_AO;
 
 uniform vec3 u_lightPos0;
 uniform vec3 u_lightPos1;
@@ -51,14 +47,13 @@ uniform vec3 u_CameraPos;
 
 //uniforms for testing 
 uniform float u_AmbientStrength;
-//uniform float u_SpecularStrength;
 uniform vec3 u_lightColor;
 uniform float u_Shininess;
 
-vec3 t_normal = texture(u_normalMap, v_TexCoord).rgb;
+//vec3 t_normal = texture(u_normalMap, v_TexCoord).rgb;
 vec3 t_diffuse = texture(u_diffuseMap, v_TexCoord).rgb;
 vec3 t_specular = texture(u_specularMap, v_TexCoord).rgb;
-float AO = texture(u_roughtnessMap, v_TexCoord).r;
+float AO = texture(u_AO, v_TexCoord).r;
 
 vec3 calculateLight(vec3 lightPos, vec3 lightColor)
 {
@@ -72,7 +67,7 @@ vec3 calculateLight(vec3 lightPos, vec3 lightColor)
 	vec3 lightDir = normalize(lightPos - v_FragPos);
 	float diffuseStregth = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diffuseStregth * lightColor * t_diffuse;
-	//
+	
 	////specular
 	vec3 viewDir = normalize(u_CameraPos - v_FragPos);
 	vec3 reflectDir = reflect(-lightDir, norm);

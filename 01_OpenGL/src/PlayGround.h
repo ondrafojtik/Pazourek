@@ -59,7 +59,7 @@ public:
 	Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
 	Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
 	Texture* normal = new Texture("src/res/models/backpack/normal.jpg");
-	Texture* roughness = new Texture("src/res/models/backpack/ao.jpg");
+	Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
 
 
 	SubTexture* sub = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 2, 0);
