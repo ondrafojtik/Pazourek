@@ -471,8 +471,8 @@
     <None Include="src\vendor\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="src\res\shaders\basic_lightning.shader" />
     <None Include="src\res\shaders\plainColor.shader" />
+    <None Include="src\res\shaders\skyBox.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">

@@ -101,7 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\res\shaders\Basic.shader" />
-    <None Include="src\res\shaders\basic_lightning.shader" />
+    <None Include="src\res\shaders\skyBox.shader" />
     <None Include="src\res\shaders\plainColor.shader" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />

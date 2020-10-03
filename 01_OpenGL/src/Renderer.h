@@ -182,7 +182,7 @@ struct RenderData
 		ib = new IndexBuffer(indices, 36);
 
 		shaders["basic"] = new Shader("src/res/shaders/Basic.shader");
-		shaders["lightning"] = new Shader("src/res/shaders/basic_lightning.shader");
+		shaders["skyBox"] = new Shader("src/res/shaders/skyBox.shader");
 		shaders["plainColor"] = new Shader("src/res/shaders/plainColor.shader");
 	}
 
@@ -219,6 +219,7 @@ private:
 	Texture* grid = new Texture("src/res/textures/grid.png");
 public:
 	void DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength);
+	void DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale, float rotation, float xAxes, float yAxes, float zAxes);
 	void DrawColor(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes);
 	void DrawModel(Texture& diffuse, Texture& specular, Texture& normals, Texture& ambient, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength, Model model);
 

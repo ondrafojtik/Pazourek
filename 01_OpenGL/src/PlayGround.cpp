@@ -5,7 +5,7 @@ void PlayGround::OnAttach()
 	lightPositions[0] = glm::vec3(5, 5, -10);
 	lightPositions[1] = glm::vec3(9, 5, 10);
 
-	std::cout << sizeof(float_t) <<  sizeof(uint32_t) << std::endl;
+	std::cout << sizeof(float_t) <<  sizeof(int32_t) << sizeof(uint32_t) << std::endl;
 
 	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
 	
@@ -45,6 +45,8 @@ void PlayGround::OnUpdate()
 void PlayGround::OnRender()
 {
 	renderer->Clear();
+	renderer->DrawCube(*skyBox, { 0, 0, 0 }, { 100, 100, 100 }, 0, 0, 0, 1);
+	
 	rotation += 0.3;
 #if 0
 	for (int y = 1; y < 10; y++)
