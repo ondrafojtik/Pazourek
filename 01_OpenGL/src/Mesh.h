@@ -16,12 +16,13 @@ struct Vertex
 	glm::vec3 position;
 	glm::vec2 texCoord;
 	glm::vec3 normal;
+	glm::vec3 tangent;
 };
 
 struct Mesh
 {
 	const int vertexCount = 24;
-	const int vertexInfo = 3 + 2 + 3;
+	const int vertexInfo = 3 + 2 + 3 + 3;
 
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -56,21 +57,25 @@ struct Mesh
 	
 		for (int i = 0; i < _vertexCount; i++)
 		{
-			pos[i * vertexInfo + 0] = vertices[i].position.x;
-			pos[i * vertexInfo + 1] = vertices[i].position.y;
-			pos[i * vertexInfo + 2] = vertices[i].position.z;
-			pos[i * vertexInfo + 3] = vertices[i].texCoord.x;
-			pos[i * vertexInfo + 4] = vertices[i].texCoord.y;
-			pos[i * vertexInfo + 5] = vertices[i].normal.x;
-			pos[i * vertexInfo + 6] = vertices[i].normal.y;
-			pos[i * vertexInfo + 7] = vertices[i].normal.z;
-
+			pos[i * vertexInfo + 0]  = vertices[i].position.x;
+			pos[i * vertexInfo + 1]  = vertices[i].position.y;
+			pos[i * vertexInfo + 2]  = vertices[i].position.z;
+			pos[i * vertexInfo + 3]  = vertices[i].texCoord.x;
+			pos[i * vertexInfo + 4]  = vertices[i].texCoord.y;
+			pos[i * vertexInfo + 5]  = vertices[i].normal.x;
+			pos[i * vertexInfo + 6]  = vertices[i].normal.y;
+			pos[i * vertexInfo + 7]  = vertices[i].normal.z;
+			pos[i * vertexInfo + 8]  = vertices[i].tangent.x;
+			pos[i * vertexInfo + 9]  = vertices[i].tangent.y;
+			pos[i * vertexInfo + 10] = vertices[i].tangent.z;
 		}
 		
 		vb = new VertexBuffer(pos, _vertexCount * sizeof(Vertex));
 		layout.Push<float>(3);
 		layout.Push<float>(2);
 		layout.Push<float>(3);
+		layout.Push<float>(3);
+
 
 		va = new VertexArray();
 		va->AddBuffer(*vb, layout);

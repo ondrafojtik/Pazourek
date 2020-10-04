@@ -3,7 +3,7 @@
 void Model::LoadModel(std::string path)
 {
     Assimp::Importer import;
-    const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+    const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
@@ -35,7 +35,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
     std::vector<Texture> textures;
-
+    
     //vertex info set
     for (int i = 0; i < mesh->mNumVertices; i++)
     {
@@ -47,7 +47,8 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
             vertex.texCoord = { 0.0f, 0.0f };
         if(mesh->HasNormals())
             vertex.normal =     { mesh->mNormals[i].x,          mesh->mNormals[i].y,            mesh->mNormals[i].z     };
-    
+        vertex.tangent =        { mesh->mTangents[i].x,         mesh->mTangents[i].y,           mesh->mTangents[i].z };
+
         //materials and maps (diffuse, specular, normal, ambient)
         //aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         //std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
