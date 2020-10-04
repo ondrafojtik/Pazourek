@@ -127,14 +127,15 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, 
 		data.shaders["basic"]->SetUniform1i("u_diffuseMap", 0);
 		specular.Bind(1);
 		data.shaders["basic"]->SetUniform1i("u_specularMap", 1);
-		//normals.Bind(2);
-		//data.shaders["basic"]->SetUniform1i("u_normalMap", 2);
+		normals.Bind(2);
+		data.shaders["basic"]->SetUniform1i("u_normalMap", 2);
 		AO.Bind(3);
 		data.shaders["basic"]->SetUniform1i("u_AO", 3);
 
 		data.shaders["basic"]->SetUniformMat4f("u_ViewProjection", m_Camera->GetProjection());
 		data.shaders["basic"]->SetUniformMat4f("u_Model", transform);
 		data.shaders["basic"]->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
+		data.shaders["basic"]->SetUniformMat4f("ModelView", m_Camera->GetView());
 		//sending all the "lightPos" info into frangment
 		int iter = 0;
 		for (int i = 0; i < 2; i++)

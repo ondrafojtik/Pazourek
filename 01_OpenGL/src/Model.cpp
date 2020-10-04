@@ -47,8 +47,8 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
             vertex.texCoord = { 0.0f, 0.0f };
         if(mesh->HasNormals())
             vertex.normal =     { mesh->mNormals[i].x,          mesh->mNormals[i].y,            mesh->mNormals[i].z     };
-        vertex.tangent =        { mesh->mTangents[i].x,         mesh->mTangents[i].y,           mesh->mTangents[i].z };
-
+        vertex.tangent =        { mesh->mTangents[i].x,         mesh->mTangents[i].y,           mesh->mTangents[i].z    };
+        vertex.bitangent =      { mesh->mBitangents[i].x,       mesh->mBitangents[i].y,         mesh->mBitangents[i].z  };
         //materials and maps (diffuse, specular, normal, ambient)
         //aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         //std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");

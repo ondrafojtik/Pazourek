@@ -30,6 +30,11 @@ struct Camera
 		return (perspective * glm::lookAt(m_Position, m_Position + forward, up)); //proj * view (perspective * lookAt)
 	}
 
+	glm::mat4 GetView() 
+	{
+		return glm::lookAt(m_Position, m_Position + forward, up);
+	}
+
 	glm::vec3 GetPosition() { return m_Position; }
 
 private:

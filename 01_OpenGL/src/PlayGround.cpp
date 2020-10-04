@@ -2,8 +2,8 @@
 
 void PlayGround::OnAttach()
 {
-	lightPositions[0] = glm::vec3(5, 5, -10);
-	lightPositions[1] = glm::vec3(9, 5, 10);
+	lightPositions[0] = glm::vec3(5, 5, 8);
+	lightPositions[1] = glm::vec3(5, 5, -10);
 
 	std::cout << sizeof(float_t) <<  sizeof(int32_t) << sizeof(uint32_t) << std::endl;
 

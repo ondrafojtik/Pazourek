@@ -46,7 +46,7 @@ struct PlayGround
 	void OnRender();
 	void ImGuiOnUpdate();
 private:
-	Camera* camera = new Camera({5, 2, -5}, 70, AspectRatio(16, 9), 0.01f, 100.0f);
+	Camera* camera = new Camera({5, 2, 5}, 70, AspectRatio(16, 9), 0.01f, 100.0f);
 	Renderer* renderer = new Renderer(camera);
 public:
 	float rotation = 0;
@@ -58,7 +58,7 @@ public:
 
 	Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
 	Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
-	Texture* normal = new Texture("src/res/models/backpack/normal.jpg");
+	Texture* normal = new Texture("src/res/models/backpack/normal.png");
 	Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
 
 

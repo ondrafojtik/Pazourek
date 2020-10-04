@@ -17,12 +17,13 @@ struct Vertex
 	glm::vec2 texCoord;
 	glm::vec3 normal;
 	glm::vec3 tangent;
+	glm::vec3 bitangent;
 };
 
 struct Mesh
 {
 	const int vertexCount = 24;
-	const int vertexInfo = 3 + 2 + 3 + 3;
+	const int vertexInfo = 3 + 2 + 3 + 3 + 3;
 
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -68,11 +69,15 @@ struct Mesh
 			pos[i * vertexInfo + 8]  = vertices[i].tangent.x;
 			pos[i * vertexInfo + 9]  = vertices[i].tangent.y;
 			pos[i * vertexInfo + 10] = vertices[i].tangent.z;
+			pos[i * vertexInfo + 11] = vertices[i].bitangent.x;
+			pos[i * vertexInfo + 12] = vertices[i].bitangent.y;
+			pos[i * vertexInfo + 13] = vertices[i].bitangent.z;
 		}
 		
 		vb = new VertexBuffer(pos, _vertexCount * sizeof(Vertex));
 		layout.Push<float>(3);
 		layout.Push<float>(2);
+		layout.Push<float>(3);
 		layout.Push<float>(3);
 		layout.Push<float>(3);
 
