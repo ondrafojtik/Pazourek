@@ -9,7 +9,6 @@
 #include "glm/vec3.hpp"
 #include "glm/vec2.hpp"
 
-//#define MAX_VERTEX_COUNT 100
 
 struct Vertex
 {

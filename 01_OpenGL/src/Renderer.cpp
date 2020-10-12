@@ -108,7 +108,7 @@ void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position, float rotat
 	data.shaders["plainColor"]->Unbind();
 }
 
-void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, Texture& AO, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, Model model)
+void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, Texture& AO, Texture& roughness, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, Model model)
 {
 	for(int i = 0; i < model.meshes.size(); i++)
 	{
@@ -131,6 +131,9 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, 
 		data.shaders["basic"]->SetUniform1i("u_normalMap", 2);
 		AO.Bind(3);
 		data.shaders["basic"]->SetUniform1i("u_AO", 3);
+		roughness.Bind(4);
+		data.shaders["basic"]->SetUniform1i("u_roughness", 4);
+
 
 		data.shaders["basic"]->SetUniformMat4f("u_ViewProjection", m_Camera->GetProjection());
 		data.shaders["basic"]->SetUniformMat4f("u_Model", transform);

@@ -57,6 +57,7 @@ uniform sampler2D u_diffuseMap;
 uniform sampler2D u_specularMap;
 uniform sampler2D u_normalMap;
 uniform sampler2D u_AO;
+uniform sampler2D u_roughness;
 
 uniform vec3 u_lightPos0;
 uniform vec3 u_lightPos1;
@@ -71,6 +72,7 @@ vec3 t_diffuse = texture(u_diffuseMap, v_TexCoord).rgb;
 vec3 t_specular = texture(u_specularMap, v_TexCoord).rgb;
 vec3 t_normal = texture(u_normalMap, v_TexCoord).rgb;
 float AO = texture(u_AO, v_TexCoord).r;
+float specularStrength = texture(u_roughness, v_TexCoord).r;
 
 vec3 calculateLight(vec3 lightPos, vec3 lightColor)
 {
@@ -80,7 +82,7 @@ vec3 calculateLight(vec3 lightPos, vec3 lightColor)
 
 	//diffuse
 	//vec3 norm = normalize(t_normal * 2.0 - 1.0);
-	vec3 norm = vec3(vec4(inverse(transpose(mat3(v_Model))) * t_normal, 1.0) * vec4(normalize(v_normal), 1.0));
+	vec3 norm = normalize(v_normal);
 	vec3 lightDir = normalize(lightPos - v_FragPos);
 	float diffuseStregth = max(dot(norm, lightDir), 0.0);
 	vec3 diffuse = diffuseStregth * lightColor * t_diffuse;
@@ -88,7 +90,7 @@ vec3 calculateLight(vec3 lightPos, vec3 lightColor)
 	////specular
 	vec3 viewDir = normalize(u_CameraPos - v_FragPos);
 	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_Shininess);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), specularStrength * u_Shininess);
 	vec3 specular = spec * lightColor * t_specular;
 
 	//result
@@ -106,5 +108,5 @@ void main()
 	color = vec4(result, 1.0f);
 	
 	//color = vec4(normalize(v_normal), 1.0);
-
+	//color = vec4(normalize(t_normal * 2.0 - 1.0), 1.0);
 }
