@@ -98,7 +98,8 @@ void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position, float rotat
 	data.va.Bind();
 	data.ib->Bind();
 	data.shaders["plainColor"]->Bind();
-	data.shaders["plainColor"]->SetUniformMat4f("u_ViewProjection", m_Camera->GetProjection());
+	data.shaders["plainColor"]->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
+	data.shaders["plainColor"]->SetUniformMat4f("u_View", m_Camera->GetView());
 	data.shaders["plainColor"]->SetUniformMat4f("u_Model", transform);
 	data.shaders["plainColor"]->SetUniform4f("u_Color", color.r, color.g, color.b, 1.0f);
 	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
@@ -135,10 +136,11 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, 
 		data.shaders["basic"]->SetUniform1i("u_roughness", 4);
 
 
-		data.shaders["basic"]->SetUniformMat4f("u_ViewProjection", m_Camera->GetProjection());
+		data.shaders["basic"]->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
+		data.shaders["basic"]->SetUniformMat4f("u_View", m_Camera->GetView());
 		data.shaders["basic"]->SetUniformMat4f("u_Model", transform);
 		data.shaders["basic"]->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
-		data.shaders["basic"]->SetUniformMat4f("ModelView", m_Camera->GetView());
+
 		//sending all the "lightPos" info into frangment
 		int iter = 0;
 		for (int i = 0; i < 2; i++)

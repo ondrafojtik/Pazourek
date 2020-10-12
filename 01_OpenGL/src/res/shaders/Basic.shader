@@ -18,22 +18,21 @@ out vec3 v_FragPos;
 
 out mat4 v_Model;
 
-uniform mat4 u_ViewProjection;
+uniform mat4 u_Projection;
+uniform mat4 u_View;
 uniform mat4 u_Model;
-
-uniform mat3 ModelView;
 
 void main()
 {
-	gl_Position = u_ViewProjection * u_Model * vec4(position, 1.0);
+	gl_Position = (u_Projection * u_View * u_Model) * vec4(position, 1.0);
 	v_TexCoord = texCoord;
 
 	v_FragPos = vec3(u_Model * vec4(position, 1.0f));
 	v_normal = inverse(transpose(mat3(u_Model))) * normal;
 
-	vec3 T = vec3(ModelView) * normalize(normal);
-	vec3 B = vec3(ModelView) * normalize(tangent);
-	vec3 N = vec3(ModelView) * normalize(bitangent);
+	vec3 T = vec3(u_View) * normalize(normal);
+	vec3 B = vec3(u_View) * normalize(tangent);
+	vec3 N = vec3(u_View) * normalize(bitangent);
 
 	mat3 TBN = transpose(mat3(T, B, N));
 	v_Model = u_Model;

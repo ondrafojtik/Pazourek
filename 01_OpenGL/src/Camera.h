@@ -27,7 +27,7 @@ struct Camera
 
 	glm::mat4 GetProjection() 
 	{ 
-		return (perspective * glm::lookAt(m_Position, m_Position + forward, up)); //proj * view (perspective * lookAt)
+		return perspective;
 	}
 
 	glm::mat4 GetView() 

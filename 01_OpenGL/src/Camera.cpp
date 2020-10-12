@@ -10,18 +10,14 @@ Camera::Camera(const glm::vec3& position, float fov, AspectRatio ar, float zNear
 
 void Camera::mouseUpdate(const glm::dvec2& newMousePosition)
 {
-	glm::dvec2 delta = (newMousePosition - oldMousePos);
-	/*
-	forward = glm::mat3(glm::rotate(glm::mat4(1.0f), glm::radians(-(float)delta.x), up)) * forward;
-	glm::vec3 toRotateAround = glm::cross(forward, up);
-	forward = glm::mat3(glm::rotate(glm::mat4(1.0f), glm::radians(-(float)delta.y), toRotateAround)) * forward;
-	*/
+	glm::dvec2 delta = (oldMousePos - newMousePosition);
+	
 	float mouseSesitivity = 0.5f;
-	rotationProduct = glm::cross(forward, up);
-	glm::mat4 rotationMat = glm::rotate(glm::mat4(1.0f), glm::radians(-(float)delta.x * mouseSesitivity), up)
-		* glm::rotate(glm::mat4(1.0f), glm::radians(-(float)delta.y * mouseSesitivity), rotationProduct);
+	rotationProduct = glm::cross(forward, up); //to rotate around!
+	glm::mat4 rotationMat = glm::rotate(glm::mat4(1.0f), glm::radians((float)delta.x * mouseSesitivity), up) //creating rot mat
+		* glm::rotate(glm::mat4(1.0f), glm::radians((float)delta.y * mouseSesitivity), rotationProduct);
 
-	forward = glm::mat3(rotationMat) * forward;
+	forward = glm::mat3(rotationMat) * forward; //final product
 
 	oldMousePos = newMousePosition;
 }
