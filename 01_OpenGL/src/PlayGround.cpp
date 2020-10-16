@@ -2,6 +2,8 @@
 
 void PlayGround::OnAttach()
 {
+	EventHandler::camera = camera;
+
 	glfwSetCursorPosCallback(window, [](GLFWwindow* window, double mouseXPos, double mouseYPos)
 		-> void {EventHandler::cursor_pos_callback(window, mouseXPos, mouseYPos);});
 	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -21,7 +23,6 @@ void PlayGround::OnDetach()
 
 void PlayGround::OnUpdate()
 {
-	//I should rly make some sort of event system
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		camera->MoveForward();
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
@@ -34,8 +35,7 @@ void PlayGround::OnUpdate()
 		camera->MoveUp();
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		camera->MoveDown();
-	if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-		mouseMovement = !mouseMovement;
+	
 	
 	if(mouseMovement)
 	{

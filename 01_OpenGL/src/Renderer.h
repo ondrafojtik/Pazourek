@@ -38,6 +38,7 @@ struct RenderData
 	VertexBuffer* unchanged_vb = nullptr;
 	VertexArray unchanged_va;
 
+
 	void Init()
 	{
 		//side 1 (front)
