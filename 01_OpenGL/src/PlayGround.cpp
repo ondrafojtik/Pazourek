@@ -2,6 +2,12 @@
 
 void PlayGround::OnAttach()
 {
+	glfwSetCursorPosCallback(window, [](GLFWwindow* window, double mouseXPos, double mouseYPos)
+		-> void {EventHandler::cursor_pos_callback(window, mouseXPos, mouseYPos);});
+	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+		-> void {EventHandler::key_callback(window, key, scancode, action, mods); });
+
+
 	lightPositions[0] = glm::vec3(5, 5, 8);
 	lightPositions[1] = glm::vec3(5, 5, -10);
 

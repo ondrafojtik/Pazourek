@@ -20,6 +20,8 @@
 #include "Map.h"
 #include "Animation.h"
 
+#include "EventHandler.h"
+
 
 static std::string s_grid;
 
