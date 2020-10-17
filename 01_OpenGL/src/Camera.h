@@ -6,14 +6,14 @@
 struct cameraBounds
 {
 	float left, right, bottom, top;
-	float getWidth() { return right - left; }
-	float getHeight() { return top - bottom; };
+	float getWidth()  { return right - left; }
+	float getHeight() { return top - bottom; }
 };
 
 struct AspectRatio
 {
 	int x, y;
-
+    
 	AspectRatio(int x, int y)
 	{
 		this->x = x;
@@ -23,22 +23,23 @@ struct AspectRatio
 
 struct Camera
 {
+
+	void MoveUp() { m_Position += (speed * up);							RecalcView(); }
+	void MoveDown() { m_Position -= (speed * up);						RecalcView(); }
+	void MoveLeft() { m_Position -= (rotationProduct * speed);			RecalcView(); }
+	void MoveRight() { m_Position += (rotationProduct * speed);			RecalcView(); }
+	void MoveForward() { m_Position += (speed * forward);				RecalcView(); }
+	void MoveBackward() { m_Position -= (speed * forward);				RecalcView(); }
+
+	void mouseUpdate(const glm::dvec2& newMousePosition);
+
 	Camera(const glm::vec3& position, float fov, AspectRatio ar, float zNear, float zFar);
 
-	glm::mat4 GetProjection() 
-	{ 
-		return perspective;
-	}
+	glm::mat4 GetProjection() { return perspective; }
 
-	glm::mat4 GetView() 
-	{
-		return view;
-	}
+	glm::mat4 GetView() { return view; }
 
-	void RecalcView()
-	{
-		view = glm::lookAt(m_Position, m_Position + forward, up);
-	}
+	void RecalcView() { view = glm::lookAt(m_Position, m_Position + forward, up); }
 
 	glm::vec3 GetPosition() { return m_Position; }
 
@@ -56,15 +57,5 @@ private:
 	float speed = 0.2f;
 
 
-
-public:
-	void MoveUp()			{ m_Position += (speed * up);				 RecalcView();}
-	void MoveDown()			{ m_Position -= (speed * up);				 RecalcView();}
-	void MoveLeft()			{ m_Position -= (rotationProduct * speed);	 RecalcView();} //move to the side of current "forward" axis
-	void MoveRight()		{ m_Position += (rotationProduct * speed);	 RecalcView();}
-	void MoveForward()		{ m_Position += (speed * forward);			 RecalcView();}
-	void MoveBackward()		{ m_Position -= (speed * forward);			 RecalcView();}
-
-	void mouseUpdate(const glm::dvec2& newMousePosition);
 
 };

@@ -6,6 +6,9 @@
 
 static class EventHandler
 {
+private:
+	static bool mouseEnable;
+
 public:
 
 	EventHandler() = delete;
@@ -14,6 +17,8 @@ public:
 
 	static void cursor_pos_callback(GLFWwindow* window, double mouseX, double mouseY)
 	{
+		if(mouseEnable)
+			camera->mouseUpdate({ mouseX, mouseY });
 
 		#if DEBUG
 		double x, y;
@@ -24,13 +29,12 @@ public:
 
 	static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-		/*
-		if ((key == GLFW_KEY_W) && (action == GLFW_PRESS))
+		if ((key == GLFW_KEY_E) && (action == GLFW_PRESS))
 		{
-			camera->MoveForward();
-			printf("pressed W\n");
-		}
-		*/
+			mouseEnable = !mouseEnable;
+			printf("Mouse rotation toggle! (current state: %i)\n",(int)mouseEnable);
+	    }
+		
 
 	}
 

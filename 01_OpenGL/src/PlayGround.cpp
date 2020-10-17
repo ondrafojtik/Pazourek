@@ -13,12 +13,29 @@ void PlayGround::OnAttach()
 	lightPositions[0] = glm::vec3(5, 5, 8);
 	lightPositions[1] = glm::vec3(5, 5, -10);
 
+    //in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
+    //texture files in correct form (AO.png, .. )
 	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
 	
 }
 
 void PlayGround::OnDetach()
 {
+    delete camera;
+    delete renderer;
+    delete alonso;
+    delete tex;
+    delete skyBox;
+    delete diffuse;
+    delete specular;
+    delete normal;
+    delete ao;
+    delete roughness;
+    delete sub;
+    delete anim;
+    delete grass;
+    delete animation;
+    delete model;
 }
 
 void PlayGround::OnUpdate()
@@ -36,13 +53,6 @@ void PlayGround::OnUpdate()
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		camera->MoveDown();
 	
-	
-	if(mouseMovement)
-	{
-		glm::dvec2 mousePos;
-		glfwGetCursorPos(window, &mousePos.x, &mousePos.y);
-		camera->mouseUpdate(mousePos);
-	}
 	animation->OnUpdate();
 }
 
@@ -61,7 +71,6 @@ void PlayGround::OnRender()
 void PlayGround::ImGuiOnUpdate()
 {
 	ImGui::Begin("Debug");
-	ImGui::Checkbox("Enable mouse movement", &mouseMovement);
 	ImGui::SliderFloat("LightX", &lightPositions[0].x, -20.0f, 20.0f);
 	ImGui::SliderFloat("LightY", &lightPositions[0].y, -20.0f, 20.0f);
 	ImGui::SliderFloat("LightZ", &lightPositions[0].z, -20.0f, 20.0f);
