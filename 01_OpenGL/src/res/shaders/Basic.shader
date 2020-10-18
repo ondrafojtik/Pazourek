@@ -9,14 +9,6 @@ layout(location = 4) in vec3 bitangent;
 
 
 out vec2 v_TexCoord;
-out vec4 v_colorElement;
-out vec3 v_position;
-out vec3 v_normal;
-out mat3 TBN;
-
-out vec3 v_FragPos;
-out mat4 v_Model;
-
 out vec3 tangentLightPos;
 out vec3 tangentViewPos;
 out vec3 tangentFragPos;
@@ -30,7 +22,8 @@ uniform vec3 u_CameraPos;
 
 void main()
 {
-    v_FragPos = vec3(u_Model * vec4(position, 1.0));
+    gl_Position = u_Projection * u_View * u_Model * vec4(position, 1.0);
+
     v_TexCoord = texCoord;
 
     mat3 normalMatrix = transpose(inverse(mat3(u_Model)));
@@ -39,12 +32,14 @@ void main()
     T = normalize(T - dot(T, N) * N);
     vec3 B = cross(N, T);
 
+    vec3 v_FragPos = vec3(u_Model * vec4(position, 1.0));
+
     mat3 TBN = transpose(mat3(T, B, N));
     tangentLightPos = TBN * u_lightPos0;
     tangentViewPos = TBN * u_CameraPos;
     tangentFragPos = TBN * v_FragPos;
 
-    gl_Position = u_Projection * u_View * u_Model * vec4(position, 1.0);
+   
 }
 
 #shader fragment
@@ -53,13 +48,6 @@ void main()
 layout(location = 0) out vec4 color;
 
 in vec2 v_TexCoord;
-in vec4 v_colorElement;
-in vec3 v_position;
-in vec3 v_normal;
-
-in vec3 v_FragPos;
-in mat3 TBN;
-in mat4 v_Model;
 
 in vec3 tangentLightPos;
 in vec3 tangentViewPos;
@@ -67,13 +55,11 @@ in vec3 tangentFragPos;
 
 uniform sampler2D u_diffuseMap;
 uniform sampler2D u_specularMap;
-
 uniform sampler2D u_AO;
 uniform sampler2D u_roughness;
 uniform sampler2D u_normalMap;
 
 uniform vec3 u_lightPos1;
-
 
 //uniforms for testing 
 uniform float u_AmbientStrength;
@@ -92,25 +78,23 @@ float specularStrength = texture(u_roughness, v_TexCoord).r;
 
 void main()
 {
-    // obtain normal from normal map in range [0,1]
+    //normal map to values from -1 to 1
     vec3 normal = texture(u_normalMap, v_TexCoord).rgb;
-    // transform normal vector to range [-1,1]
     normal = normalize(normal * 2.0 - 1.0);  // this normal is in tangent space
 
-    // get diffuse color
-    vec3 a_color = texture(u_diffuseMap, v_TexCoord).rgb;
-    // ambient
-    vec3 ambient = 0.1 * a_color;
-    // diffuse
+    //ambient
+    vec3 ambient = t_diffuse * u_AmbientStrength * AO;
+    //diffuse
     vec3 lightDir = normalize(tangentLightPos - tangentFragPos);
     float diff = max(dot(lightDir, normal), 0.0);
-    vec3 diffuse = diff * a_color * u_lightColor;
-    // specular
+    vec3 diffuse = diff * t_diffuse * u_lightColor;
+    //specular
     vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
     vec3 halfwayDir = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
-
-    vec3 specular = t_specular * spec * u_lightColor;
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
+    vec3 specular = (t_specular * spec) * u_lightColor;
+    
+    //result
     color = vec4(ambient + diffuse + specular, 1.0);
 }
