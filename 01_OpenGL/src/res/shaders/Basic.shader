@@ -66,9 +66,9 @@ uniform float u_AmbientStrength;
 uniform vec3 u_lightColor;
 uniform float u_Shininess;
 
-vec3 t_diffuse = texture(u_diffuseMap, v_TexCoord).rgb;
-vec3 t_specular = texture(u_specularMap, v_TexCoord).rgb;
-vec3 t_normal = texture(u_normalMap, v_TexCoord).rgb;
+vec3 m_diffuse = texture(u_diffuseMap, v_TexCoord).rgb;
+vec3 m_specular = texture(u_specularMap, v_TexCoord).rgb;
+vec3 m_normal = texture(u_normalMap, v_TexCoord).rgb;
 float AO = texture(u_AO, v_TexCoord).r;
 float specularStrength = texture(u_roughness, v_TexCoord).r;
 
@@ -79,21 +79,21 @@ float specularStrength = texture(u_roughness, v_TexCoord).r;
 void main()
 {
     //normal map to values from -1 to 1
-    vec3 normal = texture(u_normalMap, v_TexCoord).rgb;
+    vec3 normal = m_normal;
     normal = normalize(normal * 2.0 - 1.0);  // this normal is in tangent space
 
     //ambient
-    vec3 ambient = t_diffuse * u_AmbientStrength * AO;
+    vec3 ambient = m_diffuse * u_AmbientStrength * AO;
     //diffuse
     vec3 lightDir = normalize(tangentLightPos - tangentFragPos);
     float diff = max(dot(lightDir, normal), 0.0);
-    vec3 diffuse = diff * t_diffuse * u_lightColor;
+    vec3 diffuse = diff * m_diffuse * u_lightColor;
     //specular
     vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
     vec3 halfwayDir = normalize(lightDir + viewDir);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
-    vec3 specular = (t_specular * spec) * u_lightColor;
+    vec3 specular = (m_specular * spec) * u_lightColor;
     
     //result
     color = vec4(ambient + diffuse + specular, 1.0);

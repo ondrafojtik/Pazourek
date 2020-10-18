@@ -34,8 +34,6 @@ public:
 			mouseEnable = !mouseEnable;
 			printf("Mouse rotation toggle! (current state: %i)\n",(int)mouseEnable);
 	    }
-		
-
 	}
 
 

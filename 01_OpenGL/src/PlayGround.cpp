@@ -4,9 +4,11 @@ void PlayGround::OnAttach()
 {
 	EventHandler::camera = camera;
 
-	glfwSetCursorPosCallback(window, [](GLFWwindow* window, double mouseXPos, double mouseYPos)
+	glfwSetCursorPosCallback(window, [](GLFWwindow* window, double mouseXPos,
+                                        double mouseYPos)
 		-> void {EventHandler::cursor_pos_callback(window, mouseXPos, mouseYPos);});
-	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode,
+                                        int action, int mods)
 		-> void {EventHandler::key_callback(window, key, scancode, action, mods); });
 
 
@@ -61,9 +63,11 @@ void PlayGround::OnRender()
 	renderer->Clear();
 	renderer->DrawCube(*skyBox, { 0, 0, 0 }, { 100, 100, 100 }, 0, 0, 0, 1);
 
-	renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 2, 2 }, lightPositions, ambientStrength, lightColor, shininess, *model);
+	renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 2, 2 },
+                        lightPositions, ambientStrength, lightColor, shininess, *model);
 	//render light cube
-	renderer->DrawColor(glm::vec4(lightColor.r, lightColor.g, lightColor.b, 1.0f), lightPositions[0], 0, 1, 1, 1);
+	renderer->DrawColor(glm::vec4(lightColor.r, lightColor.g, lightColor.b, 1.0f),
+                        lightPositions[0], 0, 1, 1, 1);
 	renderer->DrawColor(glm::vec4(1.0f), lightPositions[1], 0, 1, 1, 1);
 	
 }
@@ -77,7 +81,7 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::Separator();
 	ImGui::SliderFloat("ambientStrength", &ambientStrength, 0.0f, 1.0f);
 	ImGui::ColorEdit3("lightColor", glm::value_ptr(lightColor));
-	ImGui::SliderInt("shininess", &shininess, 0, 256);
+	ImGui::SliderInt("shininess", &shininess, 32, 256);
 	ImGui::SliderFloat("SpecularStrength", &SpecularStrength, 0.0f, 1.0f);
 	ImGui::End();
 
