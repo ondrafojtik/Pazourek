@@ -24,11 +24,11 @@ struct AspectRatio
 struct Camera
 {
 
-	void MoveUp() { m_Position += (speed * up);							RecalcView(); }
-	void MoveDown() { m_Position -= (speed * up);						RecalcView(); }
-	void MoveLeft() { m_Position -= (rotationProduct * speed);			RecalcView(); }
-	void MoveRight() { m_Position += (rotationProduct * speed);			RecalcView(); }
-	void MoveForward() { m_Position += (speed * forward);				RecalcView(); }
+    void MoveUp()       { m_Position += (speed * up);					RecalcView(); }
+	void MoveDown()     { m_Position -= (speed * up);					RecalcView(); }
+	void MoveLeft()     { m_Position -= (speed * rotationProduct);		RecalcView(); }
+	void MoveRight()    { m_Position += (speed * rotationProduct);		RecalcView(); }
+	void MoveForward()  { m_Position += (speed * forward);				RecalcView(); }
 	void MoveBackward() { m_Position -= (speed * forward);				RecalcView(); }
 
 	void mouseUpdate(const glm::dvec2& newMousePosition);
@@ -55,7 +55,5 @@ private:
 
 	glm::dvec2 oldMousePos;
 	float speed = 0.2f;
-
-
 
 };

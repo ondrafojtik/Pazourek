@@ -38,8 +38,6 @@ void Renderer::DrawCube(Texture& texture, glm::vec3 position, float rotation, fl
 	data.shaders["basic"]->Bind();
 	data.shaders["basic"]->SetUniformMat4f("u_ViewProjection", m_Camera->GetProjection());
 	data.shaders["basic"]->SetUniformMat4f("u_Model", transform);
-	data.shaders["basic"]->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
-	data.shaders["basic"]->SetUniform4f("u_ColorElement", 1.0f, 1.0f, 1.0f, 1.0f);
 	data.shaders["basic"]->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 	//uniforms for testing
 	//sending all the "lightPos" info into frangment
@@ -78,7 +76,6 @@ void Renderer::DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale, f
 	data.shaders["skyBox"]->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
 	data.shaders["skyBox"]->SetUniformMat4f("u_View", m_Camera->GetView());
 	data.shaders["skyBox"]->SetUniformMat4f("u_Model", transform);
-	data.shaders["skyBox"]->SetUniform4f("u_Color", 1.0f, 1.0f, 1.0f, 1.0f);
 	GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 	data.vb->Unbind();
 	data.va.Unbind();
