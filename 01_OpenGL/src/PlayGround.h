@@ -74,7 +74,7 @@ public:
 	Animation* animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
 	float ambientStrength = 0.1f;
 	float SpecularStrength = 0.5f;
-	int shininess = 32;
+	int shininess = 128;
 	glm::vec3 lightPositions[2];
 	glm::vec3 lightColor = glm::vec3(1.0f);
 

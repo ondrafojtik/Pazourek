@@ -28,9 +28,8 @@ void main()
 
     mat3 normalMatrix = transpose(inverse(mat3(u_Model)));
     vec3 T = normalize(normalMatrix * tangent);
+    vec3 B = normalize(normalMatrix * bitangent);
     vec3 N = normalize(normalMatrix * normal);
-    T = normalize(T - dot(T, N) * N);
-    vec3 B = cross(N, T);
 
     vec3 v_FragPos = vec3(u_Model * vec4(position, 1.0));
 
