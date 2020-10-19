@@ -22,7 +22,11 @@ Renderer::Renderer(Camera *camera) : m_Camera(camera)
 	data.Init();
 }
 
-void Renderer::DrawCube(Texture& texture, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, float SpecularStrength)
+//Cube - wont work RN anyway..
+void Renderer::DrawCube(Texture& texture, glm::vec3 position,
+                        float rotation, float xAxes, float yAxes, float zAxes,
+                        glm::vec3* lightPos, float ambientStrength,
+                        const glm::vec3& lightColor, float Shininess, float SpecularStrength)
 {
 	texture.Bind();
 
@@ -38,7 +42,8 @@ void Renderer::DrawCube(Texture& texture, glm::vec3 position, float rotation, fl
 	data.shaders["basic"]->Bind();
 	data.shaders["basic"]->SetUniformMat4f("u_ViewProjection", m_Camera->GetProjection());
 	data.shaders["basic"]->SetUniformMat4f("u_Model", transform);
-	data.shaders["basic"]->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
+	data.shaders["basic"]->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x,
+                                        m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 	//uniforms for testing
 	//sending all the "lightPos" info into frangment
 	int iter = 0;
@@ -61,7 +66,9 @@ void Renderer::DrawCube(Texture& texture, glm::vec3 position, float rotation, fl
 
 }
 
-void Renderer::DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale, float rotation, float xAxes, float yAxes, float zAxes)
+//skyBox
+void Renderer::DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale,
+                        float rotation, float xAxes, float yAxes, float zAxes)
 {
 	texture.Bind();
 
@@ -108,7 +115,11 @@ void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position, float rotat
 	data.shaders["plainColor"]->Unbind();
 }
 
-void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, Texture& AO, Texture& roughness, glm::vec3 position, glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor, float Shininess, Model model)
+//model
+void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
+                         Texture& AO, Texture& roughness, glm::vec3 position,
+                         glm::vec3* lightPos, float ambientStrength,
+                         const glm::vec3& lightColor, float Shininess, Model model)
 {
 	for(int i = 0; i < model.meshes.size(); i++)
 	{
@@ -134,14 +145,13 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals, 
 		roughness.Bind(4);
 		data.shaders["basic"]->SetUniform1i("u_roughness", 4);
 
-
 		data.shaders["basic"]->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
 		data.shaders["basic"]->SetUniformMat4f("u_View", m_Camera->GetView());
 		data.shaders["basic"]->SetUniformMat4f("u_Model", transform);
-		data.shaders["basic"]->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x, m_Camera->GetPosition().y, m_Camera->GetPosition().z);
+		data.shaders["basic"]->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x,
+                                            m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 
 		//sending all the "lightPos" info into frangment
-		int iter = 0;
 		for (int i = 0; i < 2; i++)
 		{
 			std::string u_name = "u_lightPos" + std::to_string(i);
