@@ -34,32 +34,27 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
     std::vector<unsigned int> indices;
-    std::vector<Texture> textures;
+    //std::vector<Texture> textures;
     
     //vertex info set
     for (int i = 0; i < mesh->mNumVertices; i++)
     {
         Vertex vertex;
-        vertex.position =       { mesh->mVertices[i].x,         mesh->mVertices[i].y,           mesh->mVertices[i].z    };
+        //position and texCoords
+        vertex.position =
+            { mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z };
         if (mesh->mTextureCoords[0]) //apparently "if has texCoords"
-            vertex.texCoord =   { mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y                            };
+            vertex.texCoord =
+                { mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y };
         else
             vertex.texCoord = { 0.0f, 0.0f };
+        //TBN
         if(mesh->HasNormals())
-            vertex.normal =     { mesh->mNormals[i].x,          mesh->mNormals[i].y,            mesh->mNormals[i].z     };
-        vertex.tangent =        { mesh->mTangents[i].x,         mesh->mTangents[i].y,           mesh->mTangents[i].z    };
-        vertex.bitangent =      { mesh->mBitangents[i].x,       mesh->mBitangents[i].y,         mesh->mBitangents[i].z  };
-        //materials and maps (diffuse, specular, normal, ambient)
-        //aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        //std::vector<Texture> diffuseMaps = LoadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
-        //textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-        //std::vector<Texture> specularMaps = LoadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
-        //textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-        //std::vector<Texture> normalMaps = LoadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
-        //textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-        //std::vector<Texture> ambientMaps = LoadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
-        //textures.insert(textures.end(), ambientMaps.begin(), ambientMaps.end());
-
+            vertex.normal =
+                           { mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
+        vertex.tangent =   { mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
+        vertex.bitangent = { mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z  };
+        
         vertices.push_back(vertex);
     }
 
@@ -72,7 +67,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
     }
 
     //should be procesing materials, diffuse maps, etc.
-    return Mesh(vertices, indices, textures);
+    return Mesh(vertices, indices);//textures);
 
 }
 

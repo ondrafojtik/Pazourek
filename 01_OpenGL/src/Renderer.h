@@ -215,15 +215,11 @@ private:
 	RenderData data;
 
 	//blank texture (figure this out later) 
-	//u can definitely just pass in the buffer with color, not having to pass texture? or just create blank texutre internally? ?? 
+	//u can definitely just pass in the buffer with color, not having to pass texture?
+    //or just create blank texutre internally? ?? 
 	Texture* blank = new Texture("src/res/textures/Blank.png");
 	Texture* grid = new Texture("src/res/textures/grid.png");
 public:
-    //casual Cube
-	void DrawCube(Texture& texture, glm::vec3 position,
-                  float rotation, float xAxes, float yAxes, float zAxes,
-                  glm::vec3* lightPos, float ambientStrength, const glm::vec3& lightColor,
-                  float Shininess, float SpecularStrength);
     //skyBox
 	void DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale,
                   float rotation, float xAxes, float yAxes, float zAxes);

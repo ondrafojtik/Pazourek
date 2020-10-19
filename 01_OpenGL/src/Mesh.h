@@ -1,3 +1,4 @@
+
 #include <vector>
 
 #include "VertexBuffer.h"
@@ -9,6 +10,8 @@
 #include "glm/vec3.hpp"
 #include "glm/vec2.hpp"
 
+//TODO: dont need the Texture stuff in the constructor I guess (since I do it manually.. )
+//mb figure out how to not do it "manually" 
 
 struct Vertex
 {
@@ -21,7 +24,7 @@ struct Vertex
 
 struct Mesh
 {
-	const int vertexCount = 24;
+    //vertexInfo == sizeof(Vertex)/sizeof(float) - correct only if all the members of Vertex r float 
 	const int vertexInfo = 3 + 2 + 3 + 3 + 3;
 
 	std::vector<Vertex> vertices;
@@ -34,10 +37,10 @@ struct Mesh
 	VertexArray* va = nullptr;
 	IndexBuffer* ib = nullptr;
 
-	//Mesh(std::vector<Vertex> __vertices, std::vector<unsigned int> __indices, std::vector<Texture> __textures)
-	//: vertices(__vertices), indices(__indices), textures(__textures)
-	Mesh(const std::vector<Vertex>& _vertices, const std::vector<unsigned int>& _indices, const std::vector<Texture>& _textures)
-		: vertices(_vertices), indices(_indices), textures(_textures)
+	Mesh(const std::vector<Vertex>& _vertices,
+         const std::vector<unsigned int>& _indices)//,
+        //const std::vector<Texture>& _textures)
+		: vertices(_vertices), indices(_indices)//, textures(_textures)
 	{
 		setupMesh();
 	}
@@ -46,15 +49,12 @@ struct Mesh
 	//keeping the "positions, texCoords, .." here just to see if it works!
 	void setupMesh()
 	{
-		int _vertexCount = vertices.size();
-
-
 		GLCall(glGenVertexArrays(1, &vao));
 		GLCall(glBindVertexArray(vao));
-		//position, texCoords, normal
-		float* pos = new float[(sizeof(Vertex) / sizeof(float)) * _vertexCount]; //it seems it CAN be dynamic! 
-		//float pos[sizeof(Vertex) * MAX_VERTEX_COUNT];
-	
+	    //it seems it CAN be dynamic! 
+        
+        /*float* pos = new float[(sizeof(Vertex) / sizeof(float)) * _vertexCount];
+        
 		for (int i = 0; i < _vertexCount; i++)
 		{
 			pos[i * vertexInfo + 0]  = vertices[i].position.x;
@@ -71,9 +71,12 @@ struct Mesh
 			pos[i * vertexInfo + 11] = vertices[i].bitangent.x;
 			pos[i * vertexInfo + 12] = vertices[i].bitangent.y;
 			pos[i * vertexInfo + 13] = vertices[i].bitangent.z;
-		}
-		
-		vb = new VertexBuffer(pos, _vertexCount * sizeof(Vertex));
+		}*/
+
+        //having "&vertices[0]" as a prt like this actually kills the option to
+        //update subBufferData (at least I think)
+        //might have to do the whole loop anyway to get them into one nice buffer..
+		vb = new VertexBuffer(&vertices[0], vertices.size() * sizeof(Vertex));
 		layout.Push<float>(3);
 		layout.Push<float>(2);
 		layout.Push<float>(3);
@@ -83,10 +86,8 @@ struct Mesh
 
 		va = new VertexArray();
 		va->AddBuffer(*vb, layout);
-		unsigned int* _data;
-		_data = &indices[0];
-		ib = new IndexBuffer(_data, indices.size());
-	}
+        ib = new IndexBuffer(&indices[0], indices.size());
+    }
 
 	void Bind()
 	{
