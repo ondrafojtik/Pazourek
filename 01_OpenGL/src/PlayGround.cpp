@@ -17,8 +17,10 @@ void PlayGround::OnAttach()
 
     //in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
     //texture files in correct form (AO.png, .. )
-	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
-	
+	//model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
+
+    // init map here..
+    map->Init();
 }
 
 void PlayGround::OnDetach()
@@ -28,16 +30,15 @@ void PlayGround::OnDetach()
     delete alonso;
     delete tex;
     delete skyBox;
-    delete diffuse;
-    delete specular;
-    delete normal;
-    delete ao;
-    delete roughness;
-    delete sub;
-    delete anim;
+    //delete diffuse;
+    //delete specular;
+    //delete normal;
+    //delete ao;
+    //delete roughness;
+    //delete anim;
     delete grass;
-    delete animation;
-    delete model;
+    //delete animation;
+    //delete model;
 }
 
 void PlayGround::OnUpdate()
@@ -55,7 +56,7 @@ void PlayGround::OnUpdate()
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		camera->MoveDown();
 	
-	animation->OnUpdate();
+	//animation->OnUpdate();
 }
 
 void PlayGround::OnRender()
@@ -63,8 +64,8 @@ void PlayGround::OnRender()
 	renderer->Clear();
 	renderer->DrawCube(*skyBox, { 0, 0, 0 }, { 100, 100, 100 }, 0, 0, 0, 1);
 
-	renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 2, 2 },
-                        lightPositions, ambientStrength, lightColor, shininess, *model);
+	//renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 2, 2 },
+	//	lightPositions, ambientStrength, lightColor, shininess, *model);
 	//render light cube
 	renderer->DrawColor(glm::vec4(lightColor.r, lightColor.g, lightColor.b, 1.0f),
                         lightPositions[0], 0, 1, 1, 1);

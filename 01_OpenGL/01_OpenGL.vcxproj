@@ -251,6 +251,7 @@
     <ClInclude Include="src\Pathfinder.h" />
     <ClInclude Include="src\PlayGround.h" />
     <ClInclude Include="src\Random.h" />
+    <ClInclude Include="src\RandomMap.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\SubTexture.h" />

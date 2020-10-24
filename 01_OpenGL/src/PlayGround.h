@@ -21,7 +21,7 @@
 #include "Animation.h"
 
 #include "EventHandler.h"
-
+#include "RandomMap.h"
 
 static std::string s_grid;
 
@@ -58,25 +58,25 @@ public:
 	
 	Texture* skyBox = new Texture("src/res/textures/skyBox.png");
 
-	Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
-	Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
-	Texture* normal = new Texture("src/res/models/backpack/normal.png");
-	Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
-	Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
+	//Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
+	//Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
+	//Texture* normal = new Texture("src/res/models/backpack/normal.png");
+	//Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
+	//Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
 
 
 
-	SubTexture* sub = new SubTexture(*tex, glm::vec2(128.0f, 128.0f), 2, 0);
 
 	//animation test
-	Texture* anim = new Texture("src/res/textures/anim_test.png");
 	Texture* grass = new Texture("src/res/textures/minecraft_grass.png");
-	Animation* animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
+	//Animation* animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
 	float ambientStrength = 0.1f;
 	float SpecularStrength = 0.5f;
 	int shininess = 128;
 	glm::vec3 lightPositions[2];
 	glm::vec3 lightColor = glm::vec3(1.0f);
 
-	Model* model = nullptr;
+	//Model* model = nullptr;
+    
+    RandomMap* map = new RandomMap();
 };
