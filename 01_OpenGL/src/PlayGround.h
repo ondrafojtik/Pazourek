@@ -75,8 +75,10 @@ public:
 	int shininess = 128;
 	glm::vec3 lightPositions[2];
 	glm::vec3 lightColor = glm::vec3(1.0f);
-
+	
+	bool showDebugBoxes = 0;
 	//Model* model = nullptr;
     
     RandomMap* map = new RandomMap();
+	glm::vec3 map_scale = glm::vec3(5.0f, 1.0f, 5.0f);
 };

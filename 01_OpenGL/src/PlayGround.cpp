@@ -57,12 +57,20 @@ void PlayGround::OnUpdate()
 		camera->MoveDown();
 	
 	//animation->OnUpdate();
+	//rotation += 1;
 }
 
 void PlayGround::OnRender()
 {
 	renderer->Clear();
-	renderer->DrawCube(*skyBox, { 0, 0, 0 }, { 100, 100, 100 }, 0, 0, 0, 1);
+    // render map here
+	if (showDebugBoxes)
+	{
+		for (VertexInfo p : map->vertices)
+		    renderer->DrawColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), { p.x, (p.y * map->scale), p.z }, 0, 1, 1, 1);
+	}
+	renderer->DrawMap(*map, { 0, 0, 0 });
+    renderer->DrawCube(*skyBox, { 0, 0, 0 }, { 100, 100, 100 }, 0, 0, 0, 1);
 
 	//renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 2, 2 },
 	//	lightPositions, ambientStrength, lightColor, shininess, *model);
@@ -76,6 +84,7 @@ void PlayGround::OnRender()
 void PlayGround::ImGuiOnUpdate()
 {
 	ImGui::Begin("Debug");
+    ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
 	ImGui::SliderFloat("LightX", &lightPositions[0].x, -20.0f, 20.0f);
 	ImGui::SliderFloat("LightY", &lightPositions[0].y, -20.0f, 20.0f);
 	ImGui::SliderFloat("LightZ", &lightPositions[0].z, -20.0f, 20.0f);
@@ -84,6 +93,12 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::ColorEdit3("lightColor", glm::value_ptr(lightColor));
 	ImGui::SliderInt("shininess", &shininess, 32, 256);
 	ImGui::SliderFloat("SpecularStrength", &SpecularStrength, 0.0f, 1.0f);
+	ImGui::Separator();
+	ImGui::Checkbox("debug boxes", &showDebugBoxes);
+	if (ImGui::Button("Recalc map"))
+	{
+		map->Recalc();
+	}
 	ImGui::End();
 
 

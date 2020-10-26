@@ -48,13 +48,15 @@ void Renderer::DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale,
 
 }
 
-void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position, float rotation, float xAxes, float yAxes, float zAxes)
+void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position,
+                         float rotation, float xAxes, float yAxes, float zAxes)
 {
-	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
+	glm::vec3 scale = glm::vec3(0.2f, 0.2f, 0.2f);
 
-	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
+	glm::mat4 transform =
+        glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
 		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { xAxes, yAxes, zAxes })
-		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, scale.z });
 
 	data.vb->Bind();
 	data.va.Bind();
@@ -125,6 +127,35 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 		data.shaders["basic"]->Unbind();
 		diffuse.Unbind();
 	}
+}
+
+// scrap
+void Renderer::DrawMap(const RandomMap& map, glm::vec3 position)
+{
+
+	float rotation = 0.0f;
+	glm::vec3 scale = { 1.0f, 0.2f, 1.0f };
+
+	glm::mat4 transform =
+        glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 1, 0 })
+		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, scale.z });
+
+
+    map.vb->Bind();
+	map.va->Bind();
+	map.ib->Bind();
+	data.shaders["plainColor"]->Bind();
+	data.shaders["plainColor"]->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
+	data.shaders["plainColor"]->SetUniformMat4f("u_View", m_Camera->GetView());
+	data.shaders["plainColor"]->SetUniformMat4f("u_Model", transform);
+	data.shaders["plainColor"]->SetUniform4f("u_Color", 0.1f, 0.5f, 0.05f, 1.0f);
+	GLCall(glDrawElements(GL_TRIANGLES, map.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+	map.vb->Unbind();
+	map.va->Unbind();
+	map.ib->Unbind();
+	data.shaders["plainColor"]->Unbind();    
+
 }
 
 void Renderer::Clear() const

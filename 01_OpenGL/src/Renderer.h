@@ -15,6 +15,7 @@
 #include "SubTexture.h"
 #include <unordered_map>
 #include "Model.h"
+#include "RandomMap.h"
 
 struct RenderData
 {
@@ -231,7 +232,8 @@ public:
                    Texture& normals, Texture& ambient, Texture& roughness,
                    glm::vec3 position, glm::vec3* lightPos, float ambientStrength,
                    const glm::vec3& lightColor, float Shininess, Model model);
-
+    // procedural map
+    void DrawMap(const RandomMap& map, glm::vec3 position);
 	Renderer(Camera *camera);
 	void Clear() const; 
 };
