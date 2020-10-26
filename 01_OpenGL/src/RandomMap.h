@@ -15,10 +15,10 @@
 #include "IndexBuffer.h"
 
 #define MAP_HEIGHT 0
-#define X_DIMENSION 5
-#define Z_DIMENSION 5 
+#define X_DIMENSION 10
+#define Z_DIMENSION 10
 
-#define SCALE 0.2
+#define SCALE 0.4
 
 struct Point
 {
@@ -111,6 +111,8 @@ struct RandomMap
 
         srand((unsigned)std::time(NULL));
         float random = (float)rand() / RAND_MAX;
+        random = random - Random::Float();
+        random = glm::abs(random);
         seed = random * seed_origin.size();
         std::cout << "seed: " << seed << std::endl;
 

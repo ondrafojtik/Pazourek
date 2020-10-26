@@ -134,7 +134,7 @@ void Renderer::DrawMap(const RandomMap& map, glm::vec3 position)
 {
 
 	float rotation = 0.0f;
-	glm::vec3 scale = { 1.0f, 0.2f, 1.0f };
+	glm::vec3 scale = { 1.0f, map.scale, 1.0f };
 
 	glm::mat4 transform =
         glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
