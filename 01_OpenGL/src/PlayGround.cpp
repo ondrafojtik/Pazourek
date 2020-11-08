@@ -3,6 +3,7 @@
 void PlayGround::OnAttach()
 {
 	EventHandler::camera = camera;
+	//EventHandler::mouseRay = worldRay;
 
 	glfwSetCursorPosCallback(window, [](GLFWwindow* window, double mouseXPos,
                                         double mouseYPos)
@@ -11,6 +12,9 @@ void PlayGround::OnAttach()
                                         int action, int mods)
 		-> void {EventHandler::key_callback(window, key, scancode, action, mods); });
 
+	glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, 
+										int action, int mode)
+		-> void {EventHandler::mouse_button_callback(window, button, action, mode); });
 
 	lightPositions[0] = glm::vec3(5, 5, 8);
 	lightPositions[1] = glm::vec3(5, 5, -10);
@@ -21,6 +25,7 @@ void PlayGround::OnAttach()
 
     // init map here..
     map->Init();
+	
 }
 
 void PlayGround::OnDetach()
@@ -58,6 +63,8 @@ void PlayGround::OnUpdate()
 	
 	//animation->OnUpdate();
 	//rotation += 1;
+	EventHandler::camera = camera;
+	
 }
 
 void PlayGround::OnRender()
@@ -78,7 +85,9 @@ void PlayGround::OnRender()
 	renderer->DrawColor(glm::vec4(lightColor.r, lightColor.g, lightColor.b, 1.0f),
                         lightPositions[0], 0, 1, 1, 1);
 	renderer->DrawColor(glm::vec4(1.0f), lightPositions[1], 0, 1, 1, 1);
-	
+
+	renderer->DrawLine({ EventHandler::mouseRay->originPoint }, { EventHandler::mouseRay->destPoint });
+
 }
 
 void PlayGround::ImGuiOnUpdate()

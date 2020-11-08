@@ -134,7 +134,7 @@ void Renderer::DrawMap(const RandomMap& map, glm::vec3 position)
 {
 
 	float rotation = 0.0f;
-	glm::vec3 scale = { 1.0f, map.scale, 1.0f };
+	glm::vec3 scale = { 20.0f, map.scale, 20.0f };
 
 	glm::mat4 transform =
         glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
@@ -145,17 +145,53 @@ void Renderer::DrawMap(const RandomMap& map, glm::vec3 position)
     map.vb->Bind();
 	map.va->Bind();
 	map.ib->Bind();
-	data.shaders["plainColor"]->Bind();
-	data.shaders["plainColor"]->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
-	data.shaders["plainColor"]->SetUniformMat4f("u_View", m_Camera->GetView());
-	data.shaders["plainColor"]->SetUniformMat4f("u_Model", transform);
-	data.shaders["plainColor"]->SetUniform4f("u_Color", 0.1f, 0.5f, 0.05f, 1.0f);
+	data.shaders["procedural"]->Bind();
+	data.shaders["procedural"]->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
+	data.shaders["procedural"]->SetUniformMat4f("u_View", m_Camera->GetView());
+	data.shaders["procedural"]->SetUniformMat4f("u_Model", transform);
+	data.shaders["procedural"]->SetUniform4f("u_Color", 0.1f, 0.5f, 0.05f, 1.0f);
 	GLCall(glDrawElements(GL_TRIANGLES, map.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 	map.vb->Unbind();
 	map.va->Unbind();
 	map.ib->Unbind();
 	data.shaders["plainColor"]->Unbind();    
 
+}
+
+void Renderer::DrawLine(glm::vec3 p1, glm::vec3 p2)
+{
+	float line_vertex[] =
+	{
+		p1.x, p1.y, p1.z, 1.0f, 1.0f, 1.0f,
+		p2.x, p2.y, p2.z, 1.0f, 1.0f, 1.0f,
+	};
+
+	unsigned int indices[] =
+	{
+		0, 1,
+	};
+
+	glm::mat4 transform = glm::mat4(1.0f);
+
+	VertexBuffer* vb = new VertexBuffer(line_vertex, sizeof(line_vertex));
+	IndexBuffer* ib = new IndexBuffer(indices, 2);
+	VertexArray* va = new VertexArray();
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+	layout.Push<float>(3);
+	va->AddBuffer(*vb, layout);
+
+	vb->Bind();
+	va->Bind();
+	ib->Bind();
+	data.shaders["plainColor"]->Bind();
+	data.shaders["plainColor"]->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
+	data.shaders["plainColor"]->SetUniformMat4f("u_View", m_Camera->GetView());
+	data.shaders["plainColor"]->SetUniformMat4f("u_Model", transform);
+	data.shaders["plainColor"]->SetUniform4f("u_Color", 0.1f, 0.9f, 0.05f, 1.0f);
+	glVertexPointer(2, GL_FLOAT, 0, line_vertex);
+	glLineWidth(5);
+	GLCall(glDrawElements(GL_LINES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 }
 
 void Renderer::Clear() const

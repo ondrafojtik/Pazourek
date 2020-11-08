@@ -186,6 +186,8 @@ struct RenderData
 		shaders["basic"] = new Shader("src/res/shaders/Basic.shader");
 		shaders["skyBox"] = new Shader("src/res/shaders/skyBox.shader");
 		shaders["plainColor"] = new Shader("src/res/shaders/plainColor.shader");
+		shaders["procedural"] = new Shader("src/res/shaders/procedural.shader");
+		shaders["line"] = new Shader("src/res/shaders/line.shader");
 	}
 
 	void RefreshData()
@@ -234,6 +236,7 @@ public:
                    const glm::vec3& lightColor, float Shininess, Model model);
     // procedural map
     void DrawMap(const RandomMap& map, glm::vec3 position);
+	void DrawLine(glm::vec3 p1, glm::vec3 p2);
 	Renderer(Camera *camera);
 	void Clear() const; 
 };

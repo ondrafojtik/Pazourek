@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <GLFW/glfw3.h>
 #include "Camera.h"
+#include "MouseRay.h"
+#include "glm/vec4.hpp"
 
 #define DEBUG 0
 
@@ -14,7 +16,10 @@ public:
 	EventHandler() = delete;
 
 	static Camera* camera;
-
+	static MouseRay* mouseRay;
+	static glm::vec3 originPoint;
+	static glm::vec3 destPoint;
+	
 	static void cursor_pos_callback(GLFWwindow* window, double mouseX, double mouseY)
 	{
 		if(mouseEnable)
@@ -35,6 +40,21 @@ public:
 			printf("Mouse rotation toggle! (current state: %i)\n",(int)mouseEnable);
 	    }
 	}
+
+	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mode)
+	{
+		if (action == GLFW_PRESS)
+		{
+			printf("button_callback [%d,%d,%d]\n", button, action, mode);
+			glm::dvec2 mouse;
+			glfwGetCursorPos(window, &mouse.x, &mouse.y);
+			mouseRay->update_camera(camera);
+			mouseRay->set_mouse_position(mouse);
+			mouseRay->update();
+			
+		}
+	}
+
 
 
 };

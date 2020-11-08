@@ -476,6 +476,7 @@
     </None>
     <None Include="src\res\shaders\plainColor.shader" />
     <None Include="src\res\shaders\skyBox.shader" />
+    <None Include="src\res\shaders\procedural.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1292,6 +1293,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\RandomMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\.#MouseRay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MouseRay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

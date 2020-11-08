@@ -18,7 +18,7 @@
 #define X_DIMENSION 10
 #define Z_DIMENSION 10
 
-#define SCALE 0.4
+#define SCALE 1.5
 
 struct Point
 {
@@ -60,11 +60,10 @@ static Point find_point(std::vector<Point> points, float x, float z)
     std::cout  << "(Method: find_point - RandomMap.h)Couldnt find point with given coords" << std::endl;
 }
 
-// this lerp isnt "standart inverse lerp"
+// standart inverse lerp..
 static float inverse_lerp(float value, float min, float max)
 {
     float val = (value - min) / (max - min);
-    val = val * 2.0f - 1.0f;
     return val;
 }
 
@@ -195,7 +194,7 @@ struct RandomMap
                 else
                 {
                     index3 = find_point(buffer, point.x, point.z).index;
-                }
+                 }
 
                 //add normal triangles here to render and do the "hard ones" later? 
                 indices.push_back(index0);
@@ -220,9 +219,9 @@ struct RandomMap
         for (Point p : buffer)
         {
             VertexInfo vertex;
-            vertex.x = inverse_lerp(p.x, min_x, max_x);
-            vertex.y = inverse_lerp(p.y, min_y, max_y);
-            vertex.z = inverse_lerp(p.z, min_z, max_z);
+            vertex.x = inverse_lerp(p.x, min_x, max_x) * 2.0f - 1.0f;
+            vertex.y = inverse_lerp(p.y, min_y, max_y) * 2.0f - 1.0f;
+            vertex.z = inverse_lerp(p.z, min_z, max_z) * 2.0f - 1.0f;
             vertices.push_back(vertex);
         }
         // creating render data

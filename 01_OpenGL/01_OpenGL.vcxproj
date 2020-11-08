@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\res\shaders\Basic.shader" />
+    <None Include="src\res\shaders\procedural.shader" />
     <None Include="src\res\shaders\skyBox.shader" />
     <None Include="src\res\shaders\plainColor.shader" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
@@ -238,6 +239,7 @@
     <None Include="src\vendor\glm\gtx\wrap.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\.#MouseRay.h" />
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\defines.h" />
@@ -247,6 +249,7 @@
     <ClInclude Include="src\Map.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Model.h" />
+    <ClInclude Include="src\MouseRay.h" />
     <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Pathfinder.h" />
     <ClInclude Include="src\PlayGround.h" />

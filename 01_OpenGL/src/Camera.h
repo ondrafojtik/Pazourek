@@ -43,6 +43,11 @@ struct Camera
 
 	glm::vec3 GetPosition() { return m_Position; }
 
+	glm::vec3 GetForward() { return forward; }
+
+	float GetNear() { return m_near; }
+	float GetFar() { return m_far; }
+
 private:
 	glm::vec3 m_Position;
 	glm::mat4 perspective;
@@ -55,5 +60,8 @@ private:
 
 	glm::dvec2 oldMousePos;
 	float speed = 0.2f;
+
+	float m_near;
+	float m_far;
 
 };
