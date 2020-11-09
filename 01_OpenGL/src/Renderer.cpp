@@ -26,7 +26,10 @@ Renderer::Renderer(Camera *camera) : m_Camera(camera)
 void Renderer::DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale,
                         float rotation, float xAxes, float yAxes, float zAxes)
 {
-	texture.Bind();
+
+    glStencilFunc(GL_ALWAYS, 0, GL_REPLACE);
+
+    texture.Bind();
 
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
 		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { xAxes, yAxes, zAxes })
@@ -132,8 +135,10 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 // scrap
 void Renderer::DrawMap(const RandomMap& map, glm::vec3 position)
 {
+    
+    glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
-	float rotation = 0.0f;
+    float rotation = 0.0f;
 	glm::vec3 scale = { 20.0f, map.scale, 20.0f };
 
 	glm::mat4 transform =
@@ -197,5 +202,5 @@ void Renderer::DrawLine(glm::vec3 p1, glm::vec3 p2)
 void Renderer::Clear() const
 {
 	GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
-	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
 }

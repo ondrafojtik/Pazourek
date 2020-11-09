@@ -70,6 +70,8 @@ void PlayGround::OnUpdate()
 void PlayGround::OnRender()
 {
 	renderer->Clear();
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     // render map here
 	if (showDebugBoxes)
 	{
@@ -87,6 +89,12 @@ void PlayGround::OnRender()
 	renderer->DrawColor(glm::vec4(1.0f), lightPositions[1], 0, 1, 1, 1);
 
 	renderer->DrawLine({ EventHandler::mouseRay->originPoint }, { EventHandler::mouseRay->destPoint });
+
+	double x, y;
+	glfwGetCursorPos(window, &x, &y);
+	unsigned int _index;
+	glReadPixels(x, glm::abs(y - 540), 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &_index);
+	std::cout << "stencil: " << _index << std::endl;
 
 }
 
