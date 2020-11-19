@@ -81,7 +81,7 @@ void PlayGround::OnRender()
 	renderer->DrawMap(*map, { 0, 0, 0 });
     renderer->DrawCube(*skyBox, { 0, 0, 0 }, { 100, 100, 100 }, 0, 0, 0, 1);
 
-	//renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 2, 2 },
+	//renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 },
 	//	lightPositions, ambientStrength, lightColor, shininess, *model);
 	//render light cube
 	renderer->DrawColor(glm::vec4(lightColor.r, lightColor.g, lightColor.b, 1.0f),
