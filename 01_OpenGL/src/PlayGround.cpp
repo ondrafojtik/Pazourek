@@ -18,10 +18,21 @@ void PlayGround::OnAttach()
 
 	lightPositions[0] = glm::vec3(5, 5, 8);
 	lightPositions[1] = glm::vec3(5, 5, -10);
-
-    //in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
+    
+	Light l0;
+	l0.color = glm::vec3(1.0f);
+	l0.position = glm::vec3(5, 5, 8);
+	l0.type = LightType::Point;
+	lights[0] = l0; 
+	
+	Light l1;
+	l1.color = glm::vec3(0.0f, 1.0f, 0.0f);
+	l1.position = glm::vec3(5, 5, -10);
+	l1.type = LightType::Point;
+	lights[1] = l1;
+	//in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
     //texture files in correct form (AO.png, .. )
-	//model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
+	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
 
     // init map here..
     map->Init();
@@ -81,13 +92,13 @@ void PlayGround::OnRender()
 	renderer->DrawMap(*map, { 0, 0, 0 });
     renderer->DrawCube(*skyBox, { 0, 0, 0 }, { 100, 100, 100 }, 0, 0, 0, 1);
 
-	//renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 },
-	//	lightPositions, ambientStrength, lightColor, shininess, *model);
-	//render light cube
-	renderer->DrawColor(glm::vec4(lightColor.r, lightColor.g, lightColor.b, 1.0f),
-                        lightPositions[0], 0, 1, 1, 1);
-	renderer->DrawColor(glm::vec4(1.0f), lightPositions[1], 0, 1, 1, 1);
+	renderer->DrawLight(lights[0]);
+	renderer->DrawLight(lights[1]);
 
+	renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 },
+		lights, ambientStrength, shininess, *model);
+	//render light cube
+	
 	renderer->DrawLine({ EventHandler::mouseRay->originPoint }, { EventHandler::mouseRay->destPoint });
 
 	double x, y;
@@ -96,18 +107,19 @@ void PlayGround::OnRender()
 	glReadPixels(x, glm::abs(y - 540), 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &_index);
 	std::cout << "stencil: " << _index << std::endl;
 
+    
 }
 
 void PlayGround::ImGuiOnUpdate()
 {
 	ImGui::Begin("Debug");
     ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-	ImGui::SliderFloat("LightX", &lightPositions[0].x, -20.0f, 20.0f);
-	ImGui::SliderFloat("LightY", &lightPositions[0].y, -20.0f, 20.0f);
-	ImGui::SliderFloat("LightZ", &lightPositions[0].z, -20.0f, 20.0f);
+	ImGui::SliderFloat("LightX", &lights[0].position.x, -20.0f, 20.0f);
+	ImGui::SliderFloat("LightY", &lights[0].position.y, -20.0f, 20.0f);
+	ImGui::SliderFloat("LightZ", &lights[0].position.z, -20.0f, 20.0f);
 	ImGui::Separator();
 	ImGui::SliderFloat("ambientStrength", &ambientStrength, 0.0f, 1.0f);
-	ImGui::ColorEdit3("lightColor", glm::value_ptr(lightColor));
+	ImGui::ColorEdit3("lightColor", glm::value_ptr(lights[0].color));
 	ImGui::SliderInt("shininess", &shininess, 32, 256);
 	ImGui::SliderFloat("SpecularStrength", &SpecularStrength, 0.0f, 1.0f);
 	ImGui::Separator();

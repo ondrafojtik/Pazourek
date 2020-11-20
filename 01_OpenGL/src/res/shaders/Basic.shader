@@ -17,8 +17,15 @@ uniform mat4 u_Projection;
 uniform mat4 u_View;
 uniform mat4 u_Model;
 
-uniform vec3 u_lightPos0;
+//uniform vec3 u_lightPos0;
 uniform vec3 u_CameraPos;
+
+uniform vec3 u_lightPos0;
+
+uniform int u_lightType0;
+uniform vec3 u_lightPos1;
+uniform vec3 u_lightColor1;
+uniform int u_lightType1;
 
 void main()
 {
@@ -60,19 +67,19 @@ uniform sampler2D u_AO;
 uniform sampler2D u_roughness;
 uniform sampler2D u_normalMap;
 
-uniform vec3 u_lightPos1;
-
 //uniforms for testing 
 uniform float u_AmbientStrength;
 uniform vec3 u_lightColor;
 uniform float u_Shininess;
+
+// new ligths
+uniform vec3 u_lightColor0;
 
 vec3 m_diffuse = texture(u_diffuseMap, v_TexCoord).rgb;
 float m_specular = texture(u_specularMap, v_TexCoord).r;
 vec3 m_normal = texture(u_normalMap, v_TexCoord).rgb;
 float AO = texture(u_AO, v_TexCoord).r;
 float specularStrength = texture(u_roughness, v_TexCoord).r;
-
 
 //ligths still have to be put in here manually
 #define LIGHT_COUNT = 2;
@@ -88,7 +95,7 @@ void main()
     //diffuse
     vec3 lightDir = normalize(tangentLightPos - tangentFragPos);
     float diff = max(dot(lightDir, normal), 0.0);
-    vec3 diffuse = diff * m_diffuse * u_lightColor;
+    vec3 diffuse = diff * m_diffuse * u_lightColor0;
     //specular
     vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
@@ -96,7 +103,7 @@ void main()
     float random_metallness = mix(64, 32, (1.0 - m_specular)); 
     float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
     //float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
-    vec3 specular = (1.0 - specularStrength) * spec * u_lightColor;
+    vec3 specular = (1.0 - specularStrength) * spec * u_lightColor0;
     
     //result
     color = vec4(ambient + diffuse + specular, 1.0);

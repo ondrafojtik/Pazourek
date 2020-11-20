@@ -246,6 +246,7 @@
     <ClInclude Include="src\EventHandler.h" />
     <ClInclude Include="src\GLcall.h" />
     <ClInclude Include="src\IndexBuffer.h" />
+    <ClInclude Include="src\Light.h" />
     <ClInclude Include="src\Map.h" />
     <ClInclude Include="src\Mesh.h" />
     <ClInclude Include="src\Model.h" />

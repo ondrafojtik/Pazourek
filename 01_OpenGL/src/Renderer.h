@@ -17,6 +17,8 @@
 #include "Model.h"
 #include "RandomMap.h"
 
+#include "Light.h"
+
 struct RenderData
 {
 	const int vertexCount = 24; 
@@ -223,6 +225,9 @@ private:
 	Texture* blank = new Texture("src/res/textures/Blank.png");
 	Texture* grid = new Texture("src/res/textures/grid.png");
 public:
+
+    // draw a light component
+	void DrawLight(Light& light);
     //skyBox
 	void DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale,
                   float rotation, float xAxes, float yAxes, float zAxes);
@@ -230,10 +235,10 @@ public:
 	void DrawColor(const glm::vec4& color, glm::vec3 position,
                    float rotation, float xAxes, float yAxes, float zAxes);
     //model
-	void DrawModel(Texture& diffuse, Texture& specular,
-                   Texture& normals, Texture& ambient, Texture& roughness,
-                   glm::vec3 position, glm::vec3* lightPos, float ambientStrength,
-                   const glm::vec3& lightColor, float Shininess, Model model);
+	void DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
+					Texture& AO, Texture& roughness, glm::vec3 position,
+					Light* lights, float ambientStrength,
+					float Shininess, Model model);
     // procedural map
     void DrawMap(const RandomMap& map, glm::vec3 position);
 	void DrawLine(glm::vec3 p1, glm::vec3 p2);

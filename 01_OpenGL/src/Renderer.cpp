@@ -51,6 +51,34 @@ void Renderer::DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale,
 
 }
 
+void Renderer::DrawLight(Light& light)
+{
+    glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    float rotation = 0.0f;
+    
+	glm::mat4 transform =
+        glm::translate(glm::mat4(1.0f), light.position)
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 1.0f, 0.0f, 0.0f })
+		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, scale.z });
+
+
+    Shader* shader = data.shaders["plainColor"];
+    
+    shader->Bind();
+	data.va.Bind();
+	data.ib->Bind();
+	shader->Bind();
+	shader->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
+	shader->SetUniformMat4f("u_View", m_Camera->GetView());
+	shader->SetUniformMat4f("u_Model", transform);
+	shader->SetUniform4f("u_Color", light.color.r, light.color.g, light.color.b, 1.0f);
+    GLCall(glDrawElements(GL_TRIANGLES, data.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+	data.vb->Unbind();
+	data.va.Unbind();
+	data.ib->Unbind();
+	shader->Unbind();
+}
+
 void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position,
                          float rotation, float xAxes, float yAxes, float zAxes)
 {
@@ -82,20 +110,38 @@ void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position,
 //model
 void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
                          Texture& AO, Texture& roughness, glm::vec3 position,
-                         glm::vec3* lightPos, float ambientStrength,
-                         const glm::vec3& lightColor, float Shininess, Model model)
+                         Light* lights, float ambientStrength,
+                         float Shininess, Model model)
 {
-	for(int i = 0; i < model.meshes.size(); i++)
+	Shader* shader = data.shaders["basic"];
+	shader->Bind();
+
+	float rotation = 0.0f;
+	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
+
+	glm::mat4 transform =
+		glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 })
+		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+    //sending all the "lightPos" info into frangment
+	for (int i = 0; i < 2; i++)
 	{
-		float rotation = 0.0f;
-		glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
-			* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 })
-			* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+        // ive gotta send more info in (including color, pos and TYPE)
+		std::string u_lightPos = "u_lightPos" + std::to_string(i);
+		shader->SetUniform3f(u_lightPos, lights[i].position.x, 
+							 lights[i].position.y, lights[i].position.z);
+        std::string u_lightColor = "u_lightColor" + std::to_string(i);
+        shader->SetUniform3f(u_lightColor, lights[i].color.x,
+                             lights[i].color.y, lights[i].color.z);
+        std::string u_lightType = "u_lightType" + std::to_string(i);
+        shader->SetUniform1i(u_lightType, lights[i].type);
+    }
 
-        Shader* shader = data.shaders["basic"];
-        
+
+    for(int i = 0; i < model.meshes.size(); i++)
+	{
+		        
         model.meshes[i].vb->Bind();
 		model.meshes[i].va->Bind();
 		model.meshes[i].ib->Bind();
@@ -117,16 +163,9 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 		shader->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x,
                                             m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 
-		//sending all the "lightPos" info into frangment
-		for (int i = 0; i < 2; i++)
-		{
-			std::string u_name = "u_lightPos" + std::to_string(i);
-			shader->SetUniform3f(u_name, lightPos[i].x, lightPos[i].y, lightPos[i].z);
-		}
-
 		//uniforms for testing
 		shader->SetUniform1f("u_AmbientStrength", ambientStrength);
-		shader->SetUniform3f("u_lightColor", lightColor.r, lightColor.g, lightColor.b);
+		//shader->SetUniform3f("u_lightColor", lightColor.r, lightColor.g, lightColor.b);
 		shader->SetUniform1f("u_Shininess", Shininess);
 		GLCall(glDrawElements(GL_TRIANGLES, model.meshes[i].ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 		model.meshes[i].vb->Unbind();
