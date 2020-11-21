@@ -114,7 +114,21 @@ vec3 calculate_point(Light l)
 
 vec3 calculate_directional(Light l)
 {
-    return vec3(1, 0, 0);
+    vec3 lightDir = normalize(-l.lightDir);
+    float diff = max(dot(lightDir, normal), 0.0);
+    vec3 diffuse = diff * m_diffuse * l.color;
+    //specular
+    vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    vec3 halfwayDir = normalize(lightDir + viewDir);
+    //float random_metallness = mix(64, 32, (1.0 - m_specular)); 
+    //float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
+    vec3 specular = (1.0 - specularStrength) * spec * l.color;
+    
+    //result
+    vec3 final = diffuse + specular;
+    return final;
 }
 
 vec3 calculate_spotlight(Light l)

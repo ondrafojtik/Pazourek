@@ -20,6 +20,11 @@ struct MouseRay
     glm::vec3 originPoint;
     glm::vec3 destPoint;
 
+    glm::vec3 get_normalized_ray()
+    {
+        return normalize(destPoint - originPoint);
+    }
+    
     Camera* camera = nullptr;
     MouseRay() { ; }
 

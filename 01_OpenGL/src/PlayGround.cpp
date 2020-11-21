@@ -79,7 +79,9 @@ void PlayGround::OnUpdate()
 	//animation->OnUpdate();
 	//rotation += 1;
 	EventHandler::camera = camera;
-	
+    
+	lights[0].lightDir = EventHandler::mouseRay->get_normalized_ray();
+    lights[0].position = EventHandler::mouseRay->originPoint;
 }
 
 void PlayGround::OnRender()
@@ -96,7 +98,7 @@ void PlayGround::OnRender()
 	renderer->DrawMap(*map, { 0, 0, 0 });
     renderer->DrawCube(*skyBox, { 0, 0, 0 }, { 100, 100, 100 }, 0, 0, 0, 1);
 
-	renderer->DrawLight(lights[0]);
+	//renderer->DrawLight(lights[0]);
 	renderer->DrawLight(lights[1]);
 
 	renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 },

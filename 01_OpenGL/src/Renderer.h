@@ -189,7 +189,6 @@ struct RenderData
 		shaders["skyBox"] = new Shader("src/res/shaders/skyBox.shader");
 		shaders["plainColor"] = new Shader("src/res/shaders/plainColor.shader");
 		shaders["procedural"] = new Shader("src/res/shaders/procedural.shader");
-		shaders["line"] = new Shader("src/res/shaders/line.shader");
 	}
 
 	void RefreshData()
