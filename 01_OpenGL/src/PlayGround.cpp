@@ -26,7 +26,7 @@ void PlayGround::OnAttach()
 	lights[0] = l0; 
 	
 	Light l1;
-	l1.color = glm::vec3(0.0f, 1.0f, 0.0f);
+	l1.color = glm::vec3(0.05f, 0.1f, 0.5f);
 	l1.position = glm::vec3(5, 5, -10);
 	l1.type = LightType::Point;
 	lights[1] = l1;
@@ -101,11 +101,11 @@ void PlayGround::OnRender()
 	
 	renderer->DrawLine({ EventHandler::mouseRay->originPoint }, { EventHandler::mouseRay->destPoint });
 
-	double x, y;
-	glfwGetCursorPos(window, &x, &y);
-	unsigned int _index;
-	glReadPixels(x, glm::abs(y - 540), 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &_index);
-	std::cout << "stencil: " << _index << std::endl;
+	//double x, y;
+	//glfwGetCursorPos(window, &x, &y);
+	//unsigned int _index;
+	//glReadPixels(x, glm::abs(y - 540), 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &_index);
+	//std::cout << "stencil: " << _index << std::endl;
 
     
 }

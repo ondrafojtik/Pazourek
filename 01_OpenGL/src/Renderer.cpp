@@ -116,6 +116,10 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 	Shader* shader = data.shaders["basic"];
 	shader->Bind();
 
+    // test
+    shader->SetUniform3f("lights[0].position", 1, 1, 1);
+    shader->SetUniform3f("lights[1].position", 1, 1, 1);    
+
 	float rotation = 0.0f;
 	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
@@ -136,6 +140,17 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
                              lights[i].color.y, lights[i].color.z);
         std::string u_lightType = "u_lightType" + std::to_string(i);
         shader->SetUniform1i(u_lightType, lights[i].type);
+    }
+
+    for (int i = 0; i < 2; i++)
+    {
+        std::string u_name = "lights_out[" + std::to_string(i) + "].position";
+        shader->SetUniform3fv(u_name, lights[i].position);
+        u_name = "lights_out[" + std::to_string(i) + "].color";
+        shader->SetUniform3fv(u_name, lights[i].color);
+        u_name = "lights_out[" + std::to_string(i) + "].type";
+        shader->SetUniform1f(u_name, lights[i].type);
+               
     }
 
 
