@@ -131,14 +131,35 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
         shader->SetUniform3fv(u_name, lights[i].position);
         u_name = "lights_out[" + std::to_string(i) + "].color";
         shader->SetUniform3fv(u_name, lights[i].color);
-        u_name = "lights_out[" + std::to_string(i) + "].type";
-        shader->SetUniform1f(u_name, lights[i].type);
+        //u_name = "lights_out[" + std::to_string(i) + "].type";
+        //shader->SetUniform1f(u_name, lights[i].type);
+        //u_name = "lights_out[" + std::to_string(i) + "].cutoff";
+        //shader->SetUniform1f(u_name, glm::cos(glm::radians(lights[i].cutoff)));
+        u_name = "lights_out[" + std::to_string(i) + "].info";
+        shader->SetUniform3f(u_name, lights[i].type,
+                             glm::cos(glm::radians(lights[i].cutoff)), 0.0f);
         u_name = "lights_out[" + std::to_string(i) + "].lightDir";
         shader->SetUniform3fv(u_name, lights[i].lightDir);
-        u_name = "lights_out[" + std::to_string(i) + "].cutOff";
-        shader->SetUniform1f(u_name, glm::cos(glm::radians(lights[i].cutoff)));
-    }
 
+    }
+	shader->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
+	shader->SetUniformMat4f("u_View", m_Camera->GetView());
+	shader->SetUniformMat4f("u_Model", transform);
+	shader->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x,
+		m_Camera->GetPosition().y, m_Camera->GetPosition().z);
+	shader->SetUniform1f("u_AmbientStrength", ambientStrength);
+	shader->SetUniform1f("u_Shininess", Shininess);
+	
+	diffuse.Bind(0);
+	shader->SetUniform1i("u_diffuseMap", 0);
+	specular.Bind(1);
+	shader->SetUniform1i("u_specularMap", 1);
+	normals.Bind(2);
+	shader->SetUniform1i("u_normalMap", 2);
+	AO.Bind(3);
+	shader->SetUniform1i("u_AO", 3);
+	roughness.Bind(4);
+	shader->SetUniform1i("u_roughness", 4);
 
     for(int i = 0; i < model.meshes.size(); i++)
 	{
@@ -146,35 +167,14 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
         model.meshes[i].vb->Bind();
 		model.meshes[i].va->Bind();
 		model.meshes[i].ib->Bind();
-	    shader->Bind();
-		diffuse.Bind(0);
-		shader->SetUniform1i("u_diffuseMap", 0);
-		specular.Bind(1);
-		shader->SetUniform1i("u_specularMap", 1);
-		normals.Bind(2);
-		shader->SetUniform1i("u_normalMap", 2);
-		AO.Bind(3);
-		shader->SetUniform1i("u_AO", 3);
-		roughness.Bind(4);
-		shader->SetUniform1i("u_roughness", 4);
-
-	    shader->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
-	    shader->SetUniformMat4f("u_View", m_Camera->GetView());
-		shader->SetUniformMat4f("u_Model", transform);
-		shader->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x,
-                                            m_Camera->GetPosition().y, m_Camera->GetPosition().z);
-
-		//uniforms for testing
-		shader->SetUniform1f("u_AmbientStrength", ambientStrength);
-		//shader->SetUniform3f("u_lightColor", lightColor.r, lightColor.g, lightColor.b);
-		shader->SetUniform1f("u_Shininess", Shininess);
+	    
 		GLCall(glDrawElements(GL_TRIANGLES, model.meshes[i].ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 		model.meshes[i].vb->Unbind();
 		model.meshes[i].va->Unbind();
 		model.meshes[i].ib->Unbind();
-		shader->Unbind();
-		diffuse.Unbind();
+		
 	}
+	shader->Unbind();
 }
 
 // scrap

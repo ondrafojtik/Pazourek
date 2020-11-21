@@ -11,8 +11,7 @@ struct Light
 {
     vec3 position;
     vec3 color;
-    float type;
-
+    vec3 info; // [type][cutoff][]
     vec3 lightDir;
 };
 
@@ -48,9 +47,7 @@ void main()
     vec3 T = normalize(normalMatrix * tangent);
     vec3 B = normalize(normalMatrix * bitangent);
     vec3 N = normalize(normalMatrix * normal);
-    //T = normalize(T - dot(T, N) * N);
-    //vec3 B = cross(N, T);
-
+   
     vec3 v_FragPos = vec3(u_Model * vec4(position, 1.0));
 
     mat3 TBN = transpose(mat3(T, B, N));
@@ -62,7 +59,7 @@ void main()
     {
         lights[i].position = TBN * lights_out[i].position;
         lights[i].color = lights_out[i].color;
-        lights[i].type = lights_out[i].type;
+        lights[i].info = lights_out[i].info;
         lights[i].lightDir = TBN * normalize(lights_out[i].lightDir);
     }
 
@@ -78,8 +75,7 @@ struct Light
 {
     vec3 position;
     vec3 color;
-    float type;
-
+    vec3 info; // [type][cutoff][]
     vec3 lightDir;
 };
 
@@ -116,54 +112,79 @@ float specularStrength = texture(u_roughness, v_TexCoord).r;
 
 vec3 normal = normalize(m_normal * 2.0 - 1.0);  // this normal is in tangent space
 
-vec3 point_calculate_diffuse(vec3 position, vec3 color)
+vec3 point_calculate_diffuse(Light l)
 {
-    vec3 lightDir = normalize(position - tangentFragPos);
+    vec3 lightDir = normalize(l.position - tangentFragPos);
     float diff = max(dot(lightDir, normal), 0.0);
-    vec3 diffuse = diff * m_diffuse * color;
+    vec3 diffuse = diff * m_diffuse * l.color;
     return diffuse;
 }
 
-vec3 point_calculate_specular(vec3 position, vec3 color)
+vec3 point_calculate_specular(Light l)
 {
-    vec3 lightDir = normalize(position - tangentFragPos);
+    vec3 lightDir = normalize(l.position - tangentFragPos);
     vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
     vec3 halfwayDir = normalize(lightDir + viewDir);
     //float random_metallness = mix(64, 32, (1.0 - m_specular)); 
     //float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
-    vec3 specular = (1.0 - specularStrength) * spec * color;
+    vec3 specular = (1.0 - specularStrength) * spec * l.color;
     return specular;
 }
 
-vec3 direc_calculate_diffuse(vec3 lightDirection, vec3 color)
+vec3 direc_calculate_diffuse(Light l)
 {
-    float diff = max(dot(-lightDirection, normal), 0.0);
-    vec3 diffuse = diff * m_diffuse * color;
-    return diffuse;
+    return vec3(1, 0, 0);
 }
 
-vec3 direc_calculate_specular(vec3 lightDirection, vec3 color)
+vec3 direc_calculate_specular(Light l)
 {
-    vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
-    vec3 reflectDir = reflect(-lightDirection, normal);
-    vec3 halfwayDir = normalize(lightDirection + viewDir);
-    //float random_metallness = mix(64, 32, (1.0 - m_specular)); 
-    //float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
-    vec3 specular = (1.0 - specularStrength) * spec * color;
-    return specular;
+    return vec3(1, 0, 0);
 }
 
 vec3 spotl_calculate_diffuse(Light l)
 {
-    return vec3(0, 0, 1);
+    vec3 lightDir = normalize(l.position - tangentFragPos);
+    float theta = dot(lightDir, normalize(-l.lightDir));
+
+    vec3 diffuse;
+
+    if (theta > l.info.g)
+    {
+        float diff = max(dot(lightDir, normal), 0.0);
+        diffuse = diff * m_diffuse * l.color;
+    }
+    else
+    {
+        diffuse = vec3(0, 0, 0);
+    }
+    return diffuse;
 }
 
 vec3 spotl_calculate_specular(Light l)
 {
-    return vec3(0, 0, 1);
+    vec3 lightDir = normalize(l.position - tangentFragPos);
+    float theta = dot(lightDir, normalize(-l.lightDir));
+
+    vec3 specular;
+
+    if (theta > l.info.g)
+    {
+        vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
+        vec3 reflectDir = reflect(-lightDir, normal);
+        vec3 halfwayDir = normalize(lightDir + viewDir);
+        //float random_metallness = mix(64, 32, (1.0 - m_specular)); 
+        //float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
+        float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
+        vec3 specular = (1.0 - specularStrength) * spec * l.color;
+    }
+    else
+    {
+        specular = vec3(0, 0, 0);
+    }
+
+    return specular;
 }
 
 void main()
@@ -174,19 +195,19 @@ void main()
     {
         // switch-like branching
 
-        int type = int(lights[i].type);
+        
 
-        if (type == 0)                  // point 
+        if (lights[i].info.x == 0)                  // point 
         {
-            finalDiffuse += point_calculate_diffuse(lights[i].position, lights[i].color);
-            finalSpecular += point_calculate_specular(lights[i].position, lights[i].color);
+            finalDiffuse += point_calculate_diffuse(lights[i]);
+            finalSpecular += point_calculate_specular(lights[i]);
         }
-        if (type == 1)             // directional 
+        if (lights[i].info.x == 1)             // directional 
         {
-            finalDiffuse += direc_calculate_diffuse(lights[i].lightDir, lights[i].color);
-            finalSpecular += direc_calculate_specular(lights[i].lightDir, lights[i].color);
+            finalDiffuse += direc_calculate_diffuse(lights[i]);
+            finalSpecular += direc_calculate_specular(lights[i]);
         }
-        if (type == 2)              // spotlight
+        if (lights[i].info.x == 2)              // spotlight
         {
             finalDiffuse += spotl_calculate_diffuse(lights[i]);
             finalSpecular += spotl_calculate_specular(lights[i]);
