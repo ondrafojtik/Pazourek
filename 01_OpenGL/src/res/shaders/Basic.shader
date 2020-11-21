@@ -19,23 +19,13 @@ uniform Light lights_out[2];
 out Light lights[2];
 
 out vec2 v_TexCoord;
-out vec3 tangentLightPos;
 out vec3 tangentViewPos;
 out vec3 tangentFragPos;
 
 uniform mat4 u_Projection;
 uniform mat4 u_View;
 uniform mat4 u_Model;
-
-//uniform vec3 u_lightPos0;
 uniform vec3 u_CameraPos;
-
-uniform vec3 u_lightPos0;
-
-uniform int u_lightType0;
-uniform vec3 u_lightPos1;
-uniform vec3 u_lightColor1;
-uniform int u_lightType1;
 
 void main()
 {
@@ -51,7 +41,6 @@ void main()
     vec3 v_FragPos = vec3(u_Model * vec4(position, 1.0));
 
     mat3 TBN = transpose(mat3(T, B, N));
-    tangentLightPos = TBN * u_lightPos0;
     tangentViewPos = TBN * u_CameraPos;
     tangentFragPos = TBN * v_FragPos;
 
@@ -83,7 +72,6 @@ in Light lights[2];
 
 in vec2 v_TexCoord;
 
-in vec3 tangentLightPos;
 in vec3 tangentViewPos;
 in vec3 tangentFragPos;
 
@@ -95,11 +83,7 @@ uniform sampler2D u_normalMap;
 
 //uniforms for testing 
 uniform float u_AmbientStrength;
-uniform vec3 u_lightColor;
 uniform float u_Shininess;
-
-// new ligths
-uniform vec3 u_lightColor0;
 
 vec3 m_diffuse = texture(u_diffuseMap, v_TexCoord).rgb;
 float m_specular = texture(u_specularMap, v_TexCoord).r;
@@ -107,118 +91,81 @@ vec3 m_normal = texture(u_normalMap, v_TexCoord).rgb;
 float AO = texture(u_AO, v_TexCoord).r;
 float specularStrength = texture(u_roughness, v_TexCoord).r;
 
-//ligths still have to be put in here manually
-#define LIGHT_COUNT = 2;
-
 vec3 normal = normalize(m_normal * 2.0 - 1.0);  // this normal is in tangent space
 
-vec3 point_calculate_diffuse(Light l)
+vec3 calculate_point(Light l)
 {
     vec3 lightDir = normalize(l.position - tangentFragPos);
     float diff = max(dot(lightDir, normal), 0.0);
     vec3 diffuse = diff * m_diffuse * l.color;
-    return diffuse;
-}
-
-vec3 point_calculate_specular(Light l)
-{
-    vec3 lightDir = normalize(l.position - tangentFragPos);
+    //specular
     vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
     vec3 halfwayDir = normalize(lightDir + viewDir);
-    //float random_metallness = mix(64, 32, (1.0 - m_specular)); 
-    //float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
+    float random_metallness = mix(64, 32, (1.0 - m_specular)); 
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
+    //float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
     vec3 specular = (1.0 - specularStrength) * spec * l.color;
-    return specular;
+    
+    //result
+    vec3 final = diffuse + specular;
+    return final;
 }
 
-vec3 direc_calculate_diffuse(Light l)
+vec3 calculate_directional(Light l)
 {
     return vec3(1, 0, 0);
 }
 
-vec3 direc_calculate_specular(Light l)
-{
-    return vec3(1, 0, 0);
-}
-
-vec3 spotl_calculate_diffuse(Light l)
+vec3 calculate_spotlight(Light l)
 {
     vec3 lightDir = normalize(l.position - tangentFragPos);
     float theta = dot(lightDir, normalize(-l.lightDir));
 
-    vec3 diffuse;
+    vec3 final;
 
     if (theta > l.info.g)
     {
-        float diff = max(dot(lightDir, normal), 0.0);
-        diffuse = diff * m_diffuse * l.color;
+        final = calculate_point(l);
     }
-    else
-    {
-        diffuse = vec3(0, 0, 0);
-    }
-    return diffuse;
-}
-
-vec3 spotl_calculate_specular(Light l)
-{
-    vec3 lightDir = normalize(l.position - tangentFragPos);
-    float theta = dot(lightDir, normalize(-l.lightDir));
-
-    vec3 specular;
-
-    if (theta > l.info.g)
-    {
-        vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
-        vec3 reflectDir = reflect(-lightDir, normal);
-        vec3 halfwayDir = normalize(lightDir + viewDir);
-        //float random_metallness = mix(64, 32, (1.0 - m_specular)); 
-        //float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
-        float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
-        vec3 specular = (1.0 - specularStrength) * spec * l.color;
-    }
-    else
-    {
-        specular = vec3(0, 0, 0);
-    }
-
-    return specular;
+    return final;
 }
 
 void main()
 {
     vec3 finalDiffuse = vec3(0, 0, 0);
     vec3 finalSpecular = vec3(0, 0, 0);
+
+    vec3 diffuse_specular = vec3(0, 0, 0);
+
     for (int i = 0; i < 2; i++)
     {
         // switch-like branching
 
-        
-
         if (lights[i].info.x == 0)                  // point 
         {
-            finalDiffuse += point_calculate_diffuse(lights[i]);
-            finalSpecular += point_calculate_specular(lights[i]);
+            diffuse_specular += calculate_point(lights[i]);
         }
-        if (lights[i].info.x == 1)             // directional 
+        else if (lights[i].info.x == 1)             // directional 
         {
-            finalDiffuse += direc_calculate_diffuse(lights[i]);
-            finalSpecular += direc_calculate_specular(lights[i]);
+            diffuse_specular += calculate_directional(lights[i]);
         }
-        if (lights[i].info.x == 2)              // spotlight
+        else if (lights[i].info.x == 2)              // spotlight
         {
-            finalDiffuse += spotl_calculate_diffuse(lights[i]);
-            finalSpecular += spotl_calculate_specular(lights[i]);
+            diffuse_specular += calculate_spotlight(lights[i]);
         }
-
+        else
+        {
+            
+        }
+        
     }
     
     // calculate ambient
     vec3 ambient = m_diffuse * u_AmbientStrength * AO;
 
-    vec3 finalColor = ambient + finalDiffuse + finalSpecular;
+    //vec3 finalColor = ambient + finalDiffuse + finalSpecular;
 
+    vec3 finalColor = ambient + diffuse_specular;
     color = vec4(finalColor, 1.0);
 }

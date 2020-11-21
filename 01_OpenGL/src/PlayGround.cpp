@@ -23,7 +23,7 @@ void PlayGround::OnAttach()
 	l0.color = glm::vec3(1.0f);
 	l0.position = glm::vec3(5, 5, 8);
 	l0.type = LightType::Spotlight;
-	l0.lightDir = glm::vec3(0.0f, 0.0f, 1.0f);
+	l0.lightDir = glm::vec3(0.0f, 0.0f, -1.0f);
 	l0.cutoff = 12.0f;
 	lights[0] = l0; 
 	
@@ -31,6 +31,8 @@ void PlayGround::OnAttach()
 	l1.color = glm::vec3(0.5f);
 	l1.position = glm::vec3(5, 5, -10);
 	l1.type = LightType::Point;
+	l1.lightDir = glm::vec3(0.0f, 0.0f, 1.0f);
+	l1.cutoff = 12.0f;
 	lights[1] = l1;
 	//in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
     //texture files in correct form (AO.png, .. )
