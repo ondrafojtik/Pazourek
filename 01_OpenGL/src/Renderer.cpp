@@ -115,11 +115,7 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 {
 	Shader* shader = data.shaders["basic"];
 	shader->Bind();
-
-    // test
-    shader->SetUniform3f("lights[0].position", 1, 1, 1);
-    shader->SetUniform3f("lights[1].position", 1, 1, 1);    
-
+  
 	float rotation = 0.0f;
 	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
@@ -128,19 +124,6 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
     //sending all the "lightPos" info into frangment
-	for (int i = 0; i < 2; i++)
-	{
-
-        // ive gotta send more info in (including color, pos and TYPE)
-		std::string u_lightPos = "u_lightPos" + std::to_string(i);
-		shader->SetUniform3f(u_lightPos, lights[i].position.x, 
-							 lights[i].position.y, lights[i].position.z);
-        std::string u_lightColor = "u_lightColor" + std::to_string(i);
-        shader->SetUniform3f(u_lightColor, lights[i].color.x,
-                             lights[i].color.y, lights[i].color.z);
-        std::string u_lightType = "u_lightType" + std::to_string(i);
-        shader->SetUniform1i(u_lightType, lights[i].type);
-    }
 
     for (int i = 0; i < 2; i++)
     {
@@ -150,7 +133,10 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
         shader->SetUniform3fv(u_name, lights[i].color);
         u_name = "lights_out[" + std::to_string(i) + "].type";
         shader->SetUniform1f(u_name, lights[i].type);
-               
+        u_name = "lights_out[" + std::to_string(i) + "].lightDir";
+        shader->SetUniform3fv(u_name, lights[i].lightDir);
+        u_name = "lights_out[" + std::to_string(i) + "].cutOff";
+        shader->SetUniform1f(u_name, glm::cos(glm::radians(lights[i].cutoff)));
     }
 
 

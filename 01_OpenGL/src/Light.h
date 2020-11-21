@@ -4,7 +4,7 @@ enum LightType
 {
     Point = 0,
     Directional,
-    Reflector
+    Spotlight
 };
 
 struct Light
@@ -14,4 +14,9 @@ struct Light
     glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::vec3 color = glm::vec3(1.0f);
 
+    // for directional
+    glm::vec3 lightDir = glm::vec3(1.0f, 0.0f, 0.0f);
+
+    // for spotlight
+    float cutoff = 0.0f;
 };

@@ -12,6 +12,8 @@ struct Light
     vec3 position;
     vec3 color;
     float type;
+
+    vec3 lightDir;
 };
 
 uniform Light lights_out[2];
@@ -61,6 +63,7 @@ void main()
         lights[i].position = TBN * lights_out[i].position;
         lights[i].color = lights_out[i].color;
         lights[i].type = lights_out[i].type;
+        lights[i].lightDir = TBN * normalize(lights_out[i].lightDir);
     }
 
 
@@ -76,6 +79,8 @@ struct Light
     vec3 position;
     vec3 color;
     float type;
+
+    vec3 lightDir;
 };
 
 in Light lights[2];
@@ -111,15 +116,15 @@ float specularStrength = texture(u_roughness, v_TexCoord).r;
 
 vec3 normal = normalize(m_normal * 2.0 - 1.0);  // this normal is in tangent space
 
-vec3 calculate_diffuse(vec3 position, vec3 color)
+vec3 point_calculate_diffuse(vec3 position, vec3 color)
 {
     vec3 lightDir = normalize(position - tangentFragPos);
     float diff = max(dot(lightDir, normal), 0.0);
-    //vec3 diffuse = diff * m_diffuse * color;
-    return (diff * m_diffuse * color);
+    vec3 diffuse = diff * m_diffuse * color;
+    return diffuse;
 }
 
-vec3 calculate_specular(vec3 position, vec3 color)
+vec3 point_calculate_specular(vec3 position, vec3 color)
 {
     vec3 lightDir = normalize(position - tangentFragPos);
     vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
@@ -128,8 +133,37 @@ vec3 calculate_specular(vec3 position, vec3 color)
     //float random_metallness = mix(64, 32, (1.0 - m_specular)); 
     //float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
     float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
-    //vec3 specular = (1.0 - specularStrength) * spec * color;
-    return ((1.0 - specularStrength) * spec * color);
+    vec3 specular = (1.0 - specularStrength) * spec * color;
+    return specular;
+}
+
+vec3 direc_calculate_diffuse(vec3 lightDirection, vec3 color)
+{
+    float diff = max(dot(-lightDirection, normal), 0.0);
+    vec3 diffuse = diff * m_diffuse * color;
+    return diffuse;
+}
+
+vec3 direc_calculate_specular(vec3 lightDirection, vec3 color)
+{
+    vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
+    vec3 reflectDir = reflect(-lightDirection, normal);
+    vec3 halfwayDir = normalize(lightDirection + viewDir);
+    //float random_metallness = mix(64, 32, (1.0 - m_specular)); 
+    //float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
+    vec3 specular = (1.0 - specularStrength) * spec * color;
+    return specular;
+}
+
+vec3 spotl_calculate_diffuse(Light l)
+{
+    return vec3(0, 0, 1);
+}
+
+vec3 spotl_calculate_specular(Light l)
+{
+    return vec3(0, 0, 1);
 }
 
 void main()
@@ -138,13 +172,32 @@ void main()
     vec3 finalSpecular = vec3(0, 0, 0);
     for (int i = 0; i < 2; i++)
     {
-        finalDiffuse = finalDiffuse + calculate_diffuse(lights[i].position, lights[i].color);
-        finalSpecular =
-                      finalSpecular + calculate_specular(lights[i].position, lights[i].color);
-    }
+        // switch-like branching
 
+        int type = int(lights[i].type);
+
+        if (type == 0)                  // point 
+        {
+            finalDiffuse += point_calculate_diffuse(lights[i].position, lights[i].color);
+            finalSpecular += point_calculate_specular(lights[i].position, lights[i].color);
+        }
+        if (type == 1)             // directional 
+        {
+            finalDiffuse += direc_calculate_diffuse(lights[i].lightDir, lights[i].color);
+            finalSpecular += direc_calculate_specular(lights[i].lightDir, lights[i].color);
+        }
+        if (type == 2)              // spotlight
+        {
+            finalDiffuse += spotl_calculate_diffuse(lights[i]);
+            finalSpecular += spotl_calculate_specular(lights[i]);
+        }
+
+    }
+    
     // calculate ambient
     vec3 ambient = m_diffuse * u_AmbientStrength * AO;
 
-    color = vec4(ambient + finalDiffuse + finalSpecular, 1.0);
+    vec3 finalColor = ambient + finalDiffuse + finalSpecular;
+
+    color = vec4(finalColor, 1.0);
 }

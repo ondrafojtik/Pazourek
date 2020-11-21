@@ -18,15 +18,17 @@ void PlayGround::OnAttach()
 
 	lightPositions[0] = glm::vec3(5, 5, 8);
 	lightPositions[1] = glm::vec3(5, 5, -10);
-    
+	
 	Light l0;
 	l0.color = glm::vec3(1.0f);
 	l0.position = glm::vec3(5, 5, 8);
-	l0.type = LightType::Point;
+	l0.type = LightType::Spotlight;
+	l0.lightDir = glm::vec3(0.0f, 0.0f, -1.0f);
+	l0.cutoff = 12.5f;
 	lights[0] = l0; 
 	
 	Light l1;
-	l1.color = glm::vec3(0.05f, 0.1f, 0.5f);
+	l1.color = glm::vec3(0.5f);
 	l1.position = glm::vec3(5, 5, -10);
 	l1.type = LightType::Point;
 	lights[1] = l1;
