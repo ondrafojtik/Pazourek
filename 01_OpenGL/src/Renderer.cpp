@@ -131,10 +131,6 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
         shader->SetUniform3fv(u_name, lights[i].position);
         u_name = "lights_out[" + std::to_string(i) + "].color";
         shader->SetUniform3fv(u_name, lights[i].color);
-        //u_name = "lights_out[" + std::to_string(i) + "].type";
-        //shader->SetUniform1f(u_name, lights[i].type);
-        //u_name = "lights_out[" + std::to_string(i) + "].cutoff";
-        //shader->SetUniform1f(u_name, glm::cos(glm::radians(lights[i].cutoff)));
         u_name = "lights_out[" + std::to_string(i) + "].info";
         shader->SetUniform3f(u_name, lights[i].type,
                              glm::cos(glm::radians(lights[i].cutoff)), 0.0f);
@@ -160,7 +156,7 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 	shader->SetUniform1i("u_AO", 3);
 	roughness.Bind(4);
 	shader->SetUniform1i("u_roughness", 4);
-
+    shader->Bind();
     for(int i = 0; i < model.meshes.size(); i++)
 	{
 		        

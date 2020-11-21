@@ -102,9 +102,9 @@ vec3 calculate_point(Light l)
     vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
     vec3 halfwayDir = normalize(lightDir + viewDir);
-    float random_metallness = mix(64, 32, (1.0 - m_specular)); 
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
-    //float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
+    //float random_metallness = mix(64, 32, (1.0 - m_specular)); 
+    //float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
     vec3 specular = (1.0 - specularStrength) * spec * l.color;
     
     //result
@@ -122,21 +122,33 @@ vec3 calculate_spotlight(Light l)
     vec3 lightDir = normalize(l.position - tangentFragPos);
     float theta = dot(lightDir, normalize(-l.lightDir));
 
-    vec3 final;
+    vec3 final = vec3(0, 0, 0);
 
     if (theta > l.info.g)
     {
-        final = calculate_point(l);
+        vec3 lightDir = normalize(-l.lightDir);
+        float diff = max(dot(lightDir, normal), 0.0);
+        vec3 diffuse = diff * m_diffuse * l.color;
+        //specular
+        vec3 viewDir = normalize(tangentViewPos - tangentFragPos);
+        vec3 reflectDir = reflect(-lightDir, normal);
+        vec3 halfwayDir = normalize(lightDir + viewDir);
+        //float random_metallness = mix(64, 32, (1.0 - m_specular)); 
+        //float spec = pow(max(dot(normal, halfwayDir), 0.0), random_metallness);
+        float spec = pow(max(dot(normal, halfwayDir), 0.0), u_Shininess);
+        vec3 specular = (1.0 - specularStrength) * spec * l.color;
+    
+        //result
+        vec3 final = diffuse + specular;
+        return final;
     }
+
     return final;
 }
 
 void main()
 {
-    vec3 finalDiffuse = vec3(0, 0, 0);
-    vec3 finalSpecular = vec3(0, 0, 0);
-
-    vec3 diffuse_specular = vec3(0, 0, 0);
+    vec3 diffuse_specular;
 
     for (int i = 0; i < 2; i++)
     {
@@ -146,25 +158,20 @@ void main()
         {
             diffuse_specular += calculate_point(lights[i]);
         }
-        else if (lights[i].info.x == 1)             // directional 
+        if (lights[i].info.x == 1)             // directional 
         {
             diffuse_specular += calculate_directional(lights[i]);
         }
-        else if (lights[i].info.x == 2)              // spotlight
+        if (lights[i].info.x == 2)              // spotlight
         {
             diffuse_specular += calculate_spotlight(lights[i]);
         }
-        else
-        {
-            
-        }
+        
         
     }
     
     // calculate ambient
     vec3 ambient = m_diffuse * u_AmbientStrength * AO;
-
-    //vec3 finalColor = ambient + finalDiffuse + finalSpecular;
 
     vec3 finalColor = ambient + diffuse_specular;
     color = vec4(finalColor, 1.0);
