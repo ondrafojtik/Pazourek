@@ -239,7 +239,7 @@ public:
 					Light* lights, float ambientStrength,
 					float Shininess, Model model);
     // procedural map
-    void DrawMap(const RandomMap& map, glm::vec3 position);
+    void DrawMap(const RandomMap& map, glm::vec3 position, Light* lights);
 	void DrawLine(glm::vec3 p1, glm::vec3 p2);
 	Renderer(Camera *camera);
 	void Clear() const; 

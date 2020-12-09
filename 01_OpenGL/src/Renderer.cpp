@@ -26,7 +26,7 @@ Renderer::Renderer(Camera *camera) : m_Camera(camera)
 void Renderer::DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale,
                         float rotation, float xAxes, float yAxes, float zAxes)
 {
-
+	glDisable(GL_DEPTH_TEST);
     glStencilFunc(GL_ALWAYS, 0, GL_REPLACE);
 
     texture.Bind();
@@ -49,6 +49,7 @@ void Renderer::DrawCube(Texture& texture, glm::vec3 position, glm::vec3 scale,
 	data.shaders["skyBox"]->Unbind();
 	texture.Unbind();
 
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Renderer::DrawLight(Light& light)
@@ -174,33 +175,67 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 }
 
 // scrap
-void Renderer::DrawMap(const RandomMap& map, glm::vec3 position)
+void Renderer::DrawMap(const RandomMap& map, glm::vec3 position, Light* lights)
 {
     
     glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
+    Shader* shader = data.shaders["procedural"];
+    
     float rotation = 0.0f;
-	glm::vec3 scale = { 20.0f, map.scale, 20.0f };
+	glm::vec3 scale = { map.scale.x, map.scale.y , map.scale.z };
 
 	glm::mat4 transform =
         glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
 		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 1, 0 })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, scale.z });
 
+    float Shininess = 64.0f;
+    float ambientStrength = 0.1f;
+    
     map.vb->Bind();
 	map.va->Bind();
 	map.ib->Bind();
-	data.shaders["procedural"]->Bind();
-	data.shaders["procedural"]->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
-	data.shaders["procedural"]->SetUniformMat4f("u_View", m_Camera->GetView());
-	data.shaders["procedural"]->SetUniformMat4f("u_Model", transform);
-	data.shaders["procedural"]->SetUniform4f("u_Color", 0.1f, 0.5f, 0.05f, 1.0f);
+
+    shader->Bind();
+	
+	// sending in light data
+	for (int i = 0; i < 2; i++)
+	{
+		std::string u_name = "lights[" + std::to_string(i) + "].position";
+		shader->SetUniform3fv(u_name, lights[i].position);
+		u_name = "lights[" + std::to_string(i) + "].color";
+		shader->SetUniform3fv(u_name, lights[i].color);
+		u_name = "lights[" + std::to_string(i) + "].info";
+		shader->SetUniform3f(u_name, lights[i].type,
+			glm::cos(glm::radians(lights[i].cutoff)), 0.0f);
+		u_name = "lights[" + std::to_string(i) + "].lightDir";
+		shader->SetUniform3fv(u_name, lights[i].lightDir);
+
+	}
+
+    shader->SetUniform3f("u_CameraPos", m_Camera->GetPosition().x,
+		m_Camera->GetPosition().y, m_Camera->GetPosition().z);
+	shader->SetUniform1f("u_AmbientStrength", ambientStrength);
+	shader->SetUniform1f("u_Shininess", Shininess);
+    shader->SetUniformMat4f("u_Projection", m_Camera->GetProjection());
+	shader->SetUniformMat4f("u_View", m_Camera->GetView());
+	shader->SetUniformMat4f("u_Model", transform);
+	shader->SetUniform4f("u_Color", 0.1f, 0.5f, 0.05f, 1.0f);
 	GLCall(glDrawElements(GL_TRIANGLES, map.ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 	map.vb->Unbind();
 	map.va->Unbind();
 	map.ib->Unbind();
-	data.shaders["plainColor"]->Unbind();    
+	shader->Unbind();    
 
+    // draw the normals!
+    for (int i = 0; i < map.vertices.size(); i++)
+    {
+        glm::vec3 _position = glm::vec3(map.vertices[i].position.x * map.scale.x, map.vertices[i].position.y * map.scale.y, map.vertices[i].position.z * map.scale.z);
+        
+        DrawLine(_position,
+                 _position + map.vertices[i].normal);
+    }
 }
 
 void Renderer::DrawLine(glm::vec3 p1, glm::vec3 p2)

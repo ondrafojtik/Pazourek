@@ -18,25 +18,30 @@
 #define X_DIMENSION 10
 #define Z_DIMENSION 10
 
-#define SCALE 1.5
+#define SCALE_Y 1.5
 
 struct Point
 {
     float x, y, z;
     unsigned int index;
+
+    std::vector<glm::vec3> normals;
+    
     Point(float _x, float _y, float _z)
-    : x(_x), y(_y), z(_z) {} 
+        : x(_x), y(_y), z(_z) { normals = std::vector<glm::vec3>(); } 
 };
 
 struct VertexInfo
 {
-    float x, y, z;
+    glm::vec3 position;
+    glm::vec3 normal;
+    
 };
 
 static float real_y_position(float y)
 {
     float value = y;
-    y = y * SCALE;
+    y = y * SCALE_Y;
     y = y + MAP_HEIGHT;
 
     return y;
@@ -72,7 +77,8 @@ struct RandomMap
 {
     int seed = 0;
     int step = 0;
-    float scale = SCALE;
+    glm::vec3 scale;
+
     std::vector<Point> buffer;
     std::vector<VertexInfo> vertices;
     std::vector<unsigned int> indices;
@@ -93,7 +99,9 @@ struct RandomMap
         file.close();
 
         layout.Push<float>(3);
-        
+        layout.Push<float>(3);
+
+        scale = glm::vec3(20.0f, SCALE_Y, 20.0f);
         Recalc();
 
     }
@@ -135,9 +143,6 @@ struct RandomMap
                 //  *--*
                 // increase value, so that I get random value for each
                 // point(vertex)
-
-                // FILLING THE ARRAY UP, NOW THERE ARENT ANY DUPLICATES!
-
 
 
                 float y = (char)seed_origin[seed + step] - '0';
@@ -196,7 +201,7 @@ struct RandomMap
                     index3 = find_point(buffer, point.x, point.z).index;
                  }
 
-                //add normal triangles here to render and do the "hard ones" later? 
+                // add normal triangles here to render and do the "hard ones" later? 
                 indices.push_back(index0);
                 indices.push_back(index1);
                 indices.push_back(index2);
@@ -204,6 +209,36 @@ struct RandomMap
                 indices.push_back(index3);
                 indices.push_back(index0);
 
+                // calculate normal for each vertex
+
+                // first triangle
+                glm::vec3 v1 = { buffer.at(index2).x - buffer.at(index1).x,
+                                 buffer.at(index2).y - buffer.at(index1).y,
+                                 buffer.at(index2).z - buffer.at(index1).z };
+                glm::vec3 v2 = { buffer.at(index0).x - buffer.at(index1).x,
+                                 buffer.at(index0).y - buffer.at(index1).y,
+                                 buffer.at(index0).z - buffer.at(index1).z };
+                v1 = glm::normalize(v1);
+                v2 = glm::normalize(v2);
+                glm::vec3 dot_product = glm::cross(v1, v2);                
+                buffer.at(index0).normals.push_back(dot_product);
+                buffer.at(index1).normals.push_back(dot_product);
+                buffer.at(index2).normals.push_back(dot_product);
+
+                // second triangle
+                v1 = { buffer.at(index0).x - buffer.at(index3).x,
+                       buffer.at(index0).y - buffer.at(index3).y,
+                       buffer.at(index0).z - buffer.at(index3).z };
+                v2 = { buffer.at(index2).x - buffer.at(index3).x,
+                       buffer.at(index2).y - buffer.at(index3).y,
+                       buffer.at(index2).z - buffer.at(index3).z };
+                v1 = glm::normalize(v1);
+                v2 = glm::normalize(v2);
+                dot_product = glm::cross(v1, v2);                
+                buffer.at(index2).normals.push_back(dot_product);
+                buffer.at(index3).normals.push_back(dot_product);
+                buffer.at(index0).normals.push_back(dot_product);
+                
             }
         // find maximum values (so that u can transform all vertex info into values
         // from 0 to 1
@@ -219,9 +254,20 @@ struct RandomMap
         for (Point p : buffer)
         {
             VertexInfo vertex;
-            vertex.x = inverse_lerp(p.x, min_x, max_x) * 2.0f - 1.0f;
-            vertex.y = inverse_lerp(p.y, min_y, max_y) * 2.0f - 1.0f;
-            vertex.z = inverse_lerp(p.z, min_z, max_z) * 2.0f - 1.0f;
+            vertex.position.x = inverse_lerp(p.x, min_x, max_x) * 2.0f - 1.0f;
+            vertex.position.y = inverse_lerp(p.y, min_y, max_y) * 2.0f - 1.0f;
+            vertex.position.z = inverse_lerp(p.z, min_z, max_z) * 2.0f - 1.0f;
+
+            // calculate average normal
+            glm::vec3 sum = glm::vec3(0, 0, 0);
+            for (glm::vec3 normal : p.normals)
+                sum += normal;
+
+            sum = glm::normalize(sum);
+            vertex.normal.x = sum.x;
+            vertex.normal.y = sum.y;
+            vertex.normal.z = sum.z;
+            
             vertices.push_back(vertex);
         }
         // creating render data

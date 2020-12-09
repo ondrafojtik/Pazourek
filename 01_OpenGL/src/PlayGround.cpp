@@ -22,7 +22,7 @@ void PlayGround::OnAttach()
 	Light l0;
 	l0.color = glm::vec3(1.0f);
 	l0.position = glm::vec3(5, 5, 8);
-	l0.type = LightType::Spotlight;
+	l0.type = LightType::Point;
 	l0.lightDir = glm::vec3(0.0f, 0.0f, -1.0f);
 	l0.cutoff = 12.0f;
 	lights[0] = l0; 
@@ -36,7 +36,7 @@ void PlayGround::OnAttach()
 	lights[1] = l1;
 	//in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
     //texture files in correct form (AO.png, .. )
-	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
+	//model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
 
     // init map here..
     map->Init();
@@ -80,8 +80,8 @@ void PlayGround::OnUpdate()
 	//rotation += 1;
 	EventHandler::camera = camera;
     
-	lights[0].lightDir = EventHandler::mouseRay->get_normalized_ray();
-    lights[0].position = EventHandler::mouseRay->originPoint;
+	//lights[0].lightDir = EventHandler::mouseRay->get_normalized_ray();
+	//lights[0].position = EventHandler::mouseRay->originPoint;
 }
 
 void PlayGround::OnRender()
@@ -93,16 +93,16 @@ void PlayGround::OnRender()
 	if (showDebugBoxes)
 	{
 		for (VertexInfo p : map->vertices)
-		    renderer->DrawColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), { p.x, (p.y * map->scale), p.z }, 0, 1, 1, 1);
+		    renderer->DrawColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), { p.position.x, (p.position.y * map->scale.y), p.position.z }, 0, 1, 1, 1);
 	}
-	renderer->DrawMap(*map, { 0, 0, 0 });
-    renderer->DrawCube(*skyBox, { 0, 0, 0 }, { 100, 100, 100 }, 0, 0, 0, 1);
-
-	//renderer->DrawLight(lights[0]);
+	
+    renderer->DrawCube(*skyBox, camera->GetPosition(), { 1, 1, 1 }, 0, 0, 0, 1);
+	renderer->DrawMap(*map, { 0, 0, 0 }, lights);
+	renderer->DrawLight(lights[0]);
 	renderer->DrawLight(lights[1]);
 
-	renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 },
-		lights, ambientStrength, shininess, *model);
+	//renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 },
+	//	lights, ambientStrength, shininess, *model);
 	//render light cube
 	
 	renderer->DrawLine({ EventHandler::mouseRay->originPoint }, { EventHandler::mouseRay->destPoint });

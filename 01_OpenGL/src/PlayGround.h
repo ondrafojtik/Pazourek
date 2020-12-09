@@ -58,13 +58,11 @@ public:
 	
 	Texture* skyBox = new Texture("src/res/textures/skyBox.png");
 
-	Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
-	Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
-	Texture* normal = new Texture("src/res/models/backpack/normal.png");
-	Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
-	Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
-
-
+	//Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
+	//Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
+	//Texture* normal = new Texture("src/res/models/backpack/normal.png");
+	//Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
+	//Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
 
 
 	//animation test
@@ -80,7 +78,7 @@ public:
 	Light lights[2];
 
 	bool showDebugBoxes = 0;
-	Model* model = nullptr;
+	//Model* model = nullptr;
     
     RandomMap* map = new RandomMap();
 	glm::vec3 map_scale = glm::vec3(5.0f, 1.0f, 5.0f);
