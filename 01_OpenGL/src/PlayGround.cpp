@@ -6,27 +6,27 @@ void PlayGround::OnAttach()
 	//EventHandler::mouseRay = worldRay;
 
 	glfwSetCursorPosCallback(window, [](GLFWwindow* window, double mouseXPos,
-                                        double mouseYPos)
-		-> void {EventHandler::cursor_pos_callback(window, mouseXPos, mouseYPos);});
+		double mouseYPos)
+		-> void {EventHandler::cursor_pos_callback(window, mouseXPos, mouseYPos); });
 	glfwSetKeyCallback(window, [](GLFWwindow* window, int key, int scancode,
-                                        int action, int mods)
+		int action, int mods)
 		-> void {EventHandler::key_callback(window, key, scancode, action, mods); });
 
-	glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, 
-										int action, int mode)
+	glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button,
+		int action, int mode)
 		-> void {EventHandler::mouse_button_callback(window, button, action, mode); });
 
 	lightPositions[0] = glm::vec3(5, 5, 8);
 	lightPositions[1] = glm::vec3(5, 5, -10);
-	
+
 	Light l0;
 	l0.color = glm::vec3(1.0f);
 	l0.position = glm::vec3(5, 5, 8);
 	l0.type = LightType::Point;
 	l0.lightDir = glm::vec3(0.0f, 0.0f, -1.0f);
 	l0.cutoff = 12.0f;
-	lights[0] = l0; 
-	
+	lights[0] = l0;
+
 	Light l1;
 	l1.color = glm::vec3(0.5f);
 	l1.position = glm::vec3(5, 5, -10);
@@ -35,12 +35,15 @@ void PlayGround::OnAttach()
 	l1.cutoff = 12.0f;
 	lights[1] = l1;
 	//in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
-    //texture files in correct form (AO.png, .. )
+	//texture files in correct form (AO.png, .. )
 	//model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
 
-    // init map here..
-    map->Init();
+	// init map here..
+	map->Init();
+
+	// test
 	
+
 }
 
 void PlayGround::OnDetach()
@@ -82,6 +85,32 @@ void PlayGround::OnUpdate()
     
 	//lights[0].lightDir = EventHandler::mouseRay->get_normalized_ray();
 	//lights[0].position = EventHandler::mouseRay->originPoint;
+	t += 0.01f * direction;
+	if (t > 1)
+		direction = -1;
+	if (t < 0)
+		direction = 1;
+	
+	
+	glm::vec4 matOne = glm::vec4(t * t * t, t * t, t, 1);
+	glm::mat4 matTwo = {
+		-1,  3, -3, 1,
+		 3, -6,  3, 0,
+		-3,  3,  0, 0,
+		 1,  0,  0, 0
+	};
+
+	glm::mat4x3 matThree = {
+		0, 5, 0,
+		0, 5, 10,
+		10, 5, 10,
+		10, 5, 0
+	};
+
+	glm::vec3 final = (matThree * matTwo) * matOne;
+
+
+	lights[0].position = final;
 }
 
 void PlayGround::OnRender()

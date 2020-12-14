@@ -82,5 +82,6 @@ public:
     
     RandomMap* map = new RandomMap();
 	glm::vec3 map_scale = glm::vec3(5.0f, 1.0f, 5.0f);
-
+	int direction = 1;
+	float t = 0.1f;
 };

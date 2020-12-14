@@ -18,6 +18,7 @@ void main()
 {
 	gl_Position = (u_Projection * u_View * u_Model) * vec4(position, 1.0);
 	v_color = vec4(0.05f, ((position.y + 1.0) / 2.0) * 0.5, 0.03f, 1.0f);
+	//v_color = vec4(0.05f, (position.y + 1.0) / 2.0, 0.03f, 1.0f);
 	//v_color = vec4(normal, 1.0);
 	v_FragPos = vec3(u_Model * vec4(position, 1.0f));
 	v_normal = inverse(transpose(mat3(u_Model))) * normal;
@@ -50,7 +51,6 @@ uniform vec3 u_CameraPos;
 
 vec3 calculate_light(Light light)
 {
-
 	//diffuse
 	vec3 norm = normalize(v_normal);
 	vec3 lightDir = normalize(light.position - v_FragPos);
