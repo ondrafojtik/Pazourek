@@ -1,4 +1,5 @@
 #include "glm/vec3.hpp"
+#include "Object.h"
 
 enum LightType
 {
@@ -19,4 +20,5 @@ struct Light
 
     // for spotlight
     float cutoff = 0.0f;
+
 };

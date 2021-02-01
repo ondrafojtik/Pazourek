@@ -47,12 +47,6 @@ struct Particle
 		x += velocity.x * speed / 100;
 		y += velocity.y * speed / 100;
 
-		/*
-		if (m_AllowRotation)
-			m_Sprite->RotateSprite(m_Sprite->GetRotation() + (m_RotationSpeed * m_Color.a));
-		if (m_AllowScale)
-			m_Sprite->SetSize({ m_Sprite->GetOriginalSize().width * m_Color.a + m_minimalSize, m_Sprite->GetOriginalSize().height * m_Color.a + m_minimalSize });
-		*/
 
 	}
 
@@ -79,26 +73,3 @@ struct ParticleSystem
 	}
 
 };
-
-
-/*
-class ParticleSystem
-{
-private: 
-	std::vector<Particle> m_Particles;
-
-public:
-	ParticleSystem();
-	~ParticleSystem();
-
-	void AddObject(const Particle& particle);
-	void AddObject(float xPos, float yPos, float ParticleSizeX, float ParticleSizeY, glm::vec4 ParticleStartingColor, glm::vec4 ParticleDyingColor, float ParticleLife,
-		std::string particleShaderPath, bool allowRotation, bool allowScale);
-
-	void OnUpdate();
-
-	std::vector<Particle>& GetParticles() { return m_Particles; }
-};
-*/
-
-

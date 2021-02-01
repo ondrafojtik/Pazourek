@@ -45,8 +45,6 @@ struct Mesh
 		setupMesh();
 	}
 
-
-	//keeping the "positions, texCoords, .." here just to see if it works!
 	void setupMesh()
 	{
 		GLCall(glGenVertexArrays(1, &vao));
@@ -64,20 +62,5 @@ struct Mesh
 		va->AddBuffer(*vb, layout);
         ib = new IndexBuffer(&indices[0], indices.size());
     }
-
-	void Bind()
-	{
-		vb->Bind();
-		va->Bind();
-		ib->Bind();
-	}
-
-	void UnBind()
-	{
-		vb->Unbind();
-		va->Unbind();
-		ib->Unbind();
-	}
-	
 	
 };

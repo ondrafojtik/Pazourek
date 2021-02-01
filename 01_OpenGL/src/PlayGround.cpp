@@ -1,4 +1,5 @@
 #include "PlayGround.h"
+#include "Enemy.h"
 
 void PlayGround::OnAttach()
 {
@@ -36,13 +37,48 @@ void PlayGround::OnAttach()
 	lights[1] = l1;
 	//in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
 	//texture files in correct form (AO.png, .. )
-	//model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
+	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
 
 	// init map here..
 	map->Init();
 
 	// test
-	
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (Random::Float() > 0.5f)
+		{
+			glm::vec3 p1 = glm::vec3(Random::Float() * 10, Random::Float() * 10 + 5, Random::Float() * 10);
+			glm::vec3 p2 = glm::vec3(Random::Float() * 10, Random::Float() * 10 + 5, Random::Float() * 10);
+			glm::vec3 p3 = glm::vec3(Random::Float() * 10, Random::Float() * 10 + 5, Random::Float() * 10);
+			glm::vec3 p4 = glm::vec3(Random::Float() * 10, Random::Float() * 10 + 5, Random::Float() * 10);
+			glm::mat4x3 bezier = {
+				p1.x, p1.y, p1.z,
+				p2.x, p2.y, p2.z,
+				p3.x, p3.y, p3.z,
+				p4.x, p4.y, p4.z
+			};
+			Object* o = new Enemy(bezier);
+			OM->Add(*o);
+		}
+		else
+		{
+			glm::vec3 p1 = glm::vec3(Random::Float() * 10, Random::Float() * 10 + 5, Random::Float() * 10);
+			glm::vec3 p2 = glm::vec3(Random::Float() * 10, Random::Float() * 10 + 5, Random::Float() * 10);
+			glm::vec3 p3 = glm::vec3(Random::Float() * 10, Random::Float() * 10 + 5, Random::Float() * 10);
+			glm::vec3 p4 = glm::vec3(Random::Float() * 10, Random::Float() * 10 + 5, Random::Float() * 10);
+			glm::mat4x3 bezier = {
+				p1.x, p1.y, p1.z,
+				p2.x, p2.y, p2.z,
+				p3.x, p3.y, p3.z,
+				p4.x, p4.y, p4.z
+			};
+			Object* o = new Ally(bezier);
+			OM->Add(*o);
+		}
+	}
+	EventHandler::camera = camera;
+	EventHandler::object_manager = OM;
 
 }
 
@@ -53,15 +89,15 @@ void PlayGround::OnDetach()
     delete alonso;
     delete tex;
     delete skyBox;
-    //delete diffuse;
-    //delete specular;
-    //delete normal;
-    //delete ao;
-    //delete roughness;
+    delete diffuse;
+    delete specular;
+    delete normal;
+    delete ao;
+    delete roughness;
     //delete anim;
     delete grass;
     //delete animation;
-    //delete model;
+    delete model;
 }
 
 void PlayGround::OnUpdate()
@@ -79,13 +115,12 @@ void PlayGround::OnUpdate()
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		camera->MoveDown();
 	
+
+
 	//animation->OnUpdate();
 	//rotation += 1;
-	EventHandler::camera = camera;
-    
-	//lights[0].lightDir = EventHandler::mouseRay->get_normalized_ray();
-	//lights[0].position = EventHandler::mouseRay->originPoint;
-	t += 0.01f * direction;
+
+	t += 0.002f * direction;
 	if (t > 1)
 		direction = -1;
 	if (t < 0)
@@ -93,6 +128,7 @@ void PlayGround::OnUpdate()
 	
 	
 	glm::vec4 matOne = glm::vec4(t * t * t, t * t, t, 1);
+	
 	glm::mat4 matTwo = {
 		-1,  3, -3, 1,
 		 3, -6,  3, 0,
@@ -101,16 +137,19 @@ void PlayGround::OnUpdate()
 	};
 
 	glm::mat4x3 matThree = {
-		0, 5, 0,
-		0, 5, 10,
-		10, 5, 10,
-		10, 5, 0
+		0, 5, 2,
+		0, 5, 12,
+		10, 5, 12,
+		10, 5, 2
 	};
 
 	glm::vec3 final = (matThree * matTwo) * matOne;
 
 
 	lights[0].position = final;
+
+	r += 1;
+	OM->GetObjects()[0]->Rotate(r, { 1, 0, 0 });
 }
 
 void PlayGround::OnRender()
@@ -118,31 +157,26 @@ void PlayGround::OnRender()
 	renderer->Clear();
     glEnable(GL_STENCIL_TEST);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-    // render map here
-	if (showDebugBoxes)
-	{
-		for (VertexInfo p : map->vertices)
-		    renderer->DrawColor(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), { p.position.x, (p.position.y * map->scale.y), p.position.z }, 0, 1, 1, 1);
-	}
+	glStencilFunc(GL_ALWAYS, 0, GL_REPLACE);
 	
     renderer->DrawCube(*skyBox, camera->GetPosition(), { 1, 1, 1 }, 0, 0, 0, 1);
-	renderer->DrawMap(*map, { 0, 0, 0 }, lights);
+	renderer->DrawMap(*map, { 0, 0, 0 }, lights, drawNormals);
 	renderer->DrawLight(lights[0]);
 	renderer->DrawLight(lights[1]);
-
-	//renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 },
-	//	lights, ambientStrength, shininess, *model);
-	//render light cube
+	
+	
+	renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 },
+		lights, ambientStrength, shininess, *model);
 	
 	renderer->DrawLine({ EventHandler::mouseRay->originPoint }, { EventHandler::mouseRay->destPoint });
+	
+	for (Object* o : OM->GetObjects())
+	{
+		glStencilFunc(GL_ALWAYS, o->GetID(), GL_REPLACE);
+		o->Move(0.01f);
+		renderer->DrawObject(*o);
+	}
 
-	//double x, y;
-	//glfwGetCursorPos(window, &x, &y);
-	//unsigned int _index;
-	//glReadPixels(x, glm::abs(y - 540), 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &_index);
-	//std::cout << "stencil: " << _index << std::endl;
-
-    
 }
 
 void PlayGround::ImGuiOnUpdate()
@@ -158,7 +192,7 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::SliderInt("shininess", &shininess, 32, 256);
 	ImGui::SliderFloat("SpecularStrength", &SpecularStrength, 0.0f, 1.0f);
 	ImGui::Separator();
-	ImGui::Checkbox("debug boxes", &showDebugBoxes);
+	ImGui::Checkbox("Show normals", &drawNormals);
 	if (ImGui::Button("Recalc map"))
 	{
 		map->Recalc();

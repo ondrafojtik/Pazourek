@@ -2,6 +2,7 @@
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "Subject.h"
 
 struct cameraBounds
 {
@@ -21,7 +22,7 @@ struct AspectRatio
 	}
 };
 
-struct Camera
+struct Camera : public Subject
 {
 
     void MoveUp()       { m_Position += (speed * up);					RecalcView(); }
@@ -39,7 +40,7 @@ struct Camera
 
 	glm::mat4 GetView() { return view; }
 
-	void RecalcView() { view = glm::lookAt(m_Position, m_Position + forward, up); }
+	void RecalcView() { view = glm::lookAt(m_Position, m_Position + forward, up); NotifyObservers(); }
 
 	glm::vec3 GetPosition() { return m_Position; }
 
@@ -47,6 +48,13 @@ struct Camera
 
 	float GetNear() { return m_near; }
 	float GetFar() { return m_far; }
+
+	// observer
+	virtual void NotifyObservers()
+	{
+		for (Observer* obs : Subject::observers)
+			obs->Update(perspective, view, m_Position);
+	}
 
 private:
 	glm::vec3 m_Position;

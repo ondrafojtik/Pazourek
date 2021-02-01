@@ -28,4 +28,5 @@ void Camera::mouseUpdate(const glm::dvec2& newMousePosition)
 	RecalcView();
 
 	oldMousePos = newMousePosition;
+	NotifyObservers();
 }

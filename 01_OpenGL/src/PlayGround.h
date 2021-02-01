@@ -14,7 +14,7 @@
 #include <math.h>
 #include <array>
 
-#include "Renderer.h" //it already includes camera, texture etc. 
+#include "Renderer.h" 
 #include "Pathfinder.h"
 
 #include "Map.h"
@@ -22,6 +22,8 @@
 
 #include "EventHandler.h"
 #include "RandomMap.h"
+
+#include "ObjectManager.h"
 
 static std::string s_grid;
 
@@ -50,6 +52,7 @@ struct PlayGround
 private:
 	Camera* camera = new Camera({5, 2, 5}, 70, AspectRatio(16, 9), 0.01f, 100.0f);
 	Renderer* renderer = new Renderer(camera);
+
 public:
 	float rotation = 0;
 
@@ -58,11 +61,11 @@ public:
 	
 	Texture* skyBox = new Texture("src/res/textures/skyBox.png");
 
-	//Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
-	//Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
-	//Texture* normal = new Texture("src/res/models/backpack/normal.png");
-	//Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
-	//Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
+	Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
+	Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
+	Texture* normal = new Texture("src/res/models/backpack/normal.png");
+	Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
+	Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
 
 
 	//animation test
@@ -77,11 +80,15 @@ public:
 	
 	Light lights[2];
 
-	bool showDebugBoxes = 0;
-	//Model* model = nullptr;
+	Model* model = nullptr;
     
     RandomMap* map = new RandomMap();
 	glm::vec3 map_scale = glm::vec3(5.0f, 1.0f, 5.0f);
 	int direction = 1;
 	float t = 0.1f;
+
+	ObjectManager* OM = new ObjectManager();
+	bool drawNormals = 0;
+
+	float r = 0.0f;
 };

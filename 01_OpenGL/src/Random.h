@@ -1,7 +1,5 @@
 #pragma once
 
-/*all credit for random goes to Cherno*/
-
 #include <random>
 
 class Random
