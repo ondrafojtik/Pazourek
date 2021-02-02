@@ -238,6 +238,7 @@
     <ClInclude Include="src\Animation.h" />
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\defines.h" />
+    <ClInclude Include="src\FontSheet.h" />
     <ClInclude Include="src\GLcall.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Map.h" />

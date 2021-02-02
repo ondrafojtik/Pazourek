@@ -14,6 +14,8 @@
 #include "SubTexture.h"
 #include <unordered_map>
 
+#include "FontSheet.h"
+
 struct RenderData
 {
 	const int vertexCount = 4;
@@ -40,12 +42,12 @@ struct RenderData
 		positions[1] = {  0.5f, -0.5f };
 		positions[2] = {  0.5f,  0.5f };
 		positions[3] = { -0.5f,  0.5f };
-		
+
 		texCoords[0] = { 0.0f, 0.0f };
 		texCoords[1] = { 1.0f, 0.0f };
 		texCoords[2] = { 1.0f, 1.0f };
 		texCoords[3] = { 0.0f, 1.0f };
-		
+
 		unsigned int indices[] = {
 		0, 1, 2,
 		2, 3, 0
@@ -65,7 +67,7 @@ struct RenderData
 
 		vb = new VertexBuffer(pos, 4 * 4 * sizeof(float));
 		unchanged_vb = new VertexBuffer(pos, 4 * 4 * sizeof(float));
-		
+
 		layout.Push<float>(2);
 		layout.Push<float>(2);
 
@@ -98,17 +100,19 @@ struct RenderData
 
 };
 
-class Renderer 
+class Renderer
 {
 private:
 	Camera* m_Camera;
 	RenderData data;
 
 	//blank texture (figure this out later)
-	//u can definitely just pass in the buffer with color, not having to pass texture? or just create blank texutre internally? ?? 
+	//u can definitely just pass in the buffer with color, not having to pass texture? or just create blank texutre internally? ??
 	Texture* blank = new Texture("src/res/textures/Blank.png");
 	Texture* grid = new Texture("src/res/textures/grid.png");
 public:
+    void DrawFont(FontSheet& sheet, std::string text, glm::vec3 color);
+    void DrawFont(const FontSheet& sheet, glm::vec2* coords, glm::vec3 color);
 	void DrawQuad(glm::vec4 color, glm::vec2 position, glm::vec2 scale, float rotation);
 	void DrawGrid(glm::vec4 color, glm::vec2 position);
 	void DrawQuad(Texture& texture, glm::vec2 position);
@@ -118,5 +122,5 @@ public:
 	void DrawLighning(glm::vec4 color, glm::vec2 position, glm::vec2 scale);
 
 	Renderer(Camera *camera);
-	void Clear() const; 
+	void Clear() const;
 };

@@ -20,6 +20,8 @@
 #include "Map.h"
 #include "Animation.h"
 
+#include "FontSheet.h"
+
 static std::string s_grid;
 
 static std::array<Node, 15 * 8> s_nodeGrid;
@@ -107,5 +109,8 @@ private:
 	float side_y = 1;
 
 	MousePosition* mouse_position = new MousePosition();
+
+	FontSheet* font = new FontSheet("src/res/textures/FontSheets/font_sheet_5.png");
+
 
 };

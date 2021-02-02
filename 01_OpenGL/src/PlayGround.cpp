@@ -39,11 +39,11 @@ void PlayGround::OnAttach()
 	textures['U'] = m_SubUp;
 	textures['I'] = m_SubIce;
 	textures['T'] = m_SubTree;
-	
+
 	cameraX = 896;
 	cameraY = -420;
 
-	
+
 }
 
 void PlayGround::OnDetach()
@@ -64,7 +64,7 @@ void PlayGround::OnUpdate()
 {
 	//getting cursor position
 	glfwGetCursorPos(window, &mouse_position->x, &mouse_position->y);
-	
+
 	//I should rly make some sort of event system
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
 		cameraY += 8.0f;
@@ -92,7 +92,7 @@ void PlayGround::OnUpdate()
 		y = bounds.getHeight() * 0.5f - (y / windowHeight) * bounds.getHeight();
 		x = x + pos.x;
 		y = y + pos.y;
-		
+
 		myParticles->Add(x, y, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
 		myParticles->Add(x, y, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
 		myParticles->Add(x, y, ParticleLife, ParticleStartingColor, ParticleDyingColor, glm::vec2(ParticleSize, ParticleSize));
@@ -149,7 +149,7 @@ void PlayGround::OnRender()
 		renderer->DrawQuad(*m_SubTex, { tileSize * node.position.x, -tileSize * node.position.y });
 		if (drawGrid)
 		{
-			if (node.collidable) //bacically "if collidable.." 
+			if (node.collidable) //bacically "if collidable.."
 				renderer->DrawGrid(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), grid_to_position(node.position));
 			else
 				renderer->DrawGrid(glm::vec4(0.1f, 0.05f, 0.1f, 1.0f), grid_to_position(node.position));
@@ -186,12 +186,12 @@ void PlayGround::OnRender()
 
 	}
 
-	
+
 	//particles
 	for (Particle elem : myParticles->buffer)
 		renderer->DrawQuad(elem.color, { elem.x, elem.y }, elem.size, 0.0f);
 
-	
+
 	//rendering anim.
 	renderer->DrawQuad(*m_Animation->currentAnimation, { 768, -128 });
 
@@ -215,7 +215,10 @@ void PlayGround::OnRender()
 	lightning_x += 0.3 * side_x;
 	lightning_y += 0.1 * side_y;
 
-	//reset for normal blending 
+    std::string test = "TOHLE JE TEST!";
+    renderer->DrawFont(*font, test, glm::vec3(0.0f));
+
+	//reset for normal blending
 	GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 
 }
@@ -261,7 +264,7 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::Begin("Level Editor");
 
 
-	//theres a need of use "PushID and PopID" since ImGui doesnt like 2widgets or w/e with same "identity". 
+	//theres a need of use "PushID and PopID" since ImGui doesnt like 2widgets or w/e with same "identity".
 	//This goes to ID conflict and it seems like it thinks theres only 1widget (even tho it might render more)
 	int iter = 0;
 	for (std::pair<char, SubTexture*> sub : textures)
@@ -269,10 +272,10 @@ void PlayGround::ImGuiOnUpdate()
 		ImGui::PushID(iter);
 		sub.second->m_texture->Bind();
 		ImTextureID id = (ImTextureID)sub.second->m_texture->GetTexID();
-		
+
 		if (iter % 5 != 0 && iter != 0)
 			ImGui::SameLine();
-		
+
 		float left = sub.second->texCoords[0].x;
 		float right = sub.second->texCoords[1].x;
 		float bottom = sub.second->texCoords[0].y;
@@ -300,7 +303,7 @@ void PlayGround::ImGuiOnUpdate()
 	ImGui::Image(id, ImVec2(64, 64), { right, top }, { left, bottom });
 
 	ImGui::Checkbox("Edit mode", &editMode);
-	
+
 	if (ImGui::Button("Save changes"))
 	{
 		map->Save(s_grid);

@@ -1275,5 +1275,8 @@
     <ClInclude Include="src\Animation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\FontSheet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
