@@ -23,7 +23,7 @@ void PlayGround::OnAttach()
 	Light l0;
 	l0.color = glm::vec3(1.0f);
 	l0.position = glm::vec3(5, 5, 8);
-	l0.type = LightType::Point;
+	l0.type = LightType::Directional;
 	l0.lightDir = glm::vec3(0.0f, 0.0f, -1.0f);
 	l0.cutoff = 12.0f;
 	lights[0] = l0;
@@ -37,7 +37,7 @@ void PlayGround::OnAttach()
 	lights[1] = l1;
 	//in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
 	//texture files in correct form (AO.png, .. )
-	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
+	//model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
 
 	// init map here..
 	map->Init();
@@ -89,15 +89,15 @@ void PlayGround::OnDetach()
     delete alonso;
     delete tex;
     delete skyBox;
-    delete diffuse;
-    delete specular;
-    delete normal;
-    delete ao;
-    delete roughness;
+    // delete diffuse;
+    // delete specular;
+    // delete normal;
+    // delete ao;
+    // delete roughness;
     //delete anim;
     delete grass;
     //delete animation;
-    delete model;
+    //delete model;
 }
 
 void PlayGround::OnUpdate()
@@ -114,7 +114,7 @@ void PlayGround::OnUpdate()
 		camera->MoveUp();
 	if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
 		camera->MoveDown();
-	
+
 
 
 	//animation->OnUpdate();
@@ -125,10 +125,10 @@ void PlayGround::OnUpdate()
 		direction = -1;
 	if (t < 0)
 		direction = 1;
-	
-	
+
+
 	glm::vec4 matOne = glm::vec4(t * t * t, t * t, t, 1);
-	
+
 	glm::mat4 matTwo = {
 		-1,  3, -3, 1,
 		 3, -6,  3, 0,
@@ -146,7 +146,7 @@ void PlayGround::OnUpdate()
 	glm::vec3 final = (matThree * matTwo) * matOne;
 
 
-	lights[0].position = final;
+	//lights[0].position = final;
 
 	r += 1;
 	OM->GetObjects()[0]->Rotate(r, { 1, 0, 0 });
@@ -158,18 +158,17 @@ void PlayGround::OnRender()
     glEnable(GL_STENCIL_TEST);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	glStencilFunc(GL_ALWAYS, 0, GL_REPLACE);
-	
+
     renderer->DrawCube(*skyBox, camera->GetPosition(), { 1, 1, 1 }, 0, 0, 0, 1);
 	renderer->DrawMap(*map, { 0, 0, 0 }, lights, drawNormals);
 	renderer->DrawLight(lights[0]);
 	renderer->DrawLight(lights[1]);
-	
-	
-	renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 },
-		lights, ambientStrength, shininess, *model);
-	
+
+
+	//renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 }, lights, ambientStrength, shininess, *model);
+
 	renderer->DrawLine({ EventHandler::mouseRay->originPoint }, { EventHandler::mouseRay->destPoint });
-	
+
 	for (Object* o : OM->GetObjects())
 	{
 		glStencilFunc(GL_ALWAYS, o->GetID(), GL_REPLACE);
@@ -177,6 +176,12 @@ void PlayGround::OnRender()
 		renderer->DrawObject(*o);
 	}
 
+    // rendering font
+    char test_char = 'C';
+    renderer->DrawChar(*font, test_char, glm::vec3(0, 5, 0), glm::vec3(1.0f));
+
+    std::string test_text = "TOHLE JE TEST_123?!%.";
+    renderer->DrawFont(*font, test_text, glm::vec3(0, 8, 0), glm::vec3(0.0f));
 }
 
 void PlayGround::ImGuiOnUpdate()

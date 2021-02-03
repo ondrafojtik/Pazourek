@@ -14,7 +14,7 @@
 #include <math.h>
 #include <array>
 
-#include "Renderer.h" 
+#include "Renderer.h"
 #include "Pathfinder.h"
 
 #include "Map.h"
@@ -24,6 +24,9 @@
 #include "RandomMap.h"
 
 #include "ObjectManager.h"
+
+#include "FontSheet.h"
+
 
 static std::string s_grid;
 
@@ -58,14 +61,14 @@ public:
 
 	Texture* alonso = new Texture("src/res/textures/alonso.jpg");
 	Texture* tex = new Texture("src/res/textures/copy.png");
-	
+
 	Texture* skyBox = new Texture("src/res/textures/skyBox.png");
 
-	Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
-	Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
-	Texture* normal = new Texture("src/res/models/backpack/normal.png");
-	Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
-	Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
+	// Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
+	// Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
+	// Texture* normal = new Texture("src/res/models/backpack/normal.png");
+	// Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
+	// Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
 
 
 	//animation test
@@ -77,11 +80,11 @@ public:
 
     glm::vec3 lightPositions[2];
 	glm::vec3 lightColor = glm::vec3(1.0f);
-	
+
 	Light lights[2];
 
-	Model* model = nullptr;
-    
+	//Model* model = nullptr;
+
     RandomMap* map = new RandomMap();
 	glm::vec3 map_scale = glm::vec3(5.0f, 1.0f, 5.0f);
 	int direction = 1;
@@ -91,4 +94,6 @@ public:
 	bool drawNormals = 0;
 
 	float r = 0.0f;
+
+    FontSheet* font = new FontSheet("src/res/textures/fonts/font_sheet_5.png");
 };

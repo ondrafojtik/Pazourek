@@ -495,6 +495,7 @@
     <None Include="src\res\shaders\plainColor.shader" />
     <None Include="src\res\shaders\skyBox.shader" />
     <None Include="src\res\shaders\procedural.shader" />
+    <None Include="src\res\shaders\font.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1344,6 +1345,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Subject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FontSheet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

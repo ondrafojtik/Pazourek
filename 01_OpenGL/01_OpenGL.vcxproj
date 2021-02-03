@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\res\shaders\Basic.shader" />
+    <None Include="src\res\shaders\font.shader" />
     <None Include="src\res\shaders\procedural.shader" />
     <None Include="src\res\shaders\skyBox.shader" />
     <None Include="src\res\shaders\plainColor.shader" />
@@ -253,6 +254,7 @@
     <ClInclude Include="src\defines.h" />
     <ClInclude Include="src\Enemy.h" />
     <ClInclude Include="src\EventHandler.h" />
+    <ClInclude Include="src\FontSheet.h" />
     <ClInclude Include="src\GLcall.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Light.h" />

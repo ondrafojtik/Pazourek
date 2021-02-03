@@ -147,4 +147,5 @@ void RenderData::Init()
 	shaders["skyBox"] = new Shader("src/res/shaders/skyBox.shader");
 	shaders["plainColor"] = new Shader("src/res/shaders/plainColor.shader");
 	shaders["procedural"] = new Shader("src/res/shaders/procedural.shader");
+    shaders["font"] = new Shader("src/res/shaders/font.shader");
 }

@@ -17,7 +17,7 @@ bool GLLogCall(const char* function, const char* file, int line)
 	return true;
 }
 
-Renderer::Renderer(Camera *camera) : m_Camera(camera) 
+Renderer::Renderer(Camera *camera) : m_Camera(camera)
 {
 	data.Init();
 	m_Camera->RegisterObservers(data);
@@ -26,7 +26,7 @@ Renderer::Renderer(Camera *camera) : m_Camera(camera)
 
 void Renderer::DrawObject(Object& object)
 {
-	
+
 	Shader* shader = data.shaders["plainColor"];
 	shader->Bind();
 	object.GetVB()->Bind();
@@ -39,7 +39,7 @@ void Renderer::DrawObject(Object& object)
 	object.GetVA()->Unbind();
 	object.GetIB()->Unbind();
 	shader->Unbind();
-	
+
 }
 
 //skyBox
@@ -75,7 +75,7 @@ void Renderer::DrawLight(Light& light)
 {
     glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
     float rotation = 0.0f;
-    
+
 	glm::mat4 transform =
         glm::translate(glm::mat4(1.0f), light.position)
 		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 1.0f, 0.0f, 0.0f })
@@ -83,7 +83,7 @@ void Renderer::DrawLight(Light& light)
 
 
     Shader* shader = data.shaders["plainColor"];
-    
+
     shader->Bind();
 	data.vb->Bind();
 	data.va.Bind();
@@ -112,7 +112,7 @@ void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position,
 
 
     Shader* shader = data.shaders["plainColor"];
-    
+
     shader->Bind();
 	data.va.Bind();
 	data.ib->Bind();
@@ -136,7 +136,7 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 {
 	Shader* shader = data.shaders["basic"];
 	shader->Bind();
-  
+
 	float rotation = 45.0f;
 	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
@@ -166,7 +166,7 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 	//	m_Camera->GetPosition().y, m_Camera->GetPosition().z);
 	shader->SetUniform1f("u_AmbientStrength", ambientStrength);
 	shader->SetUniform1f("u_Shininess", Shininess);
-	
+
 	diffuse.Bind(0);
 	shader->SetUniform1i("u_diffuseMap", 0);
 	specular.Bind(1);
@@ -180,16 +180,16 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
     shader->Bind();
     for(int i = 0; i < model.meshes.size(); i++)
 	{
-		        
+
         model.meshes[i].vb->Bind();
 		model.meshes[i].va->Bind();
 		model.meshes[i].ib->Bind();
-	    
+
 		GLCall(glDrawElements(GL_TRIANGLES, model.meshes[i].ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 		model.meshes[i].vb->Unbind();
 		model.meshes[i].va->Unbind();
 		model.meshes[i].ib->Unbind();
-		
+
 	}
 	shader->Unbind();
 }
@@ -197,11 +197,11 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 // scrap
 void Renderer::DrawMap(const RandomMap& map, glm::vec3 position, Light* lights, bool drawNormals)
 {
-    
+
     //glStencilFunc(GL_ALWAYS, 1, 0xFF);
 
     Shader* shader = data.shaders["procedural"];
-    
+
     float rotation = 0.0f;
 	glm::vec3 scale = { map.scale.x, map.scale.y , map.scale.z };
 
@@ -212,13 +212,13 @@ void Renderer::DrawMap(const RandomMap& map, glm::vec3 position, Light* lights, 
 
     float Shininess = 64.0f;
     float ambientStrength = 0.1f;
-    
+
     map.vb->Bind();
 	map.va->Bind();
 	map.ib->Bind();
 
     shader->Bind();
-	
+
 	// sending in light data
 	for (int i = 0; i < 2; i++)
 	{
@@ -246,7 +246,7 @@ void Renderer::DrawMap(const RandomMap& map, glm::vec3 position, Light* lights, 
 	map.vb->Unbind();
 	map.va->Unbind();
 	map.ib->Unbind();
-	shader->Unbind();    
+	shader->Unbind();
 
     // draw the normals!
     if (drawNormals)
@@ -254,7 +254,7 @@ void Renderer::DrawMap(const RandomMap& map, glm::vec3 position, Light* lights, 
 		for (int i = 0; i < map.vertices.size(); i++)
 		{
 		    glm::vec3 _position = glm::vec3(map.vertices[i].position.x * map.scale.x, map.vertices[i].position.y * map.scale.y, map.vertices[i].position.z *	map.scale.z);
-		    
+
 		    DrawLine(_position,
 		             _position + map.vertices[i].normal);
 		}
@@ -263,7 +263,7 @@ void Renderer::DrawMap(const RandomMap& map, glm::vec3 position, Light* lights, 
 
 void Renderer::DrawLine(glm::vec3 p1, glm::vec3 p2)
 {
-	
+
 	float line_vertex[] =
 	{
 		p1.x, p1.y, p1.z, 1.0f, 1.0f, 1.0f,
@@ -301,6 +301,91 @@ void Renderer::DrawLine(glm::vec3 p1, glm::vec3 p2)
 	delete ib;
 	delete va;
 
+}
+
+void Renderer::DrawChar(FontSheet& font, char32_t character, glm::vec3 position, glm::vec3 color)
+{
+
+    glDisable(GL_DEPTH_TEST);
+    font.texture->Bind();
+    data.shaders["font"]->Bind();
+
+    float rotation = 0.0f;
+    glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
+		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, scale.z });
+
+
+	glm::vec2* vertex_texCoords = new glm::vec2[4];
+    vertex_texCoords = font.get_coords(character);
+
+	glm::vec3* vertex_positions = new glm::vec3[4];
+	vertex_positions[0] = { -0.5f, -0.5f, 0.0f };
+	vertex_positions[1] = { 0.5f, -0.5f, 0.0f };
+	vertex_positions[2] = { 0.5f,  0.5f, 0.0f };
+	vertex_positions[3] = { -0.5f,  0.5f, 0.0f };
+
+    float vertex_info[(3 + 2) * 4];
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            vertex_info[(i * 5) + 0] = vertex_positions[i].x;
+            vertex_info[(i * 5) + 1] = vertex_positions[i].y;
+            vertex_info[(i * 5) + 2] = vertex_positions[i].z;
+            vertex_info[(i * 5) + 3] = vertex_texCoords[i].x;
+            vertex_info[(i * 5) + 4] = vertex_texCoords[i].y;
+        }
+    }
+
+    unsigned int indices[] =
+	{
+		0, 1, 2,
+        2, 3, 0
+	};
+
+	delete[] vertex_positions;
+
+	data.shaders["font"]->SetUniform4f("u_Color", color.x, color.y, color.z, 1.0f);
+    data.shaders["font"]->SetUniformMat4f("u_Model", transform);
+
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+	layout.Push<float>(2);
+    VertexBuffer* vb = new VertexBuffer(vertex_info, sizeof(vertex_info));
+    IndexBuffer* ib = new IndexBuffer(indices, 6);
+    VertexArray* va = new VertexArray();
+
+    va->AddBuffer(*vb, layout);
+    vb->Bind();
+    va->Bind();
+    ib->Bind();
+    GLCall(glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+
+    // cleanup
+    vb->Unbind();
+    va->Unbind();
+    ib->Unbind();
+	font.texture->Unbind();
+    data.shaders["font"]->Unbind();
+	delete vb;
+    delete ib;
+    delete va;
+
+    glEnable(GL_DEPTH_TEST);
+
+}
+
+void Renderer::DrawFont(FontSheet& font, std::string text, glm::vec3 position, glm::vec3 color)
+{
+    float font_render_step = 0.0f;
+
+    for (char32_t c : text)
+    {
+        DrawChar(font, c, { position.x + font_render_step, position.y, position.z }, color);
+        font_render_step += 0.6f;
+    }
 }
 
 void Renderer::Clear() const
