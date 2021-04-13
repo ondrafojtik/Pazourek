@@ -1,18 +1,36 @@
 #include "Model.h"
+#include <fstream>
 
-void Model::LoadModel(std::string path)
+void Model::LoadModel(std::string path, bool flip_uv)
 {
+    // TODO: flip UVs..
     Assimp::Importer import;
-    const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    if (!flip_uv)
     {
-        std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
-        return;
-    }
-    directory = path.substr(0, path.find_last_of('/'));
+        const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		{
+			std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+			return;
+		}
+		directory = path.substr(0, path.find_last_of('/'));
 
-    ProcessNode(scene->mRootNode, scene);
+		ProcessNode(scene->mRootNode, scene);
+
+    }
+    else
+    {
+		const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_CalcTangentSpace);
+		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+		{
+			std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+			return;
+		}
+		directory = path.substr(0, path.find_last_of('/'));
+
+		ProcessNode(scene->mRootNode, scene);
+
+    }
 }
 
 void Model::ProcessNode(aiNode* node, const aiScene* scene)
@@ -52,9 +70,11 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
         if(mesh->HasNormals())
             vertex.normal =
                            { mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z };
-        vertex.tangent =   { mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
-        vertex.bitangent = { mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z  };
-        
+        if (mesh->HasTangentsAndBitangents())
+        {
+            vertex.tangent =   { mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z };
+            vertex.bitangent = { mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z  };
+        }
         vertices.push_back(vertex);
     }
 
@@ -65,6 +85,52 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
         for (int j = 0; j < face.mNumIndices; j++)
             indices.push_back(face.mIndices[j]);
     }
+
+    #if 1
+    // save into the file
+    {
+        std::string vb_data = "";
+        std::string ib_data = "";
+
+        glm::vec3 color = glm::vec3(0.8f, 0.0f, 0.0f);
+        for (auto v : vertices)
+        {
+            vb_data += std::to_string(v.position.x);
+            vb_data += "f, ";
+            vb_data += std::to_string(v.position.y);
+            vb_data += "f, ";
+            vb_data += std::to_string(v.position.z);
+            vb_data += "f, ";
+            vb_data += std::to_string(v.normal.x);
+            vb_data += "f, ";
+            vb_data += std::to_string(v.normal.y);
+            vb_data += "f, ";
+            vb_data += std::to_string(v.normal.z);
+            vb_data += "f, ";
+            //vb_data += std::to_string(v.texCoord.x);
+            vb_data += "0.0";
+            vb_data += "f, ";
+            //vb_data += std::to_string(v.texCoord.y);
+            vb_data += "0.0";
+            vb_data += "f, ";
+        }
+        for (auto i : indices)
+        {
+            ib_data += std::to_string(i);
+            ib_data += ", ";
+        }
+
+
+        std::ofstream out;
+        out.open("C:\\Users\\Ondra-PC\\Desktop\\liber_tmp.txt");
+        out << vb_data << std::endl;
+        out << ib_data << std::endl;
+        out.close();
+
+    }
+    #endif
+
+
 
     //should be procesing materials, diffuse maps, etc.
     return Mesh(vertices, indices);//textures);

@@ -43,6 +43,7 @@ public:
     // model
 	void DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 					Texture& AO, Texture& roughness, glm::vec3 position,
+		            float rotation,
 					Light* lights, float ambientStrength,
 					float Shininess, Model model);
     // procedural map

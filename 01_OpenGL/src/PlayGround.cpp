@@ -22,22 +22,30 @@ void PlayGround::OnAttach()
 
 	Light l0;
 	l0.color = glm::vec3(1.0f);
-	l0.position = glm::vec3(5, 5, 8);
-	l0.type = LightType::Directional;
+	l0.position = glm::vec3(3.5f, 12, 0);
+	l0.type = LightType::Point;
 	l0.lightDir = glm::vec3(0.0f, 0.0f, -1.0f);
 	l0.cutoff = 12.0f;
 	lights[0] = l0;
 
 	Light l1;
 	l1.color = glm::vec3(0.5f);
-	l1.position = glm::vec3(5, 5, -10);
+	l1.position = glm::vec3(6, -20, 10.5f);
 	l1.type = LightType::Point;
 	l1.lightDir = glm::vec3(0.0f, 0.0f, 1.0f);
 	l1.cutoff = 12.0f;
 	lights[1] = l1;
 	//in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
 	//texture files in correct form (AO.png, .. )
-	//model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj");
+	
+	model_teren = new Model("C:\\Users\\Ondra-PC\\Desktop\\teren__.obj", 1);
+	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj", 0);
+	model_zidle = new Model("C:\\Users\\Ondra-PC\\Desktop\\zidle__.obj", 1);
+	model_stul = new Model("C:\\Users\\Ondra-PC\\Desktop\\stul__.obj", 1);
+	model_kniha = new Model("C:\\Users\\Ondra-PC\\Desktop\\kniha__.obj", 1);
+	model_vaza = new Model("C:\\Users\\Ondra-PC\\Desktop\\vaza__.obj", 1);
+	model_podlaha = new Model("C:\\Users\\Ondra-PC\\Desktop\\podlaha__.obj", 1);
+	model_sipka = new Model("C:\\Users\\Ondra-PC\\Desktop\\sipka.obj", 1);
 
 	// init map here..
 	map->Init();
@@ -159,29 +167,46 @@ void PlayGround::OnRender()
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 	glStencilFunc(GL_ALWAYS, 0, GL_REPLACE);
 
+	
+
     renderer->DrawCube(*skyBox, camera->GetPosition(), { 1, 1, 1 }, 0, 0, 0, 1);
-	renderer->DrawMap(*map, { 0, 0, 0 }, lights, drawNormals);
+	//renderer->DrawMap(*map, { 0, 0, 0 }, lights, drawNormals);
 	renderer->DrawLight(lights[0]);
 	renderer->DrawLight(lights[1]);
+	
+	
+	renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 8, -5 }, 0, lights, ambientStrength, shininess, *model);
+	renderer->DrawModel(*zidle_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_zidle);
+	renderer->DrawModel(*stul_diffuse, *blank, *stul_normal, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_stul);
+	renderer->DrawModel(*kniha_diffuse, *blank, *kniha_normal, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_kniha);
+	renderer->DrawModel(*teren_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_teren);
+	renderer->DrawModel(*vaza_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_vaza);
+	renderer->DrawModel(*podlaha_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_podlaha);
+	
+	renderer->DrawModel(*blank, *blank, *blank, *blank, *blank, { 5, 3, -5 }, 0, lights, ambientStrength, shininess, *model_sipka);
+	
 
-
-	//renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 5, 2 }, lights, ambientStrength, shininess, *model);
 
 	renderer->DrawLine({ EventHandler::mouseRay->originPoint }, { EventHandler::mouseRay->destPoint });
 
-	for (Object* o : OM->GetObjects())
-	{
-		glStencilFunc(GL_ALWAYS, o->GetID(), GL_REPLACE);
-		o->Move(0.01f);
-		renderer->DrawObject(*o);
-	}
+	renderer->DrawFont(*font, "NENI MUJ MODEL", glm::vec3(2, 11, -5), glm::vec3(0.0f));
 
-    // rendering font
-    char test_char = 'C';
-    renderer->DrawChar(*font, test_char, glm::vec3(0, 5, 0), glm::vec3(1.0f));
 
-    std::string test_text = "TOHLE JE TEST_123?!%.";
-    renderer->DrawFont(*font, test_text, glm::vec3(0, 8, 0), glm::vec3(0.0f));
+	//for (Object* o : OM->GetObjects())
+	//{
+	//	glStencilFunc(GL_ALWAYS, o->GetID(), GL_REPLACE);
+	//	o->Move(0.01f);
+	//	renderer->DrawObject(*o);
+	//}
+	//
+    //// rendering font
+    //char test_char = 'C';
+    //renderer->DrawChar(*font, test_char, glm::vec3(0, 5, 0), glm::vec3(1.0f));
+	//
+    //std::string test_text = "TOHLE JE TEST_123?!%.";
+    //renderer->DrawFont(*font, test_text, glm::vec3(0, 8, 0), glm::vec3(0.0f));
+
+
 }
 
 void PlayGround::ImGuiOnUpdate()

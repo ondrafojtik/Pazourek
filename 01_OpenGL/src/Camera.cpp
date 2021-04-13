@@ -16,14 +16,8 @@ void Camera::mouseUpdate(const glm::dvec2& newMousePosition)
 	float mouseSesitivity = 0.5f;
 	rotationProduct = glm::cross(forward, up); //to rotate around!
 	//creating rot mat
-	glm::mat4 rotationMat =
-        glm::rotate(glm::mat4(1.0f),
-                    glm::radians((float)delta.x * mouseSesitivity),
-                    up) 
-		* glm::rotate(glm::mat4(1.0f),
-                    glm::radians((float)delta.y * mouseSesitivity),
-                    rotationProduct);
-
+	glm::mat4 rotationMat = glm::rotate(glm::mat4(1.0f), glm::radians((float)delta.x * mouseSesitivity), up) 
+		* glm::rotate(glm::mat4(1.0f), glm::radians((float)delta.y * mouseSesitivity), rotationProduct);
 	forward = glm::mat3(rotationMat) * forward; //final product
 	RecalcView();
 

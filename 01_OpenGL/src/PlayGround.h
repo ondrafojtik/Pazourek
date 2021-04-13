@@ -64,17 +64,42 @@ public:
 
 	Texture* skyBox = new Texture("src/res/textures/skyBox.png");
 
-	// Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
-	// Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
-	// Texture* normal = new Texture("src/res/models/backpack/normal.png");
-	// Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
-	// Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
+	Texture* diffuse = new Texture("src/res/models/backpack/diffuse.jpg");
+	Texture* specular = new Texture("src/res/models/backpack/specular.jpg");
+	Texture* normal = new Texture("src/res/models/backpack/normal.png");
+	Texture* ao = new Texture("src/res/models/backpack/ao.jpg");
+	Texture* roughness = new Texture("src/res/models/backpack/roughness.jpg");
+	Texture* blank = new Texture("src/res/textures/Blank.png");
+
+	// new scene
+	Model* model_teren = nullptr;
+	Texture* teren_diffuse = new Texture("C:\\Users\\Ondra-PC\\Desktop\\teren_diffuse.png");
+
+	Model* model_stul = nullptr;
+	Texture* stul_diffuse = new Texture("C:\\Users\\Ondra-PC\\Desktop\\stul_wood.jpg");
+	Texture* stul_normal = new Texture("C:\\Users\\Ondra-PC\\Desktop\\stul_normal_.png");
+
+	Model* model_zidle = nullptr;
+	Texture* zidle_diffuse = new Texture("C:\\Users\\Ondra-PC\\Desktop\\_bake.png");
+
+	Model* model_kniha = nullptr;
+	Texture* kniha_diffuse = new Texture("C:\\Users\\Ondra-PC\\Desktop\\kniha_diffuse.png");
+	Texture* kniha_normal = new Texture("C:\\Users\\Ondra-PC\\Desktop\\kniha_normal.png");
+
+	Model* model_vaza = nullptr;
+	Texture* vaza_diffuse = new Texture("C:\\Users\\Ondra-PC\\Desktop\\vaza_diffuse.jpg");
+
+	Model* model_podlaha = nullptr;
+	Texture* podlaha_diffuse = new Texture("C:\\Users\\Ondra-PC\\Desktop\\podlaha_stin.png"); // podlaha_stin.png
+	
+	// sipka
+	Model* model_sipka = nullptr;
 
 
 	//animation test
 	Texture* grass = new Texture("src/res/textures/minecraft_grass.png");
 	//Animation* animation = new Animation(*anim, { 240.0f, 240.0f }, 6, 0.2f);
-	float ambientStrength = 0.1f;
+	float ambientStrength = 0.3f;
 	float SpecularStrength = 0.5f;
 	int shininess = 128;
 
@@ -83,7 +108,7 @@ public:
 
 	Light lights[2];
 
-	//Model* model = nullptr;
+	Model* model = nullptr;
 
     RandomMap* map = new RandomMap();
 	glm::vec3 map_scale = glm::vec3(5.0f, 1.0f, 5.0f);
@@ -96,4 +121,6 @@ public:
 	float r = 0.0f;
 
     FontSheet* font = new FontSheet("src/res/textures/fonts/font_sheet_5.png");
+
+
 };

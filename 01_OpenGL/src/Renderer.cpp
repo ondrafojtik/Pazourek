@@ -131,18 +131,18 @@ void Renderer::DrawColor(const glm::vec4& color, glm::vec3 position,
 //model
 void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
                          Texture& AO, Texture& roughness, glm::vec3 position,
+					     float rotation,
                          Light* lights, float ambientStrength,
                          float Shininess, Model model)
 {
 	Shader* shader = data.shaders["basic"];
 	shader->Bind();
 
-	float rotation = 45.0f;
 	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
 
 	glm::mat4 transform =
 		glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
-		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 0, 1 })
+		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 1, 0 })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
     //sending all the "lightPos" info into frangment
 
@@ -306,7 +306,7 @@ void Renderer::DrawLine(glm::vec3 p1, glm::vec3 p2)
 void Renderer::DrawChar(FontSheet& font, char32_t character, glm::vec3 position, glm::vec3 color)
 {
 
-    glDisable(GL_DEPTH_TEST);
+	glDisable(GL_DEPTH_TEST);
     font.texture->Bind();
     data.shaders["font"]->Bind();
 

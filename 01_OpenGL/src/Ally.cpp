@@ -2,12 +2,12 @@
 
 Ally::Ally(glm::mat4x3 bezierPoints)
 {
-	
+
 	matThree = bezierPoints;
 
 	RenderData data;
 	data.Init();
-	
+
 	vb = data.vb;
 	layout = data.layout;
 	va = new VertexArray();

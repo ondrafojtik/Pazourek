@@ -10,16 +10,16 @@
 
 struct Model
 {
-	Model(std::string path)
+	Model(std::string path, bool flip_uv)
 	{
-		LoadModel(path);
+		LoadModel(path, flip_uv);
 	}
 
 	std::vector<Mesh> meshes;
 private:
 	std::string directory;
 
-	void LoadModel(std::string path);
+	void LoadModel(std::string path, bool flip_uv);
 	void ProcessNode(aiNode* node, const aiScene* scene);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
