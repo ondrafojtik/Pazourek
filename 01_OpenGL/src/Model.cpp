@@ -86,7 +86,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
             indices.push_back(face.mIndices[j]);
     }
 
-    #if 1
+    #if 0
     // save into the file
     {
         std::string vb_data = "";

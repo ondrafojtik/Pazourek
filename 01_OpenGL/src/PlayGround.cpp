@@ -38,14 +38,14 @@ void PlayGround::OnAttach()
 	//in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
 	//texture files in correct form (AO.png, .. )
 	
-	model_teren = new Model("C:\\Users\\Ondra-PC\\Desktop\\teren__.obj", 1);
+	model_teren = new Model("src\\res\\models\\teren\\teren__.obj", 1);
 	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj", 0);
-	model_zidle = new Model("C:\\Users\\Ondra-PC\\Desktop\\zidle__.obj", 1);
-	model_stul = new Model("C:\\Users\\Ondra-PC\\Desktop\\stul__.obj", 1);
-	model_kniha = new Model("C:\\Users\\Ondra-PC\\Desktop\\kniha__.obj", 1);
-	model_vaza = new Model("C:\\Users\\Ondra-PC\\Desktop\\vaza__.obj", 1);
-	model_podlaha = new Model("C:\\Users\\Ondra-PC\\Desktop\\podlaha__.obj", 1);
-	model_sipka = new Model("C:\\Users\\Ondra-PC\\Desktop\\sipka.obj", 1);
+	model_zidle = new Model("src\\res\\models\\zidle\\zidle__.obj", 1);
+	model_stul = new Model("src\\res\\models\\stul\\stul__.obj", 1);
+	model_kniha = new Model("src\\res\\models\\kniha\\kniha__.obj", 1);
+	model_vaza = new Model("src\\res\\models\\vaza\\vaza__.obj", 1);
+	model_podlaha = new Model("src\\res\\models\\podlaha\\podlaha__.obj", 1);
+	model_sipka = new Model("src\\res\\models\\sipka\\sipka.obj", 1);
 
 	// init map here..
 	map->Init();
@@ -87,6 +87,8 @@ void PlayGround::OnAttach()
 	}
 	EventHandler::camera = camera;
 	EventHandler::object_manager = OM;
+
+	loader->init();
 
 }
 
@@ -175,16 +177,20 @@ void PlayGround::OnRender()
 	renderer->DrawLight(lights[1]);
 	
 	
-	renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 8, -5 }, 0, lights, ambientStrength, shininess, *model);
-	renderer->DrawModel(*zidle_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_zidle);
-	renderer->DrawModel(*stul_diffuse, *blank, *stul_normal, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_stul);
-	renderer->DrawModel(*kniha_diffuse, *blank, *kniha_normal, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_kniha);
-	renderer->DrawModel(*teren_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_teren);
-	renderer->DrawModel(*vaza_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_vaza);
-	renderer->DrawModel(*podlaha_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_podlaha);
+	//renderer->DrawModel(*diffuse, *specular, *normal, *ao, *roughness, { 5, 8, -5 }, 0, lights, ambientStrength, shininess, *model);
+	//renderer->DrawModel(*zidle_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_zidle);
+	//renderer->DrawModel(*stul_diffuse, *blank, *stul_normal, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_stul);
+	//renderer->DrawModel(*kniha_diffuse, *blank, *kniha_normal, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_kniha);
+	//renderer->DrawModel(*teren_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_teren);
+	//renderer->DrawModel(*vaza_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_vaza);
+	//renderer->DrawModel(*podlaha_diffuse, *blank, *blank, *blank, *blank, { 0, 0, 0 }, 0, lights, ambientStrength, shininess, *model_podlaha);
+	//
+	//renderer->DrawModel(*blank, *blank, *blank, *blank, *blank, { 5, 3, -5 }, 0, lights, ambientStrength, shininess, *model_sipka);
 	
-	renderer->DrawModel(*blank, *blank, *blank, *blank, *blank, { 5, 3, -5 }, 0, lights, ambientStrength, shininess, *model_sipka);
-	
+	for (Model* m : loader->models)
+	{
+		renderer->DrawModel(*blank, *blank, *blank, *blank, *blank, {0, 0, 0}, 0.0f, lights, ambientStrength, shininess, *m);
+	}
 
 
 	renderer->DrawLine({ EventHandler::mouseRay->originPoint }, { EventHandler::mouseRay->destPoint });
