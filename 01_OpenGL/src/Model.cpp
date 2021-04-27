@@ -86,7 +86,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
             indices.push_back(face.mIndices[j]);
     }
 
-    #if 0
+    #if 1
     // save into the file
     {
         std::string vb_data = "";
@@ -107,11 +107,9 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
             vb_data += "f, ";
             vb_data += std::to_string(v.normal.z);
             vb_data += "f, ";
-            //vb_data += std::to_string(v.texCoord.x);
-            vb_data += "0.0";
+            vb_data += std::to_string(v.texCoord.x);
             vb_data += "f, ";
-            //vb_data += std::to_string(v.texCoord.y);
-            vb_data += "0.0";
+            vb_data += std::to_string(v.texCoord.y);
             vb_data += "f, ";
         }
         for (auto i : indices)
@@ -123,8 +121,9 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
         std::ofstream out;
         out.open("C:\\Users\\Ondra-PC\\Desktop\\liber_tmp.txt");
-        out << vb_data << std::endl;
-        out << ib_data << std::endl;
+        out << vb_data;
+        out << "*";
+        out << ib_data;
         out.close();
 
     }

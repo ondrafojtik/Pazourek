@@ -37,6 +37,11 @@ struct Mesh
 	VertexArray* va = nullptr;
 	IndexBuffer* ib = nullptr;
 
+	Mesh()
+	{
+		;
+	}
+
 	Mesh(const std::vector<Vertex>& _vertices,
          const std::vector<unsigned int>& _indices)//,
         //const std::vector<Texture>& _textures)

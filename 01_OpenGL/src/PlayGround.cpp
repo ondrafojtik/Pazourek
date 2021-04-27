@@ -1,6 +1,8 @@
 #include "PlayGround.h"
 #include "Enemy.h"
 
+#include <fstream>
+
 void PlayGround::OnAttach()
 {
 	EventHandler::camera = camera;
@@ -38,14 +40,66 @@ void PlayGround::OnAttach()
 	//in future ure gonna just pass the "ojb. folder" -> that folder WILL have to include
 	//texture files in correct form (AO.png, .. )
 	
-	model_teren = new Model("src\\res\\models\\teren\\teren__.obj", 1);
-	model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj", 0);
-	model_zidle = new Model("src\\res\\models\\zidle\\zidle__.obj", 1);
-	model_stul = new Model("src\\res\\models\\stul\\stul__.obj", 1);
-	model_kniha = new Model("src\\res\\models\\kniha\\kniha__.obj", 1);
-	model_vaza = new Model("src\\res\\models\\vaza\\vaza__.obj", 1);
-	model_podlaha = new Model("src\\res\\models\\podlaha\\podlaha__.obj", 1);
-	model_sipka = new Model("src\\res\\models\\sipka\\sipka.obj", 1);
+	//model_teren = new Model("C:\\Users\\Ondra-PC\\Desktop\\space_origin.obj", 1);
+	model_teren = new Model("C:\\Users\\Ondra-PC\\Desktop\\space_origin2.obj", 1);
+	//model_teren = new Model("C:\\Users\\Ondra-PC\\Desktop\\zkouska.obj", 1);
+	
+	std::ofstream out;
+	out.open("C:\\Users\\Ondra-PC\\Desktop\\liber_tmp.txt");
+	bool first = true;
+	for (Mesh m : model_teren->meshes)
+	{
+		// save into the file
+		{
+			std::string vb_data = "";
+			std::string ib_data = "";
+
+			glm::vec3 color = glm::vec3(0.8f, 0.0f, 0.0f);
+			for (auto v : m.vertices)
+			{
+				vb_data += std::to_string(v.position.x);
+				vb_data += "f, ";
+				vb_data += std::to_string(v.position.y);
+				vb_data += "f, ";
+				vb_data += std::to_string(v.position.z);
+				vb_data += "f, ";
+				vb_data += std::to_string(v.normal.x);
+				vb_data += "f, ";
+				vb_data += std::to_string(v.normal.y);
+				vb_data += "f, ";
+				vb_data += std::to_string(v.normal.z);
+				vb_data += "f, ";
+				vb_data += std::to_string(v.texCoord.x);
+				vb_data += "f, ";
+				vb_data += std::to_string(v.texCoord.y);
+				vb_data += "f, ";
+			}
+			for (auto i : m.indices)
+			{
+				ib_data += std::to_string(i);
+				ib_data += ", ";
+			}
+
+			
+			out << vb_data;
+			out << "*";
+			out << ib_data;
+			out << "~"; // represents new mesh
+
+			first = false;
+
+		}
+		
+	}
+	out.close();
+	
+	//model = new Model("C:/dev/Pazourek/01_OpenGL/src/res/models/backpack/backpack.obj", 0);
+	//model_zidle = new Model("src\\res\\models\\zidle\\zidle__.obj", 1);
+	//model_stul = new Model("src\\res\\models\\stul\\stul__.obj", 1);
+	//model_kniha = new Model("src\\res\\models\\kniha\\kniha__.obj", 1);
+	//model_vaza = new Model("src\\res\\models\\vaza\\vaza__.obj", 1);
+	//model_podlaha = new Model("src\\res\\models\\podlaha\\podlaha__.obj", 1);
+	//model_sipka = new Model("src\\res\\models\\sipka\\sipka.obj", 1);
 
 	// init map here..
 	map->Init();
@@ -89,7 +143,88 @@ void PlayGround::OnAttach()
 	EventHandler::object_manager = OM;
 
 	loader->init();
+	
+	//model_obj_txt = new Model();
+	
+	std::string line;
+	std::ifstream file("C:\\Users\\Ondra-PC\\Desktop\\liber_tmp.txt");
+	if (file.is_open())
+	{
+		while (std::getline(file, line))
+			obj_txt += line;
+		file.close();
+	}
 
+
+
+	model_obj_txt = new Model();
+	{
+		std::vector<std::string> _vertices;
+		std::vector<std::string> _indices;
+
+		std::string word = "";
+
+		bool after_ast = false;
+		for (char c : obj_txt)
+		{
+			// new mesh
+			if (c == '~')
+			{
+				std::vector<Vertex> vertices;
+				std::vector<unsigned int> indices;
+
+				for (int i = 0; i < _vertices.size() / 8; i++)
+				{
+					Vertex v{};
+					v.position.x = std::stof(_vertices[(i * 8) + 0]);
+					v.position.y = std::stof(_vertices[(i * 8) + 1]);
+					v.position.z = std::stof(_vertices[(i * 8) + 2]);
+
+					v.normal.x = std::stof(_vertices[(i * 8) + 3]);
+					v.normal.y = std::stof(_vertices[(i * 8) + 4]);
+					v.normal.z = std::stof(_vertices[(i * 8) + 5]);
+
+					v.texCoord.x = std::stof(_vertices[(i * 8) + 6]);
+					v.texCoord.y = std::stof(_vertices[(i * 8) + 7]);
+
+					vertices.push_back(v);
+				}
+
+				for (std::string ind : _indices)
+				{
+					unsigned int number = (unsigned int)std::strtoul(ind.c_str(), NULL, 0);
+					indices.push_back(number);
+				}
+
+				Mesh m(vertices, indices);
+				model_obj_txt->meshes.push_back(m);
+
+				vertices.clear();
+				indices.clear();
+				_vertices.clear();
+				_indices.clear();
+				after_ast = 0;
+			}
+
+
+
+			if (c == '*')
+				after_ast = 1;
+
+			if (c == ',' )
+			{
+				if (after_ast)
+					_indices.push_back(word);
+				else
+					_vertices.push_back(word);
+
+				word = "";
+			}
+			else if (c != '~')
+				word += c;
+		}
+	}
+	
 }
 
 void PlayGround::OnDetach()
@@ -160,6 +295,12 @@ void PlayGround::OnUpdate()
 
 	r += 1;
 	OM->GetObjects()[0]->Rotate(r, { 1, 0, 0 });
+
+
+	// unparse
+	
+
+
 }
 
 void PlayGround::OnRender()
@@ -187,10 +328,10 @@ void PlayGround::OnRender()
 	//
 	//renderer->DrawModel(*blank, *blank, *blank, *blank, *blank, { 5, 3, -5 }, 0, lights, ambientStrength, shininess, *model_sipka);
 	
-	for (Model* m : loader->models)
-	{
-		renderer->DrawModel(*blank, *blank, *blank, *blank, *blank, {0, 0, 0}, 0.0f, lights, ambientStrength, shininess, *m);
-	}
+	//for (Model* m : loader->models)
+	//	renderer->DrawModel(*blank, *blank, *blank, *blank, *blank, {0, 0, 0}, 0.0f, lights, ambientStrength, shininess, *m);
+
+	renderer->DrawModel(*blank, *blank, *blank, *blank, *blank, {}, 0.0f, lights, ambientStrength, shininess, *model_obj_txt);
 
 
 	renderer->DrawLine({ EventHandler::mouseRay->originPoint }, { EventHandler::mouseRay->destPoint });

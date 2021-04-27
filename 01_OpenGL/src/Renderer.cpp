@@ -138,12 +138,12 @@ void Renderer::DrawModel(Texture& diffuse, Texture& specular, Texture& normals,
 	Shader* shader = data.shaders["basic"];
 	shader->Bind();
 
-	glm::vec2 scale = glm::vec2(1.0f, 1.0f);
+	glm::vec3 scale = glm::vec3(10.0f, 10.0f, 10.0f);
 
 	glm::mat4 transform =
 		glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
 		* glm::rotate(glm::mat4(1.0f), glm::radians(rotation), { 0, 1, 0 })
-		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, 1.0f });
+		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, scale.z });
     //sending all the "lightPos" info into frangment
 
     for (int i = 0; i < 2; i++)

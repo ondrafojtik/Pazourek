@@ -127,5 +127,8 @@ public:
 
 	std::vector<Model*> models;
 
+	Model* model_obj_txt = nullptr;
+	std::string obj_txt;
+
 
 };

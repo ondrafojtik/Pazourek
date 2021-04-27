@@ -267,6 +267,7 @@
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\ObjectManager.h" />
     <ClInclude Include="src\objLoader.h" />
+    <ClInclude Include="src\OBJ_Loader.h" />
     <ClInclude Include="src\Observer.h" />
     <ClInclude Include="src\ParticleSystem.h" />
     <ClInclude Include="src\Pathfinder.h" />

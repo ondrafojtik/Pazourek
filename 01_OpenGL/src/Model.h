@@ -11,6 +11,12 @@
 
 struct Model
 {
+	Model()
+	{
+		
+	}
+
+
 	Model(std::string path, bool flip_uv)
 	{
 		LoadModel(path, flip_uv);
