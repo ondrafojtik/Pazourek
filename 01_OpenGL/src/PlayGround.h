@@ -24,7 +24,7 @@
 
 static std::string s_grid;
 
-static std::array<Node, 15 * 8> s_nodeGrid;
+static std::array<Node, 800 * 800> s_nodeGrid;
 
 struct MousePosition
 {
