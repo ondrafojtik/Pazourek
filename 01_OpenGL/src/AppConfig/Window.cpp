@@ -21,7 +21,7 @@ Window::Window(float WindowWidth, float WindowHeight) : m_Bounds{ WindowWidth, W
 	glfwWindowHint(GLFW_COCOA_GRAPHICS_SWITCHING, GLFW_TRUE);
 	glfwWindowHint(GLFW_AUTO_ICONIFY, GLFW_FALSE);
 	glfwWindowHint(GLFW_CENTER_CURSOR, GLFW_FALSE);
-	glfwMaximizeWindow(m_Window);
+	//glfwMaximizeWindow(m_Window);
 
 }
 

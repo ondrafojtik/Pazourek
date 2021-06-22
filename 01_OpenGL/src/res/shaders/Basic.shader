@@ -2,20 +2,17 @@
 #version 330 core
 
 layout(location = 0) in vec4 position;
-layout(location = 1) in vec2 texCoord;
+layout(location = 1) in vec4 color;
 
-out vec2 v_TexCoord;
-out vec4 v_colorElement;
+uniform mat4 u_view;
+uniform mat4 u_projection;
 
-uniform mat4 u_Proj; //ModelViewProjection matrix
-uniform mat4 u_Transform;
-uniform vec4 u_ColorElement;
+out vec4 v_Color;
 
 void main()
 {
-	gl_Position = (u_Proj * u_Transform * position); //u_Proj * u_Transform * position;
-	v_TexCoord = texCoord;
-	v_colorElement = u_ColorElement;
+	gl_Position = u_projection * u_view * position;
+	v_Color = color;
 }
 
 #shader fragment
@@ -23,15 +20,9 @@ void main()
 
 layout(location = 0) out vec4 color;
 
-in vec2 v_TexCoord;
-in vec4 v_colorElement;
-
-uniform sampler2D u_Texture;
-uniform vec4 u_Color;
+in vec4 v_Color;
 
 void main()
 {
-	vec4 texColor = texture(u_Texture, v_TexCoord) * 1.0;
-	color = texture(u_Texture, v_TexCoord * 1) * u_Color;
-	color = vec4(color.x, color.y, color.z, color.a) * v_colorElement;
+	color = v_Color;
 }
