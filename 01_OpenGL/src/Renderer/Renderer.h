@@ -7,6 +7,8 @@
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "IndexBuffer.h"
+#include "Texture.h"
+#include "FontSheet.h"
 
 struct Renderer
 {
@@ -14,7 +16,8 @@ struct Renderer
 	
 	void Clear() const;
 	void DrawColor(float x, float y);
-
+	void DrawChar(FontSheet& font, char32_t character, glm::vec3 position, glm::vec3 color);
+	void DrawText(FontSheet& font, std::string text, glm::vec3 position, glm::vec3 color);
 	//////////////////////////////////////////////
 	Camera* camera = nullptr;
 	Shader* shader = nullptr;

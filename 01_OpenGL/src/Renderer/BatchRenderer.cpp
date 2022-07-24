@@ -82,6 +82,8 @@ void BatchRenderer::Flush()
 	//lm::mat4 view = glm::scale(glm::mat4(1.0f), glm::vec3(100, 100, 1));
 	glm::mat4 view = glm::mat4(1.0f);
 
+	shader->Bind();
+
 	shader->SetUniformMat4f("u_view", view);
 	shader->SetUniformMat4f("u_projection", camera->projection);
 	

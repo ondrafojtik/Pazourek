@@ -36,7 +36,8 @@ public:
 	template<typename T>
 	void Push(unsigned int count)
 	{
-		static_assert(false);
+		m_Elements.push_back({ GL_INT, count, GL_FALSE });
+		m_Stride += count * VertexBufferElement::GetSizeOfType(GL_INT);
 	}
 	template<>
 	void Push<float>(unsigned int count)

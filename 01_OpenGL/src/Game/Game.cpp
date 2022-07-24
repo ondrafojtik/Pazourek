@@ -6,29 +6,21 @@
 void Game::Init()
 {
 	camera = new Camera();
-	//renderer = new Renderer(camera);
-	renderer = new BatchRenderer(camera);
+	b_renderer = new BatchRenderer(camera);
+	renderer = new Renderer(camera);
+
+	font = new FontSheet("src/res/textures/font_sheet_5.png");
 }
 
 void Game::OnUpdate()
 {
+	
 	renderer->Clear();
 
-	renderer->ResetStats();
-	renderer->StartBatch();
-	
-	// 262 144
-	int dim_x = 512;
-	int dim_y = 512;
-	for (int y = 0; y < dim_y; y++)
-		for (int x = 0; x < dim_x; x++)
-			renderer->DrawColor(x, y, glm::vec4(1.0f));
 
-	//for (int i = 0; i < 1000; i++)
-	//	renderer->DrawColor(0 + i, 100, glm::vec4(1.0f));
+	//renderer->DrawColor(mouse_pos.x, mouse_pos.y);
+	renderer->DrawText(*font, "ahoj", {50.0f, 50.0f, 1.0f}, {1.0f, 1.0f, 0.0f});
 	
-	renderer->EndBatch();
-
 }
 
 void Game::OnImGuiUpdate()
@@ -36,9 +28,34 @@ void Game::OnImGuiUpdate()
 	glfwGetCursorPos(window->GetWindow(), &mouse_pos.x, &mouse_pos.y);
 
 	ImGui::Text("Mouse pos: %f, %f", (float)mouse_pos.x, (float)mouse_pos.y);
-	ImGui::Text("Quad count: %.0f", (float)renderer->quad_count);
-	ImGui::Text("Draw count: %.0f", (float)renderer->draw_count);
+	ImGui::Text("Quad count: %.0f", (float)b_renderer->quad_count);
+	ImGui::Text("Draw count: %.0f", (float)b_renderer->draw_count);
 
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 }
+
+
+
+
+
+
+
+
+
+/**************************** BATCH RENDERER TEST  ****************************/
+/*  
+	b_renderer->Clear();
+
+	b_renderer->ResetStats();
+	b_renderer->StartBatch();
+
+	// 262 144
+	int dim_x = 512;
+	int dim_y = 512;
+	for (int y = 0; y < dim_y; y++)
+		for (int x = 0; x < dim_x; x++)
+			b_renderer->DrawColor(x, y, glm::vec4(1.0f));
+
+	b_renderer->EndBatch();
+	*/
