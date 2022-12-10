@@ -9,6 +9,7 @@
 #include "IndexBuffer.h"
 #include "Texture.h"
 #include "FontSheet.h"
+#include <map>
 
 struct Renderer
 {
@@ -20,7 +21,7 @@ struct Renderer
 	void DrawText(FontSheet& font, std::string text, glm::vec3 position, glm::vec3 color);
 	//////////////////////////////////////////////
 	Camera* camera = nullptr;
-	Shader* shader = nullptr;
+	std::unordered_map<std::string, Shader*> shaders;
 
 	unsigned int vao;
 	VertexBuffer* vb = nullptr;

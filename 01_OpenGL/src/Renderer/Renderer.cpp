@@ -42,8 +42,9 @@ void Renderer::Clear() const
 Renderer::Renderer(Camera* camera_)
 {
 	camera = camera_;
-	shader = new Shader("src/res/shaders/Color_non_batch.shader");
-	
+	shaders["Color_non_batch"] = new Shader("src/res/shaders/Color_non_batch.shader");
+	shaders["Font"] = new Shader("src/res/shaders/Font.shader");
+
 	GLCall(glGenVertexArrays(1, &vao));
 	GLCall(glBindVertexArray(vao));
 	
@@ -53,7 +54,6 @@ Renderer::Renderer(Camera* camera_)
 	va.AddBuffer(*vb, layout);
 	ib = new IndexBuffer(cexp_ib, 6);
 
-	shader->Bind();
 	vb->Bind();
 	ib->Bind();
 
@@ -64,18 +64,18 @@ void Renderer::DrawColor(float x, float y)
 {
 	glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(x, y, 0)) * glm::scale(glm::mat4(1.0f), glm::vec3(100, 100, 1));
 
-	shader = new Shader("src/res/shaders/Color_non_batch.shader");
-	shader->Bind();
+	//shader = new Shader("src/res/shaders/Color_non_batch.shader");
+	shaders["Color_non_batch"]->Bind();
 
 	float gradient = 1.0f;
 
-	shader->SetUniformMat4f("u_view", view);
-	shader->SetUniformMat4f("u_projection", camera->projection);
+	shaders["Color_non_batch"]->SetUniformMat4f("u_view", view);
+	shaders["Color_non_batch"]->SetUniformMat4f("u_projection", camera->projection);
 	//shader->SetUniform1f("u_gradient", gradient);
 
 	GLCall(glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 
-	shader->Unbind();
+	shaders["Color_non_batch"]->Unbind();
 }
 
 
@@ -83,28 +83,32 @@ void Renderer::DrawChar(FontSheet& font, char32_t character, glm::vec3 position,
 {
     font.texture->Bind();
 
-	shader = new Shader("src/res/shaders/Font.shader");
-	shader->Bind();
-
-	shader->Bind();
-
+	shaders["Font"]->Bind();
+	
+	
     float rotation = 0.0f;
     glm::vec3 scale = glm::vec3(75.0f, 75.0f, 1.0f);
-
+	
 	glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position.x, position.y, position.z })
 		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
 		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, scale.z });
+	
+	
+	glm::vec2 vertex_texCoords[4];
+    glm::vec2* coords = font.get_coords(character);
+	vertex_texCoords[0] = coords[0];
+	vertex_texCoords[1] = coords[1];
+	vertex_texCoords[2] = coords[2];
+	vertex_texCoords[3] = coords[3];
+	delete[] coords;
 
 
-	glm::vec2* vertex_texCoords = new glm::vec2[4];
-    vertex_texCoords = font.get_coords(character);
-
-	glm::vec3* vertex_positions = new glm::vec3[4];
+	glm::vec3 vertex_positions[4];
 	vertex_positions[0] = { -0.5f, -0.5f, 0.0f };
 	vertex_positions[1] = { 0.5f, -0.5f, 0.0f };
 	vertex_positions[2] = { 0.5f,  0.5f, 0.0f };
 	vertex_positions[3] = { -0.5f,  0.5f, 0.0f };
-
+	
     float vertex_info[(3 + 2) * 4];
     {
         for(int i = 0; i < 4; i++)
@@ -116,41 +120,39 @@ void Renderer::DrawChar(FontSheet& font, char32_t character, glm::vec3 position,
             vertex_info[(i * 5) + 4] = vertex_texCoords[i].y;
         }
     }
-
+	
     unsigned int indices[] =
 	{
 		0, 1, 2,
         2, 3, 0
 	};
-
-	delete[] vertex_positions;
-
-	shader->SetUniform4f("u_Color", color.x, color.y, color.z, 1.0f);
-	shader->SetUniformMat4f("u_View", transform);
-	shader->SetUniformMat4f("u_Projection", camera->projection);
+	
+	shaders["Font"]->SetUniform4f("u_Color", color.x, color.y, color.z, 1.0f);
+	shaders["Font"]->SetUniformMat4f("u_View", transform);
+	shaders["Font"]->SetUniformMat4f("u_Projection", camera->projection);
 	
 	VertexBufferLayout layout;
 	layout.Push<float>(3);
 	layout.Push<float>(2);
-    VertexBuffer* vb = new VertexBuffer(vertex_info, sizeof(vertex_info));
-    IndexBuffer* ib = new IndexBuffer(indices, 6);
-    VertexArray* va = new VertexArray();
-
-    va->AddBuffer(*vb, layout);
-    vb->Bind();
-    va->Bind();
-    ib->Bind();
-    GLCall(glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
-
-    // cleanup
-    vb->Unbind();
-    va->Unbind();
-    ib->Unbind();
+	VertexBuffer* vb = new VertexBuffer(vertex_info, sizeof(vertex_info));
+	IndexBuffer* ib = new IndexBuffer(indices, 6);
+	VertexArray* va = new VertexArray();
+	
+	va->AddBuffer(*vb, layout);
+	vb->Bind();
+	va->Bind();
+	ib->Bind();
+	GLCall(glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+	
+	// cleanup
+	vb->Unbind();
+	va->Unbind();
+	ib->Unbind();
 	font.texture->Unbind();
-	shader->Unbind();
+	shaders["Font"]->Unbind();
 	delete vb;
-    delete ib;
-    delete va;
+	delete ib;
+	delete va;
 
 }
 

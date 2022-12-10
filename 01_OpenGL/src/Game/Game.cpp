@@ -19,7 +19,8 @@ void Game::OnUpdate()
 
 
 	//renderer->DrawColor(mouse_pos.x, mouse_pos.y);
-	renderer->DrawText(*font, "ahoj", {50.0f, 50.0f, 1.0f}, {1.0f, 1.0f, 0.0f});
+	for (int i = 0; i < 100; i++)
+		renderer->DrawText(*font, "ahoj", {50.0f, 50.0f, 1.0f}, {1.0f, 1.0f, 0.0f});
 	
 }
 
