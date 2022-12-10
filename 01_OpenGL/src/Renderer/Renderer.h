@@ -10,6 +10,7 @@
 #include "Texture.h"
 #include "FontSheet.h"
 #include <map>
+#include "GUI/GUI.h"
 
 struct Renderer
 {
@@ -19,6 +20,8 @@ struct Renderer
 	void DrawColor(float x, float y);
 	void DrawChar(FontSheet& font, char32_t character, glm::vec3 position, glm::vec3 color);
 	void DrawText(FontSheet& font, std::string text, glm::vec3 position, glm::vec3 color);
+	void DrawLine(glm::vec2 from, glm::vec2 to, glm::vec3 color);
+	void DrawGUI(PZ::GUI& gui, FontSheet& font);
 	//////////////////////////////////////////////
 	Camera* camera = nullptr;
 	std::unordered_map<std::string, Shader*> shaders;

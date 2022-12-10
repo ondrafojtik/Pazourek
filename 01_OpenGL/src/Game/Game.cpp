@@ -10,6 +10,12 @@ void Game::Init()
 	renderer = new Renderer(camera);
 
 	font = new FontSheet("src/res/textures/font_sheet_5.png");
+	gui = new PZ::GUI(glm::vec3(50.0f, 50.0f, 1.0f));
+
+	gui->Text("test");
+	gui->Text("test1");
+	gui->Text("test2");
+
 }
 
 void Game::OnUpdate()
@@ -19,9 +25,15 @@ void Game::OnUpdate()
 
 
 	//renderer->DrawColor(mouse_pos.x, mouse_pos.y);
-	for (int i = 0; i < 100; i++)
-		renderer->DrawText(*font, "ahoj", {50.0f, 50.0f, 1.0f}, {1.0f, 1.0f, 0.0f});
+	//for (int i = 0; i < 100; i++)
+	//	renderer->DrawText(*font, "ahoj", {50.0f, 50.0f, 1.0f}, {1.0f, 1.0f, 0.0f});
+	//for (int i = 0; i < 100; i++)
+	//	renderer->DrawLine(glm::vec2(100, 100), glm::vec2(300, 300), glm::vec3(1.0f));
+	renderer->DrawGUI(*gui, *font);
+
 	
+	//gui->Text("test");
+
 }
 
 void Game::OnImGuiUpdate()

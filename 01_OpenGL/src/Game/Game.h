@@ -10,6 +10,7 @@
 #include "Camera.h"
 #include "BatchRenderer.h"
 #include "Texture.h"
+#include "GUI/GUI.h"
 
 struct Game
 {
@@ -33,7 +34,7 @@ struct Game
 	//////////////////////////////////////////////
 	/* GUI */
 	FontSheet* font = nullptr;
-
+	PZ::GUI* gui = nullptr;
 
 	//////////////////////////////////////////////
 

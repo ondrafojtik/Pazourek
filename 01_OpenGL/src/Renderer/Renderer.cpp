@@ -104,10 +104,14 @@ void Renderer::DrawChar(FontSheet& font, char32_t character, glm::vec3 position,
 
 
 	glm::vec3 vertex_positions[4];
-	vertex_positions[0] = { -0.5f, -0.5f, 0.0f };
-	vertex_positions[1] = { 0.5f, -0.5f, 0.0f };
-	vertex_positions[2] = { 0.5f,  0.5f, 0.0f };
-	vertex_positions[3] = { -0.5f,  0.5f, 0.0f };
+	vertex_positions[0] = { 0.0f, 0.0f, 0.0f };
+	vertex_positions[1] = { 1.0f, 0.0f, 0.0f };
+	vertex_positions[2] = { 1.0f, 1.0f, 0.0f };
+	vertex_positions[3] = { 0.0f, 1.0f, 0.0f };
+	//vertex_positions[0] = { -0.5f, -0.5f, 0.0f };
+	//vertex_positions[1] = { 0.5f, -0.5f, 0.0f };
+	//vertex_positions[2] = { 0.5f,  0.5f, 0.0f };
+	//vertex_positions[3] = { -0.5f,  0.5f, 0.0f };
 	
     float vertex_info[(3 + 2) * 4];
     {
@@ -165,4 +169,72 @@ void Renderer::DrawText(FontSheet& font, std::string text, glm::vec3 position, g
 		DrawChar(font, c, { position.x + font_render_step, position.y, position.z }, color);
 		font_render_step += 30.0f;
 	}
+}
+
+void Renderer::DrawLine(glm::vec2 from, glm::vec2 to, glm::vec3 color)
+{
+	shaders["Color_non_batch"]->Bind();
+	
+	glm::vec3 p1{ from.x, from.y, 1.0f };
+	glm::vec3 p2{ to.x, to.y, 1.0f };
+
+	float line_vertex[] =
+	{
+		p1.x, p1.y, p1.z, 1.0f, 1.0f, 1.0f,
+		p2.x, p2.y, p2.z, 1.0f, 1.0f, 1.0f,
+	};
+
+	unsigned int indices[] =
+	{
+		0, 1,
+	};
+
+	glm::mat4 transform = glm::mat4(1.0f);
+
+	VertexBuffer* vb = new VertexBuffer(line_vertex, sizeof(line_vertex));
+	IndexBuffer* ib = new IndexBuffer(indices, 2);
+	VertexArray* va = new VertexArray();
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+	layout.Push<float>(3);
+	va->AddBuffer(*vb, layout);
+
+	vb->Bind();
+	va->Bind();
+	ib->Bind();
+	shaders["Color_non_batch"]->SetUniformMat4f("u_Projection", camera->projection);
+	shaders["Color_non_batch"]->SetUniformMat4f("u_View", transform);
+	shaders["Color_non_batch"]->SetUniform4f("u_Color", color.x, color.y, color.z, 1.0f);
+	glVertexPointer(2, GL_FLOAT, 0, line_vertex);
+	glLineWidth(5);
+	GLCall(glDrawElements(GL_LINES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+
+	delete vb;
+	delete ib;
+	delete va;
+
+
+}
+
+void Renderer::DrawGUI(PZ::GUI& gui, FontSheet& font)
+{
+	PZ::GUI_borders borders = gui.get_borders();
+	std::vector<PZ::GUI_text> text = gui.get_text();
+
+	glm::vec3 top_left = borders.top_left;
+	glm::vec3 bot_right = borders.bot_right;
+
+	glm::vec3 top_right = glm::vec3(bot_right.x, top_left.y, 1.0f);
+	glm::vec3 bot_left = glm::vec3(top_left.x, bot_right.y, 1.0f);
+
+	DrawLine(top_left, top_right, glm::vec3(1.0f, 0.0f, 0.0f));
+	DrawLine(top_right, bot_right, glm::vec3(0.0f, 0.0f, 1.0f));
+	DrawLine(bot_right, bot_left, glm::vec3(0.0f, 0.0f, 1.0f));
+	DrawLine(bot_left, top_left, glm::vec3(0.0f, 1.0f, 0.0f));
+	
+
+	for (PZ::GUI_text t : text)
+		DrawText(font, t.text, t.position, glm::vec3(1.0f));
+
+
 }
