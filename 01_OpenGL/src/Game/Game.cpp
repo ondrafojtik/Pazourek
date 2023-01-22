@@ -12,23 +12,23 @@ void Game::Init()
 	font = new FontSheet("src/res/textures/font_sheet_5.png");
 	gui = new PZ::GUI(glm::vec3(50.0f, 50.0f, 1.0f));
 
-	gui->Text("test");
-	gui->Text("test1");
-	gui->Text("test2");
 
 }
+
+// #fix: 
 
 void Game::OnUpdate()
 {
 	
 	renderer->Clear();
+	gui->Clear();
+	
+	gui->Text("ahoj");
+	gui->Text("ahojdasdasdaasddsadasdas");
+	gui->Text(gui->Get_FPS().fps_str + " fps");
 
+	std::vector<PZ::GUI_text> t = gui->get_text();
 
-	//renderer->DrawColor(mouse_pos.x, mouse_pos.y);
-	//for (int i = 0; i < 100; i++)
-	//	renderer->DrawText(*font, "ahoj", {50.0f, 50.0f, 1.0f}, {1.0f, 1.0f, 0.0f});
-	//for (int i = 0; i < 100; i++)
-	//	renderer->DrawLine(glm::vec2(100, 100), glm::vec2(300, 300), glm::vec3(1.0f));
 	renderer->DrawGUI(*gui, *font);
 
 	
@@ -45,6 +45,8 @@ void Game::OnImGuiUpdate()
 	ImGui::Text("Draw count: %.0f", (float)b_renderer->draw_count);
 
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+	gui->Update();
 
 }
 

@@ -232,7 +232,6 @@ void Renderer::DrawGUI(PZ::GUI& gui, FontSheet& font)
 	DrawLine(bot_right, bot_left, glm::vec3(0.0f, 0.0f, 1.0f));
 	DrawLine(bot_left, top_left, glm::vec3(0.0f, 1.0f, 0.0f));
 	
-
 	for (PZ::GUI_text t : text)
 		DrawText(font, t.text, t.position, glm::vec3(1.0f));
 
