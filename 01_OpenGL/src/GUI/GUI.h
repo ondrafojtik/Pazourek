@@ -22,6 +22,7 @@ namespace PZ
 
 	struct FPS
 	{
+		float framerate = 0;
 		float fps = 0;
 		std::string fps_str = "";
 	};
@@ -36,7 +37,6 @@ namespace PZ
 
 	public:
 		FPS fps{};
-		float framerate = 0;
 
 		void reset()
 		{
@@ -53,8 +53,8 @@ namespace PZ
 			auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
 			if (duration >= 100) 
 			{
-				framerate = 100 / counter;
-				fps.fps = 1000 / framerate;
+				fps.framerate = 100 / counter;
+				fps.fps = 1000 / fps.framerate;
 				fps.fps_str = float_to_string(fps.fps, 1);
 				reset();
 			}
