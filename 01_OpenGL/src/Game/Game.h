@@ -36,6 +36,8 @@ struct Game
 	FontSheet* font = nullptr;
 	PZ::GUI* gui = nullptr;
 
+	bool test_value = false;
+	float ftest_value = 0.5f;
 	//////////////////////////////////////////////
 
 

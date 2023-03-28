@@ -12,7 +12,7 @@ void Game::Init()
 	font = new FontSheet("src/res/textures/font_sheet_5.png");
 	gui = new PZ::GUI(glm::vec3(50.0f, 50.0f, 1.0f));
 
-
+	gui->CreateContext(window->GetWindow());
 }
 
 // #fix: 
@@ -23,17 +23,19 @@ void Game::OnUpdate()
 	renderer->Clear();
 	gui->Clear();
 	
-	gui->Text("ahoj");
-	gui->Text("ahojdasdasdaasddsadasdas");
+	gui->Text("AHOJ");
+	gui->Text("ahojdasdas");
+	gui->Text("TOHLE JE UPPER CASE");
 	gui->Text(gui->Get_FPS().fps_str + " fps");
+	gui->Button("test.test-test", &test_value);
+	gui->Text(std::to_string(test_value));
+
+	gui->Text(std::to_string(font->texture->GetHeight()));
 
 	std::vector<PZ::GUI_text> t = gui->get_text();
 
 	renderer->DrawGUI(*gui, *font);
-
 	
-	//gui->Text("test");
-
 }
 
 void Game::OnImGuiUpdate()
@@ -45,6 +47,9 @@ void Game::OnImGuiUpdate()
 	ImGui::Text("Draw count: %.0f", (float)b_renderer->draw_count);
 
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	ImGui::Checkbox("test.test-test", &test_value);
+	// SliderFloat(const char* label, float* v, float v_min, float v_max, const char* display_format = "%.3f", float power = 1.0f);
+	ImGui::SliderFloat("slider", &ftest_value, 0.0f, 1.0f);
 
 	gui->Update();
 

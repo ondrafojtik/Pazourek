@@ -44,6 +44,7 @@ Renderer::Renderer(Camera* camera_)
 	camera = camera_;
 	shaders["Color_non_batch"] = new Shader("src/res/shaders/Color_non_batch.shader");
 	shaders["Font"] = new Shader("src/res/shaders/Font.shader");
+	shaders["Basic"] = new Shader("src/res/shaders/Basic.shader");
 
 	GLCall(glGenVertexArrays(1, &vao));
 	GLCall(glBindVertexArray(vao));
@@ -76,6 +77,66 @@ void Renderer::DrawColor(float x, float y)
 	GLCall(glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 
 	shaders["Color_non_batch"]->Unbind();
+}
+
+void Renderer::DrawQuad(glm::vec3 bot_left, glm::vec3 top_right, glm::vec4 color)
+{
+	shaders["Basic"]->Bind();
+
+	float _scale_factor = 1.0f;
+
+	glm::vec3 scale = glm::vec3((top_right.x - bot_left.x) * _scale_factor, (top_right.y - bot_left.y) * _scale_factor, 1);
+	float rotation = 0;
+
+	glm::vec3 position = glm::vec3(0, 0, 0);
+	position.x = (bot_left.x + top_right.x) / 2;
+	position.y = (bot_left.y + top_right.y) / 2;
+	position.z = (bot_left.z + top_right.z) / 2;
+
+
+	glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+		* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+		* glm::scale(glm::mat4(1.0f), { scale.x, scale.y, scale.z });
+
+	glm::vec3 coords[4];
+	coords[0] = { -0.5f, -0.5f, 0.0f };
+	coords[1] = {  0.5f, -0.5f, 0.0f };
+	coords[2] = {  0.5f,  0.5f, 0.0f };
+	coords[3] = { -0.5f,  0.5f, 0.0f };
+
+	uint32_t indices[] =
+	{
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	VertexBufferLayout layout;
+	layout.Push<float>(3);
+	VertexBuffer* vb = new VertexBuffer(coords, sizeof(coords));
+	IndexBuffer* ib = new IndexBuffer(indices, 6);
+	VertexArray* va = new VertexArray();
+	va->AddBuffer(*vb, layout);
+
+	shaders["Basic"]->SetUniformMat4f("u_view", transform); // transform == view
+	shaders["Basic"]->SetUniformMat4f("u_projection", camera->projection);
+	shaders["Basic"]->SetUniform4f("u_color", color.x, color.y, color.z, color.a);
+
+	vb->Bind();
+	va->Bind();
+	ib->Bind();
+
+	GLCall(glDrawElements(GL_TRIANGLES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
+
+	vb->Unbind();
+	va->Unbind();
+	ib->Unbind();
+	delete vb;
+	delete ib;
+	delete va;
+
+
+	shaders["Basic"]->Unbind();
+
 }
 
 
@@ -167,11 +228,11 @@ void Renderer::DrawText(FontSheet& font, std::string text, glm::vec3 position, g
 	for (char32_t c : text)
 	{
 		DrawChar(font, c, { position.x + font_render_step, position.y, position.z }, color);
-		font_render_step += 30.0f;
+		font_render_step += 32.0f;
 	}
 }
 
-void Renderer::DrawLine(glm::vec2 from, glm::vec2 to, glm::vec3 color)
+void Renderer::DrawLine(glm::vec2 from, glm::vec2 to, glm::vec4 color)
 {
 	shaders["Color_non_batch"]->Bind();
 	
@@ -206,7 +267,7 @@ void Renderer::DrawLine(glm::vec2 from, glm::vec2 to, glm::vec3 color)
 	shaders["Color_non_batch"]->SetUniformMat4f("u_View", transform);
 	shaders["Color_non_batch"]->SetUniform4f("u_Color", color.x, color.y, color.z, 1.0f);
 	glVertexPointer(2, GL_FLOAT, 0, line_vertex);
-	glLineWidth(5);
+	glLineWidth(3);
 	GLCall(glDrawElements(GL_LINES, ib->GetCount(), GL_UNSIGNED_INT, nullptr));
 
 	delete vb;
@@ -216,24 +277,39 @@ void Renderer::DrawLine(glm::vec2 from, glm::vec2 to, glm::vec3 color)
 
 }
 
+void Renderer::DrawBorder(glm::vec3 top_left, glm::vec3 bot_right)
+{
+	glm::vec3 top_right = glm::vec3(bot_right.x, top_left.y, 1.0f);
+	glm::vec3 bot_left = glm::vec3(top_left.x, bot_right.y, 1.0f);
+
+	DrawLine(top_left, top_right, GUI_THEME_border_color);
+	DrawLine(top_right, bot_right, GUI_THEME_border_color);
+	DrawLine(bot_right, bot_left, GUI_THEME_border_color);
+	DrawLine(bot_left, top_left, GUI_THEME_border_color);
+}
+
 void Renderer::DrawGUI(PZ::GUI& gui, FontSheet& font)
 {
 	PZ::GUI_borders borders = gui.get_borders();
 	std::vector<PZ::GUI_text> text = gui.get_text();
+	std::vector<PZ::GUI_button> buttons = gui.get_buttons();
 
-	glm::vec3 top_left = borders.top_left;
-	glm::vec3 bot_right = borders.bot_right;
-
-	glm::vec3 top_right = glm::vec3(bot_right.x, top_left.y, 1.0f);
-	glm::vec3 bot_left = glm::vec3(top_left.x, bot_right.y, 1.0f);
-
-	DrawLine(top_left, top_right, glm::vec3(1.0f, 0.0f, 0.0f));
-	DrawLine(top_right, bot_right, glm::vec3(0.0f, 0.0f, 1.0f));
-	DrawLine(bot_right, bot_left, glm::vec3(0.0f, 0.0f, 1.0f));
-	DrawLine(bot_left, top_left, glm::vec3(0.0f, 1.0f, 0.0f));
-	
 	for (PZ::GUI_text t : text)
 		DrawText(font, t.text, t.position, glm::vec3(1.0f));
+
+	for (PZ::GUI_button b : buttons)
+	{
+		if (*b.value)
+			DrawQuad(b.top_left, b.bot_right, GUI_THEME_button_enabled_color);
+		else
+			DrawQuad(b.top_left, b.bot_right, GUI_THEME_button_disabled_color);
+		
+		DrawBorder(b.top_left, b.bot_right);
+		DrawText(font, b.label, b.top_left, glm::vec3(1.0f));
+	}
+
+	DrawBorder(borders.top_left, borders.bot_right);
+
 
 
 }

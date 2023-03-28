@@ -238,6 +238,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GUI\GUI.h" />
+    <ClInclude Include="src\GUI\GUI_theme.h" />
     <ClInclude Include="src\Renderer\BatchRenderer.h" />
     <ClInclude Include="src\Renderer\Camera.h" />
     <ClInclude Include="src\AppConfig\defines.h" />

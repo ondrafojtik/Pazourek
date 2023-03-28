@@ -7,7 +7,9 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <GLFW/glfw3.h>
 
+#include "GUI_theme.h"
 
 namespace PZ
 {
@@ -27,14 +29,13 @@ namespace PZ
 		std::string fps_str = "";
 	};
 
-
 	struct GUI_fps
 	{
 	private:
 		float counter = 0;
 		std::chrono::high_resolution_clock::time_point start;
 		std::chrono::high_resolution_clock::time_point now;
-
+		
 	public:
 		FPS fps{};
 
@@ -63,6 +64,16 @@ namespace PZ
 
 	};
 
+	struct GUI_mouse_state
+	{
+		double pos_x = -1;
+		double pos_y = -1;
+
+		int button = -1;
+		int action = -1;
+		int mode = -1;
+	};
+
 	struct GUI_borders
 	{
 		glm::vec3 top_left = glm::vec3(0.0f);
@@ -75,35 +86,56 @@ namespace PZ
 		glm::vec3 position;
 	};
 
+	struct GUI_button
+	{
+		glm::vec3 top_left = glm::vec3(0.0f);
+		glm::vec3 bot_right = glm::vec3(0.0f);
+
+		std::string label = "";
+		bool* value;
+	};
+
 	struct GUI
 	{
 		
 		GUI(glm::vec3 _position);
 
+		void CreateContext(GLFWwindow* window);
 		void Clear();
 		void Update();
 		void Text(std::string text);
+		// button as in toggle..
+		void Button(std::string label, bool* value);
 
 		GUI_borders get_borders();
 		std::vector<GUI_text> get_text();
+		std::vector<GUI_button> get_buttons();
 
+		// utils
 		FPS Get_FPS();
+		static GUI_mouse_state mouse_state;
 
 	private:
 		std::vector<GUI_text> drawable_text;
+		std::vector<GUI_button> active_buttons;
 		
+		static void cursor_pos_callback(GLFWwindow* window, double mouseX, double mouseY);
+		static void mouse_button_callback(GLFWwindow* window, int button, int action, int mode);
 
 		glm::vec3 position;
 		int line_number = 0; 
 		float line_height = 60.0f; // should scale with font..
 		float max_line_width = 300.0f;
-		float font_render_step = 30.0f;
+		float font_render_step = 32.0f;
 
 		// borders
 		GUI_borders borders;
 
 		// utils
 		GUI_fps fps;
+
+		// buttons
+		void update_buttons();
 
 	};
 
